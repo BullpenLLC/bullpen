@@ -2,6 +2,8 @@
 
 Learn investing in short lessons, then compete in a paper-trading season ranked on skill.
 
+**Try the prototype:** https://bullpenllc.github.io/bullpen/prototype/ (works on phones; updates a minute or two after each merge into `main`).
+
 - `prototype/index.html`: the clickable demo. Open it in any browser.
 - `CLAUDE.md`: the project brief. Claude Code reads it automatically.
 - `docs/review-brief.md`: the first prompt to give Claude Code.

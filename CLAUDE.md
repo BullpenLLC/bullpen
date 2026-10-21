@@ -3,7 +3,8 @@
 A mobile app that teaches young people in Lebanon (starting with AUB students) how investing
 works, Duolingo style, then lets them compete in a paper-trading season ranked on skill.
 
-The only thing built so far is a clickable prototype: `prototype/index.html`. It is one
+The only thing built so far is a clickable prototype: `prototype/index.html`, live at
+https://bullpenllc.github.io/bullpen/prototype/ (GitHub Pages, published from `main`). It is one
 self-contained HTML file (inline CSS and JS, Google Fonts only). Open it in a browser. Nothing
 is saved, all players and numbers are fake.
 
