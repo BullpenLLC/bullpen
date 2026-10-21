@@ -240,6 +240,11 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
 @keyframes enter{from{transform:translateX(18px); opacity:0}to{transform:none; opacity:1}}
 .term{margin-top:18px; border-radius:16px; padding:14px; background:var(--sky-tint)}
 .term .term-k{display:block; font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--sky); margin-bottom:4px}
+.ref{display:flex; align-items:center; gap:8px; margin-top:18px; padding:11px 13px; border-radius:14px; border:1px solid var(--line); color:var(--ink); text-decoration:none; font-size:14px}
+.ref:hover{background:var(--surface-2)}
+.ref .ref-k{font-family:var(--font-mono); font-size:11px; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-2)}
+.ref b{flex:1}
+.ref .ref-go{color:var(--sky); font-weight:600}
 .intro-meta{display:flex; flex-wrap:wrap; gap:8px; margin-top:18px}
 .intro-meta span{font-family:var(--font-mono); font-size:12px; padding:5px 9px; border-radius:8px; background:var(--surface-2); color:var(--ink-2)}
 
@@ -463,14 +468,151 @@ $('#pClose').innerHTML = I.x;
 
 /* ---------- content ---------- */
 const PATH = ['What a stock is','Risk and return','Diversification','Index funds','Fees and compounding','Unit check'];
+/* Further reading. We link to Investopedia for depth; lesson text is always our own words. */
+const IVP = 'https://www.investopedia.com/terms/';
+const PATH_REFS = [
+  {title:'Stock', url:IVP+'s/stock.asp'},
+  {title:'Risk-return tradeoff', url:IVP+'r/riskreturntradeoff.asp'},
+  {title:'Diversification', url:IVP+'d/diversification.asp'},
+  {title:'Index fund', url:IVP+'i/indexfund.asp'},
+  {title:'Compounding', url:IVP+'c/compounding.asp'},
+  null
+];
 const OFFSETS = [0, 58, 76, 34, -42, -12];
 
-const LESSON = {
+const WHAT_A_STOCK = {
+  title:'What a stock is', min:4,
+  cards:[
+    {k:'Lesson 1 · The idea', t:'A small piece of a company', b:`
+      <p class="lead">A stock, also called a share, is a small piece of ownership in a company. Buy one and you own part of that business.</p>
+      <div class="term"><span class="term-k">Key term</span><b>Shareholder:</b> anyone who owns at least one share of a company.</div>
+      <div class="intro-meta"><span>4 ideas</span><span>5 questions</span><span>About 4 min</span></div>`,
+     ref:{title:'Stock', url:IVP+'s/stock.asp'}},
+    {k:'Do the maths', t:'How big is your slice?', b:`
+      <p>A bakery is split into 1,000 shares. The whole business is worth $200,000. You buy 10 shares.</p>
+      <div class="compare">
+        <div class="pf">
+          <div class="pf-h">The bakery</div>
+          <p>1,000 shares in total</p>
+          <div class="pf-r">Each share is worth<b class="mono">$200</b></div>
+        </div>
+        <div class="pf">
+          <div class="pf-h">Your slice</div>
+          <p>10 shares out of 1,000</p>
+          <div class="pf-r">You own 1%, worth<b class="mono good-t">$2,000</b></div>
+        </div>
+      </div>
+      <p>$200,000 ÷ 1,000 shares = $200 a share. 10 shares × $200 = $2,000, which is 1% of the bakery.</p>`,
+     ref:{title:'Shareholder', url:IVP+'s/shareholder.asp'}},
+    {k:'Making money', t:'Two ways shares pay you', b:`
+      <div class="split">
+        <div class="col good"><div class="col-h">Way 1</div><b>The price goes up</b><p>Buy a share at $20, sell it later at $26, and you keep the $6 difference.</p></div>
+        <div class="col good"><div class="col-h">Way 2</div><b>Dividends</b><p>Some companies pay shareholders part of their profits, often every three months.</p></div>
+      </div>
+      <p>Many companies, especially young fast-growing ones, pay no dividend. They put their profits back into growing the business instead.</p>
+      <div class="term"><span class="term-k">Key term</span><b>Dividend:</b> a cash payment a company makes to its shareholders out of its profits.</div>`,
+     ref:{title:'Dividend', url:IVP+'d/dividend.asp'}},
+    {k:'The risk', t:'Prices move every day', b:`
+      <p>Shares are bought and sold on a stock exchange, like the New York Stock Exchange or Nasdaq. When more people want to buy a share than sell it, the price rises. When more want to sell, it falls.</p>
+      <div class="split">
+        <div class="col good"><div class="col-h">Best case</div><b>No upper limit</b><p>A share can end up worth many times what you paid.</p></div>
+        <div class="col bad"><div class="col-h">Worst case</div><b>It can go to $0</b><p>If the company fails, shareholders are paid last and can lose everything they put in.</p></div>
+      </div>
+      <p>If you buy shares with your own money, the most you can lose is what you paid. You can't end up owing more.</p>
+      <div class="term"><span class="term-k">Key term</span><b>Stock exchange:</b> a marketplace where buyers and sellers trade shares.</div>`,
+     ref:{title:'Stock exchange', url:IVP+'s/stockexchange.asp'}}
+  ],
+  qs:[
+    {q:'What do you get when you buy one share of a company?',
+     o:['A small part of the company','A loan you get paid interest on','A job at the company','A fixed monthly payment'], a:0,
+     e:'A share is a slice of ownership. Lending money to a company is a bond, which comes in a later lesson.'},
+    {q:'A company is split into 2,000 shares. You own 50 of them. What percentage of the company do you own?',
+     o:['0.5%','2.5%','5%','25%'], a:1,
+     e:'50 ÷ 2,000 = 0.025, which is 2.5%.'},
+    {q:'What are the two ways a share can make you money?',
+     o:['The price rises, and dividends','Interest, and fees','A salary, and a bonus','Rent, and interest'], a:0,
+     e:'You can sell for more than you paid, and some companies pay out part of their profits as dividends.'},
+    {q:'Karim buys 10 shares at $40 each and later sells all of them at $55 each. Ignoring fees, what is his profit?',
+     o:['$15','$150','$400','$550'], a:1,
+     e:'He makes $55 − $40 = $15 on each share. 10 shares × $15 = $150.'},
+    {q:'True or false: if a company you bought shares in goes bankrupt, you can end up owing more than you paid.',
+     o:['True','False'], a:1,
+     e:'When you buy shares with your own money, the most you can lose is what you paid for them.'}
+  ]
+};
+
+const RISK_AND_RETURN = {
+  title:'Risk and return', min:4,
+  cards:[
+    {k:'Lesson 2 · The idea', t:'What you get, and how sure you are', b:`
+      <p class="lead">Return is how much you gain or lose on an investment. Risk is how uncertain that result is, including the chance you lose money.</p>
+      <div class="term"><span class="term-k">Key term</span><b>Return:</b> the gain or loss, usually shown as a percentage of what you put in. $1,000 that grows to $1,100 is a 10% return.</div>
+      <div class="intro-meta"><span>4 ideas</span><span>5 questions</span><span>About 4 min</span></div>`,
+     ref:{title:'Return', url:IVP+'r/return.asp'}},
+    {k:'The trade-off', t:'No free lunch', b:`
+      <p>In general, investments that can pay more are also the ones that can drop more. You take on more risk for the chance of a bigger return.</p>
+      <div class="split">
+        <div class="col good"><div class="col-h">Lower risk</div><b>Smaller, steadier returns</b><p>Bank savings accounts, government bonds.</p></div>
+        <div class="col bad"><div class="col-h">Higher risk</div><b>Bigger possible gains and losses</b><p>Shares in single companies, crypto.</p></div>
+      </div>
+      <p>Higher risk means a wider range of outcomes. It is not a promise of more money: a risky investment can lose badly.</p>
+      <div class="term"><span class="term-k">Key term</span><b>Risk-return trade-off:</b> the higher the possible return, the higher the risk you usually have to accept.</div>`,
+     ref:{title:'Risk-return tradeoff', url:IVP+'r/riskreturntradeoff.asp'}},
+    {k:'Do the maths', t:'Same average, different ride', b:`
+      <p>Two investments each start with $1,000 and run for four years. Both average 6% a year.</p>
+      <div class="compare">
+        <div class="pf">
+          <div class="pf-h">Investment A</div>
+          <p class="mono">+6% · +6% · +6% · +6%</p>
+          <div class="pf-r">$1,000 becomes<b class="mono good-t">$1,262</b></div>
+        </div>
+        <div class="pf">
+          <div class="pf-h">Investment B</div>
+          <p class="mono">+20% · −10% · +18% · −4%</p>
+          <div class="pf-r">$1,000 becomes<b class="mono">$1,223</b></div>
+        </div>
+      </div>
+      <p>B was a much bumpier ride, and the drops cost it more than the average suggests: it ends $39 behind.</p>
+      <div class="term"><span class="term-k">Key term</span><b>Volatility:</b> how much a price swings up and down.</div>
+      <p>This is why Bullpen seasons rank you on return divided by swings. Wild bets that happen to pay off shouldn't beat steady skill.</p>`,
+     ref:{title:'Volatility', url:IVP+'v/volatility.asp'}},
+    {k:'Your timeline', t:'When you need the money matters', b:`
+      <p>How much risk makes sense depends partly on when you'll need the money back.</p>
+      <div class="split">
+        <div class="col bad"><div class="col-h">Needed soon</div><b>No time to recover</b><p>A 30% drop the month before tuition is due leaves no time to wait for prices to come back.</p></div>
+        <div class="col good"><div class="col-h">Needed in 10+ years</div><b>Time to ride out drops</b><p>One bad year matters less when there are many years left.</p></div>
+      </div>
+      <p>Time doesn't remove risk. It gives you room to wait instead of being forced to sell at a low point.</p>
+      <div class="term"><span class="term-k">Key term</span><b>Time horizon:</b> how long until you need the money you invested.</div>`,
+     ref:{title:'Time horizon', url:IVP+'t/timehorizon.asp'}}
+  ],
+  qs:[
+    {q:'You invest $500 and it grows to $550. What is your return?',
+     o:['5%','10%','50%','$10'], a:1,
+     e:'You gained $50 on $500. $50 ÷ $500 = 0.10, which is 10%.'},
+    {q:'Which of these usually has the lowest risk?',
+     o:['A bank savings account','Shares in one new tech company','A cryptocurrency','Shares in one small company'], a:0,
+     e:'Its value barely moves. The trade-off is a lower return.'},
+    {q:'What does the risk-return trade-off mean?',
+     o:['Higher possible returns usually come with more risk','Taking more risk guarantees a higher return','Low-risk investments always lose money','Risk and return have nothing to do with each other'], a:0,
+     e:'More risk buys you the chance of a bigger return, not a promise of one.'},
+    {q:'Investment A rises 6% every year. Investment B swings between +20% and −10%. Both average about 6% a year. Which is more volatile?',
+     o:['A','B','They are equally volatile','There is no way to tell'], a:1,
+     e:'Volatility is about the size of the swings. B moves far more from year to year.'},
+    {q:"Maya will need her savings for tuition in three months. Why is an investment with big swings a poor fit for that money?",
+     o:["A drop might not recover before she needs the money","Investments with big swings can't be sold quickly","Prices only swing over many years","It always loses money over three months"], a:0,
+     e:'With a short time horizon, a bad drop could force her to sell at a loss right when tuition is due.'}
+  ]
+};
+
+const DIVERSIFICATION = {
+  title:'Diversification', min:4, badge:{name:'Many Baskets', icon:'baskets'},
   cards:[
     {k:'Lesson 3 · The idea', t:'Spread your money out', b:`
       <p class="lead">Diversification means splitting your money across many different investments, so one bad result can't sink the whole portfolio.</p>
       <div class="term"><span class="term-k">Key term</span><b>Portfolio:</b> everything you own as investments, taken together.</div>
-      <div class="intro-meta"><span>4 ideas</span><span>5 questions</span><span>About 4 min</span></div>`},
+      <div class="intro-meta"><span>4 ideas</span><span>5 questions</span><span>About 4 min</span></div>`,
+     ref:{title:'Portfolio', url:IVP+'p/portfolio.asp'}},
     {k:'Do the maths', t:'One basket or ten?', b:`
       <p>Two students each invest $1,000. Then one company has terrible news and its shares fall 40%.</p>
       <div class="compare">
@@ -487,7 +629,8 @@ const LESSON = {
           <div class="pf-r">One falls 40%, the rest hold<b class="mono good-t">$960</b></div>
         </div>
       </div>
-      <p>Same bad news. Portfolio A loses $400. Portfolio B loses $40.</p>`},
+      <p>Same bad news. Portfolio A loses $400. Portfolio B loses $40.</p>`,
+     ref:{title:'Diversification', url:IVP+'d/diversification.asp'}},
     {k:'The catch', t:'Different has to mean different', b:`
       <p>Spreading out only helps if your investments don't all move together. Ten tech companies often rise and fall at the same time, so owning all ten is close to one big bet.</p>
       <div class="mix">
@@ -498,14 +641,16 @@ const LESSON = {
         <div class="mix-h"><span>Actually spread out</span><span class="tag good">Moves differently</span></div>
         <div class="chips"><span>Tech</span><span>Healthcare</span><span>Energy</span><span>Bonds</span><span>Gold</span><span>Other countries</span></div>
       </div>
-      <div class="term"><span class="term-k">Key term</span><b>Correlation:</b> how closely two investments move together.</div>`},
+      <div class="term"><span class="term-k">Key term</span><b>Correlation:</b> how closely two investments move together.</div>`,
+     ref:{title:'Correlation', url:IVP+'c/correlation.asp'}},
     {k:'The limit', t:"What it can't protect you from", b:`
       <p>Diversification cuts the risk that comes from any one company. It can't remove the risk that hits the whole market at once.</p>
       <div class="split">
         <div class="col good"><div class="col-h">Reduces</div><b>Company-specific risk</b><p>A scandal, a failed product, a bad CEO.</p></div>
         <div class="col bad"><div class="col-h">Can't remove</div><b>Market risk</b><p>A recession or crash, when most prices fall together.</p></div>
       </div>
-      <p>So a diversified portfolio can still lose money in a bad year. It usually loses less than a single bet would.</p>`}
+      <p>So a diversified portfolio can still lose money in a bad year. It usually loses less than a single bet would.</p>`,
+     ref:{title:'Unsystematic risk', url:IVP+'u/unsystematicrisk.asp'}}
   ],
   qs:[
     {q:'Rana keeps all her savings in shares of one company. Which risk is she most exposed to?',
@@ -526,6 +671,9 @@ const LESSON = {
   ]
 };
 
+/* One entry per playable lesson, in path order. Lessons 4-6 aren't written yet. */
+const LESSONS = [WHAT_A_STOCK, RISK_AND_RETURN, DIVERSIFICATION];
+
 /* sample players */
 const LEAGUE = [
   ['nour.h','AUB',512],['karim99','LAU',470],['maya.s','AUB',431],['jad.t','USJ',398],['lea.f','AUB',352],
@@ -540,7 +688,7 @@ const LEB = [['karim99','LAU',1902],['nour.h','AUB',1720],['christa.l','USJ',171
 const GLOBAL = [['finn.o','UK',2214],['layla.q','AE',2187],['omar.s','SA',2150],['karim99','LB',1902],['hana.m','JO',1880],['youssef.e','EG',1861]];
 
 /* ---------- state ---------- */
-const INITIAL = {streak:7, streakToday:false, hearts:5, xpTotal:1240, weekly:215, rating:1388, done:2, tab:'learn', view:'week', last:null, wait:false, newBadge:false};
+const INITIAL = {streak:7, streakToday:false, hearts:5, xpTotal:1240, weekly:215, rating:1388, done:2, tab:'learn', view:'week', last:null, wait:false, newBadge:false, pick:null};
 let S = JSON.parse(JSON.stringify(INITIAL));
 
 function avColor(name){ let h=0; for(const c of name) h=(h*31+c.charCodeAt(0))>>>0; return 'var(--av'+(h%5+1)+')'; }
@@ -574,19 +722,25 @@ function statusBar(){
   </div>`;
 }
 
+function lessonMeta(L){ return `${L.cards.length} ideas · ${L.qs.length} questions · about ${L.min} min`; }
+function maxXp(L){ return L.qs.length * 10 + 15; }
+
 function renderLearn(){
   const cur = S.done; // index of current lesson
+  const pick = S.pick ?? cur; // lesson whose card is open on the path
   let path = '';
   PATH.forEach((t,i) => {
     const st = i < cur ? 'done' : i === cur ? 'current' : 'locked';
     path += `<button class="node ${st}" style="--x:${OFFSETS[i]}px" data-i="${i}" aria-label="${t}, ${st==='done'?'completed':st==='current'?'next lesson':'locked'}">
       ${st==='current'?'<span class="ring"></span>':''}${candle(st, i+1)}<span class="lbl">${t}</span></button>`;
-    if(st==='current'){
-      if(i === 2){
-        path += `<div class="callout"><span class="eyebrow">Lesson 3 of 6</span><h3>Diversification</h3>
-          <div class="meta">4 ideas · 5 questions · about 4 min</div>
-          <button class="btn" id="startBtn">Start · up to +65 XP</button></div>`;
-      } else {
+    if(i === pick){
+      const L = LESSONS[i];
+      if(L && i <= cur){
+        const again = i < cur;
+        path += `<div class="callout"><span class="eyebrow">Lesson ${i+1} of 6${again?' · Completed':''}</span><h3>${L.title}</h3>
+          <div class="meta">${lessonMeta(L)}</div>
+          <button class="btn${again?' ghost':''}" id="startBtn">${again?'Practice again':'Start'} · up to +${maxXp(L)} XP</button></div>`;
+      } else if(i === cur){
         path += `<div class="callout soon"><span class="eyebrow">Lesson ${i+1} of 6</span><h3>${t}</h3>
           <div class="meta">This lesson comes in the next prototype. Today's lesson is done.</div></div>`;
       }
@@ -598,10 +752,12 @@ function renderLearn(){
       <div class="path">${path}</div>
       <div class="next-unit">${I.lock}<div><b>Unit 2 · Reading a price chart</b>Finish Unit 1 to unlock</div></div>
     </div>`;
-  const sb = $('#startBtn'); if(sb) sb.onclick = startLesson;
+  const sb = $('#startBtn'); if(sb) sb.onclick = () => startLesson(pick);
   $('#s-learn').querySelectorAll('.node').forEach(n => n.onclick = () => {
     const i = +n.dataset.i;
-    if(i === 2 && S.done === 2) startLesson();
+    if(i > cur || !LESSONS[i]) return;
+    if(i === pick) startLesson(i);          // second tap (or tap on the current lesson) starts it
+    else { S.pick = i; renderLearn(); }     // first tap on a finished lesson opens its card
   });
 }
 
@@ -765,32 +921,36 @@ function renderAll(){ renderLearn(); renderTrade(); renderLeague(); renderProfil
 
 /* ---------- lesson player ---------- */
 let P = null;
-const TOTAL = LESSON.cards.length + LESSON.qs.length;
+const LSN = () => LESSONS[P.lesson];
 
-function startLesson(){
-  P = {phase:'cards', i:0, queue:LESSON.qs.map((_,i)=>i), sel:null, checked:false, lastOk:false, missed:new Set(), correct:0, xp:0, mistakes:0};
+function startLesson(idx){
+  P = {lesson:idx, phase:'cards', i:0, queue:LESSONS[idx].qs.map((_,i)=>i), sel:null, checked:false, lastOk:false, missed:new Set(), correct:0, xp:0, mistakes:0};
   $('#player').hidden = false;
   renderPlayer();
 }
 function setHearts(){ $('#pHearts').innerHTML = I.heart + `<span class="n">${S.hearts}</span>`; }
 function progress(){
-  const seen = P.phase==='cards' ? P.i : LESSON.cards.length;
-  $('#pBar').style.width = ((seen + P.correct) / TOTAL * 100) + '%';
+  const L = LSN(), seen = P.phase==='cards' ? P.i : L.cards.length;
+  $('#pBar').style.width = ((seen + P.correct) / (L.cards.length + L.qs.length) * 100) + '%';
 }
 function setFoot(mode){ $('#pFoot').className = 'p-foot' + (mode ? ' '+mode : ''); }
 
+function refLink(r){
+  if(!r) return '';
+  return `<a class="ref" href="${r.url}" target="_blank" rel="noopener"><span class="ref-k">Go deeper</span><b>${r.title}</b><span class="ref-go">Investopedia ↗</span></a>`;
+}
 function renderPlayer(){
   setHearts(); progress(); setFoot(''); $('#fb').hidden = true;
   const btn = $('#pBtn'); btn.className = 'btn';
   const body = $('#pBody');
   if(P.phase === 'cards'){
-    const c = LESSON.cards[P.i];
-    body.innerHTML = `<div class="enter"><span class="eyebrow">${c.k}</span><h2>${c.t}</h2>${c.b}</div>`;
-    btn.disabled = false; btn.textContent = P.i === LESSON.cards.length-1 ? 'Start the quiz' : 'Continue';
+    const c = LSN().cards[P.i];
+    body.innerHTML = `<div class="enter"><span class="eyebrow">${c.k}</span><h2>${c.t}</h2>${c.b}${refLink(c.ref)}</div>`;
+    btn.disabled = false; btn.textContent = P.i === LSN().cards.length-1 ? 'Start the quiz' : 'Continue';
   } else {
-    const qi = P.queue[0], q = LESSON.qs[qi];
+    const qi = P.queue[0], q = LSN().qs[qi];
     const keys = 'ABCD';
-    body.innerHTML = `<div class="enter"><span class="eyebrow">Question ${P.correct+1} of ${LESSON.qs.length}${P.missed.has(qi)?'<span class="retry">· Try again</span>':''}</span>
+    body.innerHTML = `<div class="enter"><span class="eyebrow">Question ${P.correct+1} of ${LSN().qs.length}${P.missed.has(qi)?'<span class="retry">· Try again</span>':''}</span>
       <div class="q-text">${q.q}</div>
       <div class="opts">${q.o.map((o,i)=>`<button class="opt" data-i="${i}" aria-pressed="false"><span class="key">${keys[i]}</span><span>${o}</span></button>`).join('')}</div></div>`;
     body.querySelectorAll('.opt').forEach(b => b.onclick = () => {
@@ -809,10 +969,10 @@ function onPrimary(){
   const btn = $('#pBtn');
   if(P.phase === 'cards'){
     P.i++;
-    if(P.i >= LESSON.cards.length){ P.phase = 'quiz'; }
+    if(P.i >= LSN().cards.length){ P.phase = 'quiz'; }
     renderPlayer(); return;
   }
-  const qi = P.queue[0], q = LESSON.qs[qi];
+  const qi = P.queue[0], q = LSN().qs[qi];
   if(!P.checked){
     if(P.sel === null) return;
     P.checked = true;
@@ -858,9 +1018,12 @@ function finish(){
   const prevWeek = weekRank(S.weekly), prevAub = aubRank(S.rating);
   S.xpTotal += P.xp; S.weekly += P.xp; S.rating += Math.round(P.xp * 0.52);
   if(!S.streakToday){ S.streak++; S.streakToday = true; }
-  S.done = 3; S.newBadge = true;
-  const acc = Math.round(LESSON.qs.length / (LESSON.qs.length + P.mistakes) * 100);
-  S.last = {xp:P.xp, acc, prevWeek, newWeek:weekRank(S.weekly), prevAub, mistakes:P.mistakes};
+  const L = LSN(), first = P.lesson === S.done, badge = first ? L.badge : null;
+  if(first) S.done = P.lesson + 1;
+  if(badge) S.newBadge = true;
+  S.pick = null;
+  const acc = Math.round(L.qs.length / (L.qs.length + P.mistakes) * 100);
+  S.last = {lesson:P.lesson, xp:P.xp, acc, prevWeek, newWeek:weekRank(S.weekly), prevAub, mistakes:P.mistakes};
   $('#pBar').style.width = '100%';
   $('#player').hidden = true;
   renderAll();
@@ -875,13 +1038,13 @@ function finish(){
       <path d="M120 44l5 5 9-10" fill="none" stroke="var(--on-gold)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
     <h1>Lesson complete</h1>
-    <div class="sub">Diversification · Unit 1</div>
+    <div class="sub">${L.title} · Unit 1</div>
     <div class="tiles">
       <div class="tile xp"><div class="t-h">Total XP</div><div class="t-v">${I.bolt}<span id="xpCount">0</span></div></div>
       <div class="tile acc"><div class="t-h">Accuracy</div><div class="t-v">${acc}%</div></div>
       <div class="tile str"><div class="t-h">Streak</div><div class="t-v">${I.flame}${S.streak}</div></div>
     </div>
-    <div class="unlock"><div class="hex">${I.baskets}</div><div><b>Badge unlocked: Many Baskets</b><span>For finishing Diversification</span></div></div>`;
+    ${badge ? `<div class="unlock"><div class="hex">${I[badge.icon]}</div><div><b>Badge unlocked: ${badge.name}</b><span>For finishing ${L.title}</span></div></div>` : ''}`;
   $('#result').hidden = false;
   countUp($('#xpCount'), P.xp);
 }
@@ -895,8 +1058,9 @@ $('#resShare').onclick = openShare;
 
 function shareText(){
   const L = S.last;
-  const score = `${LESSON.qs.length}/${LESSON.qs.length + (L?L.mistakes:0)}`;
-  return `I just finished the Diversification lesson on Bullpen (${score} answers right, +${L?L.xp:0} XP). I'm #${L?L.newWeek:weekRank(S.weekly)} in my Gold League this week. Think you can beat me?`;
+  const n = LESSONS[L ? L.lesson : 2].qs.length, title = LESSONS[L ? L.lesson : 2].title;
+  const score = `${n}/${n + (L?L.mistakes:0)}`;
+  return `I just finished the ${title} lesson on Bullpen (${score} answers right, +${L?L.xp:0} XP). I'm #${L?L.newWeek:weekRank(S.weekly)} in my Gold League this week. Think you can beat me?`;
 }
 function openShare(){
   const L = S.last;
@@ -909,7 +1073,7 @@ function openShare(){
     <div class="wm">Bullpen</div>
     <div class="sc-big">#${L?L.newWeek:weekRank(S.weekly)}</div>
     <div class="sc-sub">in Gold League this week</div>
-    <div class="sc-row"><span>Diversification ✓</span><span>+${L?L.xp:0} XP</span><span>${S.streak}-day streak</span><span>AUB</span></div>`;
+    <div class="sc-row"><span>${LESSONS[L ? L.lesson : 2].title} ✓</span><span>+${L?L.xp:0} XP</span><span>${S.streak}-day streak</span><span>AUB</span></div>`;
   $('#copyMsg').textContent = '';
   $('#shareModal').hidden = false;
 }
