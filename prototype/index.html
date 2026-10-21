@@ -1740,11 +1740,12 @@ function startLesson(idx){ beginPlayer({L:LESSONS[idx], lesson:idx, mode:'lesson
 function startTest(kind, title, qs, extra = {}){ beginPlayer(Object.assign({L:{title, cards:[], qs}, lesson:null, mode:'test', kind}, extra)); }
 function beginPlayer(o){
   P = Object.assign({phase: o.L.cards.length ? 'cards' : 'quiz', i:0, queue:o.L.qs.map((_,i)=>i), sel:null, checked:false, lastOk:false,
-    missed:new Set(), correct:0, answered:0, right:[], xp:0, mistakes:0}, o);
+    missed:new Set(), correct:0, answered:0, right:[], xp:0, mistakes:0, order:{}}, o);
   $('#pHearts').hidden = P.mode === 'test';
   $('#player').hidden = false;
   renderPlayer();
 }
+function shuffled(a){ for(let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 function setHearts(){ $('#pHearts').innerHTML = I.heart + `<span class="n">${S.hearts}</span>`; }
 function progress(){
   const L = LSN();
@@ -1771,9 +1772,12 @@ function renderPlayer(){
       : P.mode === 'test'
       ? `${esc(LSN().title)} · Question ${P.answered+1} of ${n}`
       : `Question ${P.correct+1} of ${n}${P.missed.has(qi)?'<span class="retry">· Try again</span>':''}`;
+    // Shuffle answer order once per question per attempt, so the right answer isn't always in the same spot.
+    // True/false questions keep their order. data-i is always the option's original index.
+    if(!P.order[qi]) P.order[qi] = q.o.length > 2 ? shuffled(q.o.map((_, i) => i)) : q.o.map((_, i) => i);
     body.innerHTML = `<div class="enter"><span class="eyebrow">${eyebrow}</span>
       <div class="q-text">${q.q}</div>
-      <div class="opts">${q.o.map((o,i)=>`<button class="opt" data-i="${i}" aria-pressed="false"><span class="key">${keys[i]}</span><span>${o}</span></button>`).join('')}</div></div>`;
+      <div class="opts">${P.order[qi].map((oi, d)=>`<button class="opt" data-i="${oi}" aria-pressed="false"><span class="key">${keys[d]}</span><span>${q.o[oi]}</span></button>`).join('')}</div></div>`;
     body.querySelectorAll('.opt').forEach(b => b.onclick = () => {
       if(P.checked) return;
       P.sel = +b.dataset.i;
@@ -1799,7 +1803,7 @@ function onPrimary(){
     P.checked = true;
     const ok = P.sel === q.a; P.lastOk = ok;
     const opts = $('#pBody').querySelectorAll('.opt');
-    opts.forEach((o,i) => { o.disabled = true; if(i===q.a) o.classList.add('right'); else if(i===P.sel) o.classList.add('wrong'); });
+    opts.forEach(o => { const oi = +o.dataset.i; o.disabled = true; if(oi===q.a) o.classList.add('right'); else if(oi===P.sel) o.classList.add('wrong'); });
     if(test){ P.right[qi] = ok; P.answered++; }
     if(ok){
       P.correct++; if(!test) P.xp += P.missed.has(qi) ? 5 : 10;
