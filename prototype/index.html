@@ -82,7 +82,7 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
   .device{width:100%; height:100%; border-radius:0; box-shadow:none; border:0}
 }
 
-.screen{flex:1; min-height:0; overflow-y:auto; overscroll-behavior:contain}
+.screen{flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; overscroll-behavior:contain}
 
 /* top status bar */
 .status{position:sticky; top:0; z-index:5; background:var(--surface); border-bottom:1px solid var(--line);
@@ -240,11 +240,6 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
 @keyframes enter{from{transform:translateX(18px); opacity:0}to{transform:none; opacity:1}}
 .term{margin-top:18px; border-radius:16px; padding:14px; background:var(--sky-tint)}
 .term .term-k{display:block; font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--sky); margin-bottom:4px}
-.ref{display:flex; align-items:center; gap:8px; margin-top:18px; padding:11px 13px; border-radius:14px; border:1px solid var(--line); color:var(--ink); text-decoration:none; font-size:14px}
-.ref:hover{background:var(--surface-2)}
-.ref .ref-k{font-family:var(--font-mono); font-size:11px; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-2)}
-.ref b{flex:1}
-.ref .ref-go{color:var(--sky); font-weight:600}
 .intro-meta{display:flex; flex-wrap:wrap; gap:8px; margin-top:18px}
 .intro-meta span{font-family:var(--font-mono); font-size:12px; padding:5px 9px; border-radius:8px; background:var(--surface-2); color:var(--ink-2)}
 
@@ -339,6 +334,94 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
 .unlock span{font-size:13px; color:var(--ink-2)}
 .res-foot{padding-block:12px 20px}
 
+/* lesson visuals (Unit 2) */
+.cdl{display:block; width:100%; max-width:320px; height:auto; margin:18px auto 0}
+.kv{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:14px}
+.kv.kv3{grid-template-columns:repeat(3,1fr)}
+.kv div{background:var(--surface-2); border-radius:14px; padding:10px 6px; text-align:center; min-width:0}
+.kv b{display:block; font-family:var(--font-mono); font-size:16px}
+.kv span{font-size:11.5px; color:var(--ink-2)}
+
+/* learn: placement link, test-out */
+.unit.locked{opacity:.75}
+.place-link{margin-top:16px; display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; padding:12px 14px; border:0; border-radius:16px; background:var(--sky-tint); text-align:left}
+.place-link b{display:block; font-size:14.5px} .place-link span span{display:block; font-size:12.5px; color:var(--ink-2); margin-top:2px}
+.place-link .go{flex:none; color:var(--sky); font-family:var(--font-display); font-weight:800}
+.callout.testout{max-width:none; margin:12px 0 0}
+
+/* onboarding */
+.ob{position:absolute; inset:0; z-index:30; background:var(--surface); display:flex; flex-direction:column}
+.ob-body{flex:1; min-height:0; overflow-y:auto; padding-block:26px 20px}
+.ob-foot{padding-block:12px 20px}
+.ob-foot:empty{display:none}
+.ob .wm{font-family:var(--font-display); font-weight:800; font-size:22px; color:var(--bull-ink)}
+.ob h1{font-size:29px; margin-top:20px; letter-spacing:-.01em}
+.ob .sub{color:var(--ink-2); margin:8px 0 0}
+.choices{display:grid; gap:12px; margin-top:22px}
+.choice{display:flex; gap:14px; align-items:center; text-align:left; width:100%; background:var(--surface); border:2px solid var(--line); box-shadow:0 4px 0 var(--line); border-radius:18px; padding:14px}
+.choice:active{transform:translateY(3px); box-shadow:0 1px 0 var(--line)}
+.choice .lv-ic{flex:none; width:46px; height:46px; display:grid; place-items:center; border-radius:14px}
+.choice .lv-ic svg{width:26px; height:26px}
+.choice b{display:block; font-family:var(--font-display); font-size:17px}
+.choice .d{display:block; font-size:13.5px; color:var(--ink-2); margin-top:2px}
+.ob-card{margin-top:20px; background:var(--banner); color:var(--on-banner); border-radius:22px; padding:18px}
+.ob-card h2{font-size:22px; margin-top:8px}
+.ob-card p{color:var(--on-banner-2); margin:6px 0 0; font-size:14px}
+.ob-note{margin-top:16px; padding:12px 14px; border-radius:16px; background:var(--bull-tint); color:var(--bull-ink); font-weight:600; font-size:14px}
+.text-btn{background:none; border:0; color:var(--ink-2); font-weight:700; text-decoration:underline; padding:8px; width:100%}
+
+/* trade: competitions and clans */
+.seg.three{grid-template-columns:repeat(3,1fr)}
+.field{width:100%; font:inherit; font-size:16px; color:var(--ink); background:var(--surface); border:2px solid var(--line); border-radius:14px; padding:11px 14px}
+.field:focus{outline:none; border-color:var(--sky)}
+.code-row{display:grid; grid-template-columns:minmax(0,1fr) auto; gap:10px; margin-top:10px}
+.code-row .field{text-transform:uppercase; font-family:var(--font-mono); letter-spacing:.06em}
+.code-row .field::placeholder{text-transform:none; letter-spacing:0; font-family:var(--font-body)}
+.btn.sm{width:auto; padding:10px 18px; font-size:15px}
+.msg{min-height:18px; font-size:13px; margin-top:8px}
+.msg.bad{color:var(--bear-ink)} .msg.good{color:var(--bull-ink)}
+.card-list{display:grid; gap:10px; margin-top:12px}
+.comp{display:block; width:100%; text-align:left; background:var(--surface); border:2px solid var(--line); border-radius:18px; padding:14px; box-shadow:0 3px 0 var(--line)}
+.comp-top{display:flex; justify-content:space-between; gap:8px; align-items:flex-start}
+.comp h3{font-size:17px}
+.comp .host{font-size:13px; color:var(--ink-2); margin-top:2px}
+.comp .meta{display:flex; flex-wrap:wrap; gap:6px; margin-top:10px}
+.pill.bull{background:var(--bull-tint); color:var(--bull-ink)}
+.sec-row{display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-top:24px}
+.sec-row .sec-h{margin:0}
+.link-btn{background:none; border:0; color:var(--sky); font-weight:800; font-size:14px; padding:4px}
+.clan{display:grid; grid-template-columns:44px minmax(0,1fr) auto; gap:12px; align-items:center; padding:12px; border:2px solid var(--line); border-radius:18px}
+.clan .cl-ic{width:44px; height:44px; border-radius:14px; display:grid; place-items:center; color:#fff; font-family:var(--font-display); font-weight:800; font-size:15px}
+.clan b{display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.clan .d{display:block; font-size:12.5px; color:var(--ink-2)}
+.clan .btn{width:auto; padding:8px 14px; font-size:14px}
+.clan.mine{border-color:var(--sky); background:var(--sky-tint)}
+.empty{border:2px dashed var(--line); border-radius:18px; padding:16px; color:var(--ink-2); font-size:14px; text-align:center}
+.sheet.tall{max-height:92%; overflow-y:auto}
+.sh-head{display:flex; justify-content:space-between; align-items:flex-start; gap:10px}
+.sh-head h2{margin-top:4px}
+.sheet .sh-sub{margin:8px 0 0}
+.form{display:grid; gap:16px; margin-top:16px}
+.form .l{display:block; font-weight:700; font-size:13.5px; margin-bottom:6px}
+.pills{display:flex; flex-wrap:wrap; gap:8px}
+.pills button{border:2px solid var(--line); background:var(--surface); border-radius:12px; padding:8px 12px; font-weight:700; font-size:13.5px; color:var(--ink-2)}
+.pills button[aria-pressed="true"]{border-color:var(--sky); background:var(--sky-tint); color:var(--sky)}
+.cost{display:flex; justify-content:space-between; gap:10px; align-items:center; padding:12px 14px; border-radius:16px; background:var(--bull-tint); font-size:14px}
+.cost b{font-family:var(--font-mono); color:var(--bull-ink); white-space:nowrap}
+.cost.paid{background:var(--gold-tint)} .cost.paid b{color:var(--gold-ink)}
+.invite{margin-top:16px; border:2px dashed var(--line); border-radius:18px; padding:14px; text-align:center}
+.invite .code{font-family:var(--font-mono); font-weight:800; font-size:26px; letter-spacing:.08em; margin-top:4px}
+.invite .link{font-family:var(--font-mono); font-size:12px; color:var(--ink-2); word-break:break-all; margin-top:6px}
+.mini-board{list-style:none; padding:0; margin:14px 0 0}
+.mini-board li{display:grid; grid-template-columns:30px minmax(0,1fr) auto; gap:10px; padding:8px 6px; border-top:1px solid var(--line); font-size:14px; align-items:center}
+.mini-board li.me{background:var(--sky-tint); border-radius:10px; border-top-color:transparent; color:var(--sky); font-weight:700}
+.mini-board .pts{min-width:0}
+.mini-board li.gap-row{display:block; border-top:0}
+.trophies{list-style:none; padding:0; margin:12px 0 0; display:grid; gap:8px}
+.trophies li{display:flex; gap:12px; align-items:center; padding:12px; border-radius:16px; background:var(--surface-2)}
+.trophies .rk.medal{flex:none; margin:0}
+.trophies b{display:block; font-size:14.5px} .trophies span{font-size:12.5px; color:var(--ink-2)}
+
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important; transition:none!important}
 }
@@ -349,9 +432,9 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
   <div class="ver">Prototype v0.1 · working name</div>
   <p>A clickable demo of the core loop for AUB student interviews.</p>
   <ol>
-    <li>Start the gold lesson on the path</li>
-    <li>Answer five quiz questions</li>
-    <li>See where the XP puts you in the weekly league</li>
+    <li>Pick your level, or take the placement test</li>
+    <li>Play a lesson and see where the XP puts you in the league</li>
+    <li>In Trade, join a competition with code FINA-310, or create your own</li>
   </ol>
   <p>Players and numbers are samples. Nothing you do here is saved or sent.</p>
 </aside>
@@ -401,7 +484,17 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
     </div>
   </section>
 
+  <!-- ONBOARDING: level pick, placement test intro and result, invites -->
+  <section class="ob" id="onboard" hidden aria-label="Get started">
+    <div class="ob-body pad" id="obBody"></div>
+    <div class="ob-foot pad btn-row" id="obFoot"></div>
+  </section>
+
   <!-- OVERLAYS -->
+  <div class="overlay" id="tradeModal" hidden>
+    <div class="sheet tall pad" role="dialog" aria-modal="true" aria-label="Competition" id="tradeSheet"></div>
+  </div>
+
   <div class="overlay" id="heartsModal" hidden>
     <div class="sheet pad" role="dialog" aria-modal="true" aria-labelledby="hmT">
       <svg class="big-ic" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 20.5s-7.5-4.6-9.2-9.3C1.6 7.8 3.8 4.5 7.1 4.5c2 0 3.6 1.1 4.9 2.8 1.3-1.7 2.9-2.8 4.9-2.8 3.3 0 5.5 3.3 4.3 6.7-1.7 4.7-9.2 9.3-9.2 9.3z" opacity=".35"/></svg>
@@ -443,6 +536,7 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
 const $ = s => document.querySelector(s);
 const fmt = n => n.toLocaleString('en-US');
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc = v => String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 /* ---------- icons ---------- */
 const I = {
@@ -467,17 +561,7 @@ document.querySelectorAll('[data-ic]').forEach(el => el.innerHTML = I[el.dataset
 $('#pClose').innerHTML = I.x;
 
 /* ---------- content ---------- */
-const PATH = ['What a stock is','Risk and return','Diversification','Index funds','Fees and compounding','Unit check'];
-/* Further reading. We link to Investopedia for depth; lesson text is always our own words. */
-const IVP = 'https://www.investopedia.com/terms/';
-const PATH_REFS = [
-  {title:'Stock', url:IVP+'s/stock.asp'},
-  {title:'Risk-return tradeoff', url:IVP+'r/riskreturntradeoff.asp'},
-  {title:'Diversification', url:IVP+'d/diversification.asp'},
-  {title:'Index fund', url:IVP+'i/indexfund.asp'},
-  {title:'Compounding', url:IVP+'c/compounding.asp'},
-  null
-];
+/* sideways offsets for the six candles in each unit */
 const OFFSETS = [0, 58, 76, 34, -42, -12];
 
 const WHAT_A_STOCK = {
@@ -485,9 +569,8 @@ const WHAT_A_STOCK = {
   cards:[
     {k:'Lesson 1 · The idea', t:'A small piece of a company', b:`
       <p class="lead">A stock, also called a share, is a small piece of ownership in a company. Buy one and you own part of that business.</p>
-      <div class="term"><span class="term-k">Key term</span><b>Shareholder:</b> anyone who owns at least one share of a company.</div>
-      <div class="intro-meta"><span>4 ideas</span><span>5 questions</span><span>About 4 min</span></div>`,
-     ref:{title:'Stock', url:IVP+'s/stock.asp'}},
+      <div class="term"><span class="term-k">Key term</span><b>Equity:</b> another word for ownership. That's why stocks are also called equities, and why "equity markets" means stock markets.</div>
+      <div class="intro-meta"><span>4 ideas</span><span>5 questions</span><span>About 4 min</span></div>`},
     {k:'Do the maths', t:'How big is your slice?', b:`
       <p>A bakery is split into 1,000 shares. The whole business is worth $200,000. You buy 10 shares.</p>
       <div class="compare">
@@ -502,16 +585,14 @@ const WHAT_A_STOCK = {
           <div class="pf-r">You own 1%, worth<b class="mono good-t">$2,000</b></div>
         </div>
       </div>
-      <p>$200,000 ÷ 1,000 shares = $200 a share. 10 shares × $200 = $2,000, which is 1% of the bakery.</p>`,
-     ref:{title:'Shareholder', url:IVP+'s/shareholder.asp'}},
+      <p>$200,000 ÷ 1,000 shares = $200 a share. 10 shares × $200 = $2,000, which is 1% of the bakery.</p>`},
     {k:'Making money', t:'Two ways shares pay you', b:`
       <div class="split">
         <div class="col good"><div class="col-h">Way 1</div><b>The price goes up</b><p>Buy a share at $20, sell it later at $26, and you keep the $6 difference.</p></div>
         <div class="col good"><div class="col-h">Way 2</div><b>Dividends</b><p>Some companies pay shareholders part of their profits, often every three months.</p></div>
       </div>
       <p>Many companies, especially young fast-growing ones, pay no dividend. They put their profits back into growing the business instead.</p>
-      <div class="term"><span class="term-k">Key term</span><b>Dividend:</b> a cash payment a company makes to its shareholders out of its profits.</div>`,
-     ref:{title:'Dividend', url:IVP+'d/dividend.asp'}},
+      <div class="term"><span class="term-k">Key term</span><b>Dividend:</b> a cash payment a company makes to its shareholders out of its profits.</div>`},
     {k:'The risk', t:'Prices move every day', b:`
       <p>Shares are bought and sold on a stock exchange, like the New York Stock Exchange or Nasdaq. When more people want to buy a share than sell it, the price rises. When more want to sell, it falls.</p>
       <div class="split">
@@ -519,8 +600,7 @@ const WHAT_A_STOCK = {
         <div class="col bad"><div class="col-h">Worst case</div><b>It can go to $0</b><p>If the company fails, shareholders are paid last and can lose everything they put in.</p></div>
       </div>
       <p>If you buy shares with your own money, the most you can lose is what you paid. You can't end up owing more.</p>
-      <div class="term"><span class="term-k">Key term</span><b>Stock exchange:</b> a marketplace where buyers and sellers trade shares.</div>`,
-     ref:{title:'Stock exchange', url:IVP+'s/stockexchange.asp'}}
+      <div class="term"><span class="term-k">Key term</span><b>Stock exchange:</b> a marketplace where buyers and sellers trade shares.</div>`}
   ],
   qs:[
     {q:'What do you get when you buy one share of a company?',
@@ -547,8 +627,7 @@ const RISK_AND_RETURN = {
     {k:'Lesson 2 · The idea', t:'What you get, and how sure you are', b:`
       <p class="lead">Return is how much you gain or lose on an investment. Risk is how uncertain that result is, including the chance you lose money.</p>
       <div class="term"><span class="term-k">Key term</span><b>Return:</b> the gain or loss, usually shown as a percentage of what you put in. $1,000 that grows to $1,100 is a 10% return.</div>
-      <div class="intro-meta"><span>4 ideas</span><span>5 questions</span><span>About 4 min</span></div>`,
-     ref:{title:'Return', url:IVP+'r/return.asp'}},
+      <div class="intro-meta"><span>4 ideas</span><span>5 questions</span><span>About 4 min</span></div>`},
     {k:'The trade-off', t:'No free lunch', b:`
       <p>In general, investments that can pay more are also the ones that can drop more. You take on more risk for the chance of a bigger return.</p>
       <div class="split">
@@ -556,8 +635,7 @@ const RISK_AND_RETURN = {
         <div class="col bad"><div class="col-h">Higher risk</div><b>Bigger possible gains and losses</b><p>Shares in single companies, crypto.</p></div>
       </div>
       <p>Higher risk means a wider range of outcomes. It is not a promise of more money: a risky investment can lose badly.</p>
-      <div class="term"><span class="term-k">Key term</span><b>Risk-return trade-off:</b> the higher the possible return, the higher the risk you usually have to accept.</div>`,
-     ref:{title:'Risk-return tradeoff', url:IVP+'r/riskreturntradeoff.asp'}},
+      <div class="term"><span class="term-k">Key term</span><b>Risk-return trade-off:</b> the higher the possible return, the higher the risk you usually have to accept.</div>`},
     {k:'Do the maths', t:'Same average, different ride', b:`
       <p>Two investments each start with $1,000 and run for four years. Both average 6% a year.</p>
       <div class="compare">
@@ -574,8 +652,7 @@ const RISK_AND_RETURN = {
       </div>
       <p>B was a much bumpier ride, and the drops cost it more than the average suggests: it ends $39 behind.</p>
       <div class="term"><span class="term-k">Key term</span><b>Volatility:</b> how much a price swings up and down.</div>
-      <p>This is why Bullpen seasons rank you on return divided by swings. Wild bets that happen to pay off shouldn't beat steady skill.</p>`,
-     ref:{title:'Volatility', url:IVP+'v/volatility.asp'}},
+      <p>This is why Bullpen seasons rank you on return divided by swings. Wild bets that happen to pay off shouldn't beat steady skill.</p>`},
     {k:'Your timeline', t:'When you need the money matters', b:`
       <p>How much risk makes sense depends partly on when you'll need the money back.</p>
       <div class="split">
@@ -583,8 +660,7 @@ const RISK_AND_RETURN = {
         <div class="col good"><div class="col-h">Needed in 10+ years</div><b>Time to ride out drops</b><p>One bad year matters less when there are many years left.</p></div>
       </div>
       <p>Time doesn't remove risk. It gives you room to wait instead of being forced to sell at a low point.</p>
-      <div class="term"><span class="term-k">Key term</span><b>Time horizon:</b> how long until you need the money you invested.</div>`,
-     ref:{title:'Time horizon', url:IVP+'t/timehorizon.asp'}}
+      <div class="term"><span class="term-k">Key term</span><b>Time horizon:</b> how long until you need the money you invested.</div>`}
   ],
   qs:[
     {q:'You invest $500 and it grows to $550. What is your return?',
@@ -610,9 +686,8 @@ const DIVERSIFICATION = {
   cards:[
     {k:'Lesson 3 · The idea', t:'Spread your money out', b:`
       <p class="lead">Diversification means splitting your money across many different investments, so one bad result can't sink the whole portfolio.</p>
-      <div class="term"><span class="term-k">Key term</span><b>Portfolio:</b> everything you own as investments, taken together.</div>
-      <div class="intro-meta"><span>4 ideas</span><span>5 questions</span><span>About 4 min</span></div>`,
-     ref:{title:'Portfolio', url:IVP+'p/portfolio.asp'}},
+      <div class="term"><span class="term-k">Key term</span><b>Concentration risk:</b> the danger of having too much of your money riding on a single investment.</div>
+      <div class="intro-meta"><span>4 ideas</span><span>5 questions</span><span>About 4 min</span></div>`},
     {k:'Do the maths', t:'One basket or ten?', b:`
       <p>Two students each invest $1,000. Then one company has terrible news and its shares fall 40%.</p>
       <div class="compare">
@@ -629,8 +704,7 @@ const DIVERSIFICATION = {
           <div class="pf-r">One falls 40%, the rest hold<b class="mono good-t">$960</b></div>
         </div>
       </div>
-      <p>Same bad news. Portfolio A loses $400. Portfolio B loses $40.</p>`,
-     ref:{title:'Diversification', url:IVP+'d/diversification.asp'}},
+      <p>Same bad news. Portfolio A loses $400. Portfolio B loses $40.</p>`},
     {k:'The catch', t:'Different has to mean different', b:`
       <p>Spreading out only helps if your investments don't all move together. Ten tech companies often rise and fall at the same time, so owning all ten is close to one big bet.</p>
       <div class="mix">
@@ -641,16 +715,14 @@ const DIVERSIFICATION = {
         <div class="mix-h"><span>Actually spread out</span><span class="tag good">Moves differently</span></div>
         <div class="chips"><span>Tech</span><span>Healthcare</span><span>Energy</span><span>Bonds</span><span>Gold</span><span>Other countries</span></div>
       </div>
-      <div class="term"><span class="term-k">Key term</span><b>Correlation:</b> how closely two investments move together.</div>`,
-     ref:{title:'Correlation', url:IVP+'c/correlation.asp'}},
+      <div class="term"><span class="term-k">Key term</span><b>Correlation:</b> how closely two investments move together.</div>`},
     {k:'The limit', t:"What it can't protect you from", b:`
       <p>Diversification cuts the risk that comes from any one company. It can't remove the risk that hits the whole market at once.</p>
       <div class="split">
         <div class="col good"><div class="col-h">Reduces</div><b>Company-specific risk</b><p>A scandal, a failed product, a bad CEO.</p></div>
         <div class="col bad"><div class="col-h">Can't remove</div><b>Market risk</b><p>A recession or crash, when most prices fall together.</p></div>
       </div>
-      <p>So a diversified portfolio can still lose money in a bad year. It usually loses less than a single bet would.</p>`,
-     ref:{title:'Unsystematic risk', url:IVP+'u/unsystematicrisk.asp'}}
+      <p>So a diversified portfolio can still lose money in a bad year. It usually loses less than a single bet would.</p>`}
   ],
   qs:[
     {q:'Rana keeps all her savings in shares of one company. Which risk is she most exposed to?',
@@ -677,8 +749,7 @@ const INDEX_FUNDS = {
     {k:'Lesson 4 · The idea', t:'Buy the whole list', b:`
       <p class="lead">An index is a list of companies used to measure part of the market. An index fund buys every company on that list, so one purchase gives you a small piece of all of them.</p>
       <div class="term"><span class="term-k">Key term</span><b>S&amp;P 500:</b> an index of about 500 of the largest companies listed in the US. When people say "the market was up today", they often mean this index.</div>
-      <div class="intro-meta"><span>4 ideas</span><span>5 questions</span><span>About 4 min</span></div>`,
-     ref:{title:'Index fund', url:IVP+'i/indexfund.asp'}},
+      <div class="intro-meta"><span>4 ideas</span><span>5 questions</span><span>About 4 min</span></div>`},
     {k:'Do the maths', t:'Diversification in one click', b:`
       <p>Remember Lesson 3: spreading money out cuts the damage from any one company. Here is what $100 gets you.</p>
       <div class="compare">
@@ -694,24 +765,21 @@ const INDEX_FUNDS = {
         </div>
       </div>
       <p>Many index funds are ETFs, so you buy and sell them on a stock exchange just like a share.</p>
-      <div class="term"><span class="term-k">Key term</span><b>ETF (exchange-traded fund):</b> a fund that trades on a stock exchange like a single share.</div>`,
-     ref:{title:'S&P 500', url:IVP+'s/sp500.asp'}},
+      <div class="term"><span class="term-k">Key term</span><b>ETF (exchange-traded fund):</b> a fund that trades on a stock exchange like a single share.</div>`},
     {k:'Active or passive', t:'Copy the market or try to beat it', b:`
       <div class="split">
         <div class="col bad"><div class="col-h">Active fund</div><b>Managers pick stocks</b><p>They try to beat the market. Paying them usually means higher fees.</p></div>
         <div class="col good"><div class="col-h">Index fund</div><b>Copies the list</b><p>No stock picking, so fees are usually very low.</p></div>
       </div>
       <p>Beating the market is hard. Over 10 to 15 years, most active US stock funds have done worse than the S&amp;P 500 once fees are taken out, according to S&amp;P's regular SPIVA reports.</p>
-      <div class="term"><span class="term-k">Key term</span><b>Expense ratio:</b> the fee a fund charges each year, as a percentage of the money you have in it.</div>`,
-     ref:{title:'Active management', url:IVP+'a/activemanagement.asp'}},
+      <div class="term"><span class="term-k">Key term</span><b>Expense ratio:</b> the fee a fund charges each year, as a percentage of the money you have in it.</div>`},
     {k:'The limit', t:'You get the market, ups and downs', b:`
       <p>An index fund holds hundreds of companies, but they are all in the same market. When the whole market falls, the fund falls with it.</p>
       <div class="split">
         <div class="col good"><div class="col-h">Removes</div><b>Picking the wrong company</b><p>One company failing barely dents the fund.</p></div>
         <div class="col bad"><div class="col-h">Doesn't remove</div><b>Market risk</b><p>In a crash, most of the list drops together.</p></div>
       </div>
-      <p>An index fund won't beat the market. By design it gets the market's return, minus its small fee.</p>`,
-     ref:{title:'ETF', url:IVP+'e/etf.asp'}}
+      <p>An index fund won't beat the market. By design it gets the market's return, minus its small fee.</p>`}
   ],
   qs:[
     {q:'What does an index fund do?',
@@ -750,8 +818,7 @@ const FEES_AND_COMPOUNDING = {
         </div>
       </div>
       <div class="term"><span class="term-k">Key term</span><b>Compounding:</b> earning a return on your past returns, not just on the money you first put in.</div>
-      <div class="intro-meta"><span>4 ideas</span><span>5 questions</span><span>About 5 min</span></div>`,
-     ref:{title:'Compounding', url:IVP+'c/compounding.asp'}},
+      <div class="intro-meta"><span>4 ideas</span><span>5 questions</span><span>About 5 min</span></div>`},
     {k:'Do the maths', t:'Time does the heavy lifting', b:`
       <p>$1,000 growing 7% a year, left alone:</p>
       <div class="split">
@@ -759,8 +826,7 @@ const FEES_AND_COMPOUNDING = {
         <div class="col good"><div class="col-h">After 30 years</div><b class="mono">$7,612</b><p>More than seven times.</p></div>
       </div>
       <p>After 20 years it's $3,870. So the last 10 years add $3,742, more than the first 20 years put together ($2,870).</p>
-      <div class="term"><span class="term-k">Key term</span><b>Rule of 72:</b> divide 72 by the yearly return to estimate how many years it takes to double. At 7%, about 10 years.</div>`,
-     ref:{title:'Rule of 72', url:IVP+'r/ruleof72.asp'}},
+      <div class="term"><span class="term-k">Key term</span><b>Rule of 72:</b> divide 72 by the yearly return to estimate how many years it takes to double. At 7%, about 10 years.</div>`},
     {k:'The catch', t:'Fees compound too', b:`
       <p>Two funds both earn 7% a year before fees. You put $10,000 in each and leave it for 30 years.</p>
       <div class="compare">
@@ -775,16 +841,14 @@ const FEES_AND_COMPOUNDING = {
           <div class="pf-r">Ends at<b class="mono bad-t">$57,435</b></div>
         </div>
       </div>
-      <p>A fee gap that looks tiny each year costs $16,582 over 30 years, because every dollar taken in fees stops compounding for you.</p>`,
-     ref:{title:'Expense ratio', url:IVP+'e/expenseratio.asp'}},
+      <p>A fee gap that looks tiny each year costs $16,582 over 30 years, because every dollar taken in fees stops compounding for you.</p>`},
     {k:'The other side', t:'Compounding works on debt too', b:`
       <p>When you owe money, the interest compounds against you. Unpaid interest gets added to what you owe, and then you pay interest on that too.</p>
       <div class="split">
         <div class="col good"><div class="col-h">Saving at 7%</div><b>Doubles in about 10 years</b><p>72 ÷ 7 ≈ 10.</p></div>
         <div class="col bad"><div class="col-h">Owing at 24%</div><b>Doubles in about 3 years</b><p>72 ÷ 24 = 3. Credit card rates are often this high.</p></div>
       </div>
-      <div class="term"><span class="term-k">Key term</span><b>Compound interest:</b> interest charged or earned on both the original amount and the interest already added.</div>`,
-     ref:{title:'Compound interest', url:IVP+'c/compoundinterest.asp'}}
+      <div class="term"><span class="term-k">Key term</span><b>Compound interest:</b> interest charged or earned on both the original amount and the interest already added.</div>`}
   ],
   qs:[
     {q:'$1,000 earns 10% a year, and the gains stay invested. What is it worth after 2 years?',
@@ -805,8 +869,360 @@ const FEES_AND_COMPOUNDING = {
   ]
 };
 
-/* One entry per playable lesson, in path order. Lesson 6 (Unit check) isn't written yet. */
-const LESSONS = [WHAT_A_STOCK, RISK_AND_RETURN, DIVERSIFICATION, INDEX_FUNDS, FEES_AND_COMPOUNDING];
+const UNIT1_CHECK = {
+  title:'Unit check', min:4, badge:{name:'Market Basics', icon:'book'}, cards:[],
+  qs:[
+    {q:'A company has 60,000 shares. You own 300. What percentage of the company do you own?',
+     o:['0.05%','0.5%','5%','20%'], a:1,
+     e:'300 ÷ 60,000 = 0.005, which is 0.5%.'},
+    {q:'You invest $800 and it grows to $920. What is your return?',
+     o:['12%','15%','20%','$120'], a:1,
+     e:'You gained $120 on $800. $120 ÷ $800 = 0.15, which is 15%.'},
+    {q:'Which pair spreads your risk the most?',
+     o:['A global stock index fund and a government bond fund','Shares in two oil companies','Shares in two banks','Bitcoin and another cryptocurrency'], a:0,
+     e:'Stocks and government bonds often move differently. The other pairs tend to rise and fall together.'},
+    {q:'A fund charges 0.5% a year. You have $20,000 in it. What is this year\'s fee?',
+     o:['$10','$50','$100','$1,000'], a:2,
+     e:'0.5% of $20,000 = 0.005 × $20,000 = $100.'},
+    {q:'Using the rule of 72, roughly how long does money take to double at 6% a year?',
+     o:['6 years','12 years','18 years','72 years'], a:1,
+     e:'72 ÷ 6 = 12 years.'},
+    {q:'An S&P 500 index fund holds about 500 companies. Why can it still fall 30% in a year?',
+     o:['A market-wide fall hits most of those companies at once','Index funds always lose money in the long run','One bad company can sink the whole fund','The fund manager made bad picks'], a:0,
+     e:'Diversification removes company-specific risk, not market risk.'},
+    {q:'Which of these usually has the widest range of possible outcomes?',
+     o:['Shares in a single young company','A bank savings account','A short-term government bond','An S&P 500 index fund'], a:0,
+     e:'One young company can multiply in value or go to zero. The others swing far less.'},
+    {q:'Two funds both earn 8% a year before fees. One charges 1.5% a year, the other 0.2%. What happens over 30 years?',
+     o:['The 1.5% fund ends with much less, because the fees compound','They end up about the same','The 1.5% fund ends with more because it costs more','Fees only matter in the first year'], a:0,
+     e:'Every year the higher fee takes more, and that money stops compounding for you.'}
+  ]
+};
+
+/* ---------- Unit 2: Reading the market ---------- */
+const PRICE_CHARTS = {
+  title:'Price charts', min:4,
+  cards:[
+    {k:'Unit 2 · Lesson 1', t:'Four prices in one candle', b:`
+      <p class="lead">Most trading apps show prices as candlesticks. Each candle sums up one period, such as one day, with four prices: open, high, low and close.</p>
+      <svg class="cdl" viewBox="0 0 300 160" role="img" aria-label="Two candles. Green: close above open. Red: close below open. Thin wicks reach the high and low.">
+        <line x1="60" y1="10" x2="60" y2="132" stroke="var(--bull-deep)" stroke-width="3" stroke-linecap="round"/>
+        <rect x="42" y="32" width="36" height="72" rx="5" fill="var(--bull)"/>
+        <g font-family="var(--font-mono)" font-size="11" fill="var(--ink-2)">
+          <text x="86" y="14">High</text><text x="86" y="37">Close</text><text x="86" y="107">Open</text><text x="86" y="134">Low</text>
+          <text x="214" y="14" text-anchor="end">High</text><text x="214" y="37" text-anchor="end">Open</text><text x="214" y="107" text-anchor="end">Close</text><text x="214" y="134" text-anchor="end">Low</text>
+          <text x="60" y="154" text-anchor="middle" fill="var(--bull-ink)">Closed higher</text><text x="240" y="154" text-anchor="middle" fill="var(--bear-ink)">Closed lower</text>
+        </g>
+        <line x1="240" y1="10" x2="240" y2="132" stroke="var(--bear-deep)" stroke-width="3" stroke-linecap="round"/>
+        <rect x="222" y="32" width="36" height="72" rx="5" fill="var(--bear)"/>
+      </svg>
+      <div class="term"><span class="term-k">Key term</span><b>Body and wicks:</b> the thick body runs from the open to the close. The thin wicks stretch to the period's high and low.</div>
+      <div class="intro-meta"><span>4 ideas</span><span>5 questions</span><span>About 4 min</span></div>`},
+    {k:'Read one candle', t:'What happened that day', b:`
+      <p>A stock's daily candle shows these four prices:</p>
+      <div class="kv"><div><b>$50</b><span>Open</span></div><div><b>$54</b><span>High</span></div><div><b>$48</b><span>Low</span></div><div><b>$53</b><span>Close</span></div></div>
+      <p>It closed above where it opened, so the candle is green. The body runs from $50 to $53. The wicks reach up to $54 and down to $48.</p>
+      <p>Change for the day: $53 − $50 = <b>+$3</b>, and $3 ÷ $50 = <b class="good-t">+6%</b>.</p>`},
+    {k:'Zoom out', t:'The timeframe changes the story', b:`
+      <p>A candle can cover one minute, one day or one week. The same stock can look like it's crashing on an hourly chart and climbing steadily on a yearly one.</p>
+      <div class="split">
+        <div class="col bad"><div class="col-h">Past week</div><b>−8%</b><p>Five red candles in a row.</p></div>
+        <div class="col good"><div class="col-h">Past year</div><b>+40%</b><p>A steady climb with a small dip at the end.</p></div>
+      </div>
+      <div class="term"><span class="term-k">Key term</span><b>Volume:</b> how many shares changed hands in a period. A big move on high volume means a lot of buyers or sellers took part.</div>`},
+    {k:'The limit', t:'Charts show the past, not the future', b:`
+      <p>A chart tells you what the price did. It doesn't tell you why it moved, or what it will do next.</p>
+      <p>People look for patterns in charts, but a pattern that worked before is no guarantee it will work again. Research on whether chart patterns beat the market after trading costs is mixed at best.</p>
+      <div class="split">
+        <div class="col good"><div class="col-h">Charts are good for</div><b>Seeing what happened</b><p>Trends, swings and how far a price has fallen from its high.</p></div>
+        <div class="col bad"><div class="col-h">Charts can't</div><b>Predict tomorrow</b><p>Prices react to news nobody has seen yet.</p></div>
+      </div>`}
+  ],
+  qs:[
+    {q:'On a daily candle, what does the top of the upper wick show?',
+     o:["The day's highest price",'The closing price','The opening price',"The day's average price"], a:0,
+     e:'The wicks stretch to the highest and lowest prices of the period.'},
+    {q:'A stock opens at $40 and closes at $37. On most charts, what colour is that candle?',
+     o:['Green','Red','Grey','It depends on the volume'], a:1,
+     e:'It closed below where it opened, so it is a falling, red candle.'},
+    {q:'A stock opens at $50 and closes at $53. What was its change that day?',
+     o:['+3%','+6%','+53%','+$53'], a:1,
+     e:'It rose $3 on a $50 start. $3 ÷ $50 = 6%.'},
+    {q:'Which statement about price charts is true?',
+     o:['They show what happened, not what will happen next','A rising chart guarantees more gains','Candle patterns reliably predict tomorrow','Charts show how much profit a company makes'], a:0,
+     e:'Charts record past prices. Future prices depend on news nobody has seen yet.'},
+    {q:'A stock is down 8% this week but up 40% over the past year. What does this show?',
+     o:['The timeframe you look at changes the story','The stock is crashing','The yearly chart must be wrong','Weekly charts are more accurate'], a:0,
+     e:'Zooming in or out can make the same stock look very different.'}
+  ]
+};
+
+const MARKET_CAP = {
+  title:'Market cap', min:4,
+  cards:[
+    {k:'Unit 2 · Lesson 2', t:'Price alone tells you little', b:`
+      <p class="lead">A $500 share doesn't mean a bigger company than a $50 share. To know a company's size, you also need to know how many shares exist.</p>
+      <div class="term"><span class="term-k">Key term</span><b>Market cap:</b> share price × number of shares. It's what the stock market says the whole company is worth.</div>
+      <div class="intro-meta"><span>4 ideas</span><span>5 questions</span><span>About 4 min</span></div>`},
+    {k:'Do the maths', t:'Which company is bigger?', b:`
+      <div class="compare">
+        <div class="pf">
+          <div class="pf-h">Company A</div>
+          <p>$500 a share × 10 million shares</p>
+          <div class="pf-r">Market cap<b class="mono">$5 billion</b></div>
+        </div>
+        <div class="pf">
+          <div class="pf-h">Company B</div>
+          <p>$50 a share × 2 billion shares</p>
+          <div class="pf-r">Market cap<b class="mono good-t">$100 billion</b></div>
+        </div>
+      </div>
+      <p>Company B's shares cost a tenth as much, but the company is 20 times bigger.</p>`},
+    {k:'Stock splits', t:'More slices, same pizza', b:`
+      <p>A company can split each share into several. The price per share drops, you get more shares, and the total value stays the same.</p>
+      <div class="split">
+        <div class="col good"><div class="col-h">Before a 10-for-1 split</div><b class="mono">2 × $600</b><p>Worth $1,200.</p></div>
+        <div class="col good"><div class="col-h">After</div><b class="mono">20 × $60</b><p>Still worth $1,200.</p></div>
+      </div>
+      <div class="term"><span class="term-k">Key term</span><b>Stock split:</b> dividing each share into more shares at a lower price, without changing the company's value.</div>`},
+    {k:'Size groups', t:'Large, mid and small', b:`
+      <p>Investors often group companies by market cap. The exact lines vary, but these are common:</p>
+      <div class="score"><div><b>$10B+</b><span>Large-cap</span></div><div><b>$2B–10B</b><span>Mid-cap</span></div><div><b>$0.3B–2B</b><span>Small-cap</span></div></div>
+      <p>Smaller companies can grow faster, but their prices usually swing more. Large companies tend to be steadier.</p>`}
+  ],
+  qs:[
+    {q:'A company\'s shares cost $20, and there are 500 million of them. What is its market cap?',
+     o:['$10 million','$500 million','$1 billion','$10 billion'], a:3,
+     e:'$20 × 500 million = $10 billion.'},
+    {q:'Company X\'s shares cost $400. Company Y\'s cost $40. Which company is bigger?',
+     o:['Company X','Company Y',"You can't tell without knowing how many shares each has",'They are the same size'], a:2,
+     e:'Size is price × number of shares. The price alone doesn\'t tell you.'},
+    {q:'You own 3 shares at $900 each. The company does a 3-for-1 split. What do you own now?',
+     o:['9 shares at $300','3 shares at $300','9 shares at $900','1 share at $2,700'], a:0,
+     e:'Three times the shares at a third of the price. Still $2,700 in total.'},
+    {q:'Using the common size groups, a company worth $50 billion is:',
+     o:['Large-cap','Mid-cap','Small-cap','Micro-cap'], a:0,
+     e:'Anything above about $10 billion is usually called large-cap.'},
+    {q:'Which statement is usually true?',
+     o:["Smaller companies' prices tend to swing more than large ones","Small-cap stocks are always safer","Market cap measures a company's profit","A lower share price means a cheaper company"], a:0,
+     e:'Smaller companies can grow faster, but their prices usually move more.'}
+  ]
+};
+
+const EARNINGS_PE = {
+  title:'Earnings and P/E', min:5,
+  cards:[
+    {k:'Unit 2 · Lesson 3', t:'What the company earns', b:`
+      <p class="lead">Earnings are a company's profit after all its costs. Split them across all the shares and you get earnings per share.</p>
+      <div class="kv kv3"><div><b>$2B</b><span>Yearly profit</span></div><div><b>1B</b><span>Shares</span></div><div><b class="good-t">$2</b><span>Earnings per share</span></div></div>
+      <div class="term"><span class="term-k">Key term</span><b>EPS (earnings per share):</b> profit ÷ number of shares.</div>
+      <div class="intro-meta"><span>4 ideas</span><span>5 questions</span><span>About 5 min</span></div>`},
+    {k:'Do the maths', t:'The P/E ratio', b:`
+      <p>The P/E ratio compares the share price with earnings per share. It tells you how many dollars investors pay for each $1 of yearly profit.</p>
+      <div class="compare">
+        <div class="pf">
+          <div class="pf-h">Company A</div>
+          <p>Price $30 ÷ EPS $3</p>
+          <div class="pf-r">P/E<b class="mono">10</b></div>
+        </div>
+        <div class="pf">
+          <div class="pf-h">Company B</div>
+          <p>Price $100 ÷ EPS $2</p>
+          <div class="pf-r">P/E<b class="mono">50</b></div>
+        </div>
+      </div>
+      <p>Investors pay $10 for each $1 of Company A's profit, and $50 for each $1 of Company B's.</p>
+      <div class="term"><span class="term-k">Key term</span><b>P/E ratio:</b> share price ÷ earnings per share.</div>`},
+    {k:'Reading it', t:'High or low, not good or bad', b:`
+      <div class="split">
+        <div class="col good"><div class="col-h">High P/E</div><b>Big expectations</b><p>Investors expect fast growth, or the price has run ahead of the business.</p></div>
+        <div class="col bad"><div class="col-h">Low P/E</div><b>Low expectations</b><p>Slow growth, a problem investors are worried about, or a bargain.</p></div>
+      </div>
+      <p>P/E only makes sense next to similar companies. Two supermarket chains are a fair comparison. A bank and a software start-up aren't.</p>`},
+    {k:'The limit', t:'When P/E breaks down', b:`
+      <p>If a company made a loss, P/E has no meaning. And one strange year, like a one-off sale of a building, can make earnings look better or worse than normal.</p>
+      <div class="split">
+        <div class="col good"><div class="col-h">Trailing P/E</div><b>Last year's earnings</b><p>Real numbers, but about the past.</p></div>
+        <div class="col good"><div class="col-h">Forward P/E</div><b>Next year's forecast</b><p>About the future, but only a guess.</p></div>
+      </div>`}
+  ],
+  qs:[
+    {q:'A company earns $500 million in a year and has 250 million shares. What is its EPS?',
+     o:['$0.50','$2','$5','$250'], a:1,
+     e:'$500 million ÷ 250 million shares = $2 a share.'},
+    {q:'A share costs $60 and the company\'s EPS is $3. What is its P/E ratio?',
+     o:['3','18','20','63'], a:2,
+     e:'$60 ÷ $3 = 20.'},
+    {q:'A company has a P/E of 40. What does that usually tell you?',
+     o:['Investors expect strong growth','The company is losing money','The shares are cheap','It pays a large dividend'], a:0,
+     e:'Paying $40 for each $1 of profit only makes sense if investors expect profits to grow.'},
+    {q:'Which P/E comparison makes the most sense?',
+     o:['Two supermarket chains','A bank and a software start-up','A company\'s P/E and its share price','Gold and a tech stock'], a:0,
+     e:'P/E is most useful between similar businesses.'},
+    {q:'A company made a loss last year. What is its trailing P/E?',
+     o:['It has no meaningful P/E','Zero','Very high','The same as its share price'], a:0,
+     e:'With negative earnings, the ratio doesn\'t mean anything.'}
+  ]
+};
+
+const PLACING_ORDERS = {
+  title:'Placing orders', min:4,
+  cards:[
+    {k:'Unit 2 · Lesson 4', t:'Two prices, not one', b:`
+      <p class="lead">For every buyer there's a seller. At any moment a stock has two prices: what buyers are offering and what sellers are asking.</p>
+      <div class="kv kv3"><div><b>$99.90</b><span>Bid (buyers)</span></div><div><b>$100.10</b><span>Ask (sellers)</span></div><div><b class="bad-t">$0.20</b><span>Spread</span></div></div>
+      <div class="term"><span class="term-k">Key term</span><b>Bid-ask spread:</b> the gap between the highest price a buyer will pay and the lowest price a seller will accept.</div>
+      <div class="intro-meta"><span>4 ideas</span><span>5 questions</span><span>About 4 min</span></div>`},
+    {k:'Order types', t:'Speed or price: pick one', b:`
+      <div class="split">
+        <div class="col good"><div class="col-h">Market order</div><b>Fills now</b><p>Buys at the best ask, or sells at the best bid, straight away. The exact price isn't guaranteed.</p></div>
+        <div class="col good"><div class="col-h">Limit order</div><b>Your price or better</b><p>"Buy at $98 or less." The price is guaranteed, but it may never fill.</p></div>
+      </div>
+      <div class="term"><span class="term-k">Key term</span><b>Limit order:</b> an order to buy or sell only at a price you set, or better.</div>`},
+    {k:'Do the maths', t:'The hidden cost of the spread', b:`
+      <p>You buy 50 shares at the ask of $100.10, then change your mind and sell straight away at the bid of $99.90.</p>
+      <div class="split">
+        <div class="col bad"><div class="col-h">Lost to the spread</div><b class="mono">$10</b><p>$0.20 × 50 shares, before any fees.</p></div>
+        <div class="col good"><div class="col-h">Where it's smaller</div><b>Busy stocks</b><p>Lots of buyers and sellers keep the gap tight.</p></div>
+      </div>
+      <p>Rarely traded stocks and small coins often have much wider spreads.</p>`},
+    {k:'In Bullpen', t:'How the trading game fills orders', b:`
+      <p>When prices move fast, a market order can fill at a worse price than the one you saw. That's called slippage.</p>
+      <p>In Bullpen's trading game, every order fills at the next market price after you tap, never at an old price on screen. It works like a real market order, so nobody can game a stale price.</p>
+      <div class="term"><span class="term-k">Key term</span><b>Slippage:</b> the difference between the price you expected and the price you actually got.</div>`}
+  ],
+  qs:[
+    {q:'The bid is $24.95 and the ask is $25.05. If you buy with a market order right now, about what do you pay?',
+     o:['$24.95','$25.00','$25.05','$25.10'], a:2,
+     e:'A market buy fills at the ask: the lowest price a seller will accept.'},
+    {q:'Which order type guarantees your price but might never fill?',
+     o:['Market order','Limit order','Both','Neither'], a:1,
+     e:'A limit order only fills at your price or better. If the market never gets there, it doesn\'t fill.'},
+    {q:'The bid is $9.98 and the ask is $10.02. You buy 200 shares and sell them straight away. How much do you lose to the spread?',
+     o:['$0.04','$4','$8','$40'], a:2,
+     e:'The spread is $0.04 a share. $0.04 × 200 = $8.'},
+    {q:'You only want to buy if the price drops to $45 or lower. Which order do you place?',
+     o:['A limit buy at $45','A market buy now','A market sell','A limit sell at $45'], a:0,
+     e:'A limit buy at $45 only fills at $45 or less.'},
+    {q:'Why do rarely traded stocks tend to have wider spreads?',
+     o:['Fewer buyers and sellers are competing on price','Exchanges charge more for them','They are always more profitable','The law requires it'], a:0,
+     e:'With little competition, the gap between bids and asks stays wide.'}
+  ]
+};
+
+const BULLS_AND_BEARS = {
+  title:'Bulls, bears and recoveries', min:5,
+  cards:[
+    {k:'Unit 2 · Lesson 5', t:'Naming the moves', b:`
+      <p class="lead">Markets go through long rises and sharp falls. The names tell you how big a fall was.</p>
+      <div class="score"><div><b>10–20%</b><span>Correction</span></div><div><b>20%+</b><span>Bear market</span></div><div><b>Long rise</b><span>Bull market</span></div></div>
+      <div class="term"><span class="term-k">Key term</span><b>Drawdown:</b> how far a price has fallen from its last peak.</div>
+      <div class="intro-meta"><span>4 ideas</span><span>5 questions</span><span>About 5 min</span></div>`},
+    {k:'Do the maths', t:'Losses need bigger gains to undo', b:`
+      <p>After a fall, you're climbing back from a smaller amount, so the percentage you need is bigger than the one you lost.</p>
+      <div class="score"><div><b class="bad-t">−10%</b><span>needs +11%</span></div><div><b class="bad-t">−20%</b><span>needs +25%</span></div><div><b class="bad-t">−50%</b><span>needs +100%</span></div></div>
+      <p>$1,000 that falls 50% is $500. A 50% rise from there only gets you to $750.</p>`},
+    {k:'History', t:'Real falls, real recoveries', b:`
+      <div class="split">
+        <div class="col bad"><div class="col-h">2007–2009</div><b>S&amp;P 500 fell ~57%</b><p>It took until 2013 to get back to its old high.</p></div>
+        <div class="col bad"><div class="col-h">2020</div><b>Fell ~34% in a month</b><p>It was back at its high by August, about 5 months after the low.</p></div>
+      </div>
+      <p>Recoveries aren't guaranteed to be quick. Japan's Nikkei index took about 34 years to get back to its 1989 peak.</p>`},
+    {k:'The trap', t:'Big rebounds hide next to big falls', b:`
+      <p>Some of the market's biggest one-day gains came within days of its worst falls, for example in October 2008 and March 2020.</p>
+      <div class="split">
+        <div class="col bad"><div class="col-h">Sold in the panic</div><b>Locked in the loss</b><p>And often missed the rebound days.</p></div>
+        <div class="col good"><div class="col-h">Stayed invested</div><b>Rode it out</b><p>Only works if you don't need the money soon (Lesson 2).</p></div>
+      </div>
+      <p>This is history, not a promise. Nobody knows when a fall will end.</p>`}
+  ],
+  qs:[
+    {q:'A market falls 25% from its peak. What is that usually called?',
+     o:['A bear market','A correction','A bull market','A recession'], a:0,
+     e:'A fall of 20% or more from the peak is usually called a bear market.'},
+    {q:'Your $2,000 portfolio falls 50%. What rise do you need to get back to $2,000?',
+     o:['50%','75%','100%','200%'], a:2,
+     e:'You\'re down to $1,000. Getting back to $2,000 means doubling: +100%.'},
+    {q:'A portfolio falls 20%, then rises 20%. Where does it end up?',
+     o:['Back to even','Down 4%','Up 4%','Down 20%'], a:1,
+     e:'$100 → $80 → $96. The rise is 20% of a smaller amount.'},
+    {q:'A market drops 12% from its peak. What is that usually called?',
+     o:['A bear market','A correction','A crash','A bull market'], a:1,
+     e:'A fall of 10% to 20% is usually called a correction.'},
+    {q:'After its March 2020 low, roughly how long did the S&P 500 take to get back to its February high?',
+     o:['About 2 weeks','About 5 months','About 5 years','It never got back'], a:1,
+     e:'It hit its low on 23 March and set a new high in August 2020.'}
+  ]
+};
+
+const UNIT2_CHECK = {
+  title:'Unit check', min:4, badge:{name:'Chart Reader', icon:'candles'}, cards:[],
+  qs:[
+    {q:'A daily candle opens at $120, closes at $126, has a high of $129 and a low of $118. How tall is its body?',
+     o:['$3','$6','$9','$11'], a:1,
+     e:'The body runs from the open to the close: $126 − $120 = $6.'},
+    {q:'A company has 300 million shares at $50 each. What is its market cap?',
+     o:['$350 million','$1.5 billion','$15 billion','$150 billion'], a:2,
+     e:'$50 × 300 million = $15 billion.'},
+    {q:'A share costs $45 and EPS is $1.50. What is the P/E ratio?',
+     o:['15','30','43.5','67.5'], a:1,
+     e:'$45 ÷ $1.50 = 30.'},
+    {q:'Two software companies have P/E ratios of 15 and 60. What is the most likely reason for the gap?',
+     o:['Investors expect the P/E 60 company to grow much faster','The P/E 60 company is cheaper','The P/E 15 company is losing money','They are worth exactly the same'], a:0,
+     e:'A high P/E usually means investors are paying up for expected growth.'},
+    {q:'A rarely traded stock has a bid of $3.00 and an ask of $3.10. You buy 1,000 shares and sell them straight away. What do you lose to the spread?',
+     o:['$10','$100','$310','$3,100'], a:1,
+     e:'$0.10 a share × 1,000 shares = $100.'},
+    {q:'Getting a specific price matters more to you than getting filled quickly. Which order fits?',
+     o:['A limit order','A market order','Either, they work the same way','Neither'], a:0,
+     e:'A limit order only fills at your price or better.'},
+    {q:'What does a 2-for-1 stock split change?',
+     o:['The number of shares and the price per share, not the total value','The total value of your shares','The company\'s profit','Nothing at all'], a:0,
+     e:'You get twice the shares at half the price. The total stays the same.'},
+    {q:'A portfolio falls from $10,000 to $7,000. Roughly what rise gets it back to $10,000?',
+     o:['30%','43%','70%','100%'], a:1,
+     e:'It needs $3,000 on top of $7,000. $3,000 ÷ $7,000 ≈ 43%.'}
+  ]
+};
+
+/* Placement test: question i checks lesson PLACE_AT[i]. Kept separate from lesson quizzes. */
+const PLACEMENT = [
+  {q:'A company has 1 million shares. You own 10,000. What share of the company do you own?',
+   o:['0.1%','1%','10%','100%'], a:1, e:'10,000 ÷ 1,000,000 = 0.01, which is 1%.'},
+  {q:'Which of these usually has the widest range of possible outcomes?',
+   o:['Shares in a single young company','A bank savings account','A short-term government bond','A broad stock index fund'], a:0,
+   e:'One young company can soar or go to zero. The others swing far less.'},
+  {q:'Why does owning 20 airline stocks give limited protection?',
+   o:['They tend to rise and fall together','Airlines never pay dividends','20 companies is too many to track','Airline shares are too cheap'], a:0,
+   e:'Investments that move together don\'t spread your risk much.'},
+  {q:'What does an S&P 500 index fund aim to do?',
+   o:['Match the return of about 500 large US companies','Beat the market by picking winners','Avoid any losses','Invest in 500 different countries'], a:0,
+   e:'It copies the index rather than trying to beat it.'},
+  {q:'$5,000 earns 10% a year for 2 years, with the gains reinvested. What is it worth?',
+   o:['$5,500','$6,000','$6,050','$10,000'], a:2, e:'$5,000 → $5,500 → $6,050.'},
+  {q:'A daily candle opens at $80, closes at $76, and its low is $74. Where is the bottom of the lower wick?',
+   o:['$76','$80','$74','$78'], a:2, e:'The lower wick reaches the day\'s low: $74.'},
+  {q:'Shares cost $25, and there are 4 billion of them. What is the market cap?',
+   o:['$4 billion','$25 billion','$100 billion','$1 trillion'], a:2, e:'$25 × 4 billion = $100 billion.'},
+  {q:'A share costs $90 and earnings per share are $4.50. What is the P/E ratio?',
+   o:['4.5','20','40.5','85.5'], a:1, e:'$90 ÷ $4.50 = 20.'},
+  {q:'You only want to sell if you get $120 a share or more. Which order fits?',
+   o:['A market sell','A limit sell at $120','A limit buy at $120','A market buy'], a:1, e:'A limit sell at $120 only fills at $120 or higher.'},
+  {q:'A stock falls 40%. What rise brings it back to where it started?',
+   o:['40%','60%','About 67%','140%'], a:2, e:'It\'s at 60% of its old price. 100 ÷ 60 ≈ 1.67, so it needs about +67%.'}
+];
+const PLACE_AT = [0,1,2,3,4,6,7,8,9,10];
+
+/* Units in order. LESSONS is the flat list the path and player use; UNIT_START[u] is where unit u begins. */
+const UNITS = [
+  {title:'How markets work', level:'Beginner', lessons:[WHAT_A_STOCK, RISK_AND_RETURN, DIVERSIFICATION, INDEX_FUNDS, FEES_AND_COMPOUNDING, UNIT1_CHECK]},
+  {title:'Reading the market', level:'Intermediate', lessons:[PRICE_CHARTS, MARKET_CAP, EARNINGS_PE, PLACING_ORDERS, BULLS_AND_BEARS, UNIT2_CHECK]}
+];
+const LESSONS = [], UNIT_START = [];
+UNITS.forEach((U, u) => {
+  UNIT_START.push(LESSONS.length);
+  U.lessons.forEach((L, j) => { L.unit = u; L.n = j + 1; LESSONS.push(L); });
+});
 
 /* sample players */
 const LEAGUE = [
@@ -822,7 +1238,10 @@ const LEB = [['karim99','LAU',1902],['nour.h','AUB',1720],['christa.l','USJ',171
 const GLOBAL = [['finn.o','UK',2214],['layla.q','AE',2187],['omar.s','SA',2150],['karim99','LB',1902],['hana.m','JO',1880],['youssef.e','EG',1861]];
 
 /* ---------- state ---------- */
-const INITIAL = {streak:7, streakToday:false, hearts:5, xpTotal:1240, weekly:215, rating:1388, done:2, tab:'learn', view:'week', last:null, wait:false, newBadge:false, pick:null};
+const INITIAL = {streak:7, streakToday:false, hearts:5, xpTotal:1240, weekly:215, rating:1388, done:0, tab:'learn', view:'week', last:null, wait:false, newBadge:null, pick:null,
+  onboarded:false, level:null, placed:false, testedOut:[], scrollCur:false,
+  tview:'comps', joined:['AUB-CUP'], created:{}, credits:1, clan:null, requested:[], createdClans:[], clanQ:'', draft:null,
+  trophies:[{name:'Global Weekly Sprint', when:'Week 41, 2026', place:2, of:3880}]};
 let S = JSON.parse(JSON.stringify(INITIAL));
 
 function avColor(name){ let h=0; for(const c of name) h=(h*31+c.charCodeAt(0))>>>0; return 'var(--av'+(h%5+1)+')'; }
@@ -856,56 +1275,294 @@ function statusBar(){
   </div>`;
 }
 
-function lessonMeta(L){ return `${L.cards.length} ideas · ${L.qs.length} questions · about ${L.min} min`; }
+function lessonMeta(L){
+  return L.cards.length ? `${L.cards.length} ideas · ${L.qs.length} questions · about ${L.min} min`
+                        : `Mixed review · ${L.qs.length} questions · about ${L.min} min`;
+}
 function maxXp(L){ return L.qs.length * 10 + 15; }
 
 function renderLearn(){
-  const cur = S.done; // index of current lesson
+  const cur = S.done; // global index of the next lesson
   const pick = S.pick ?? cur; // lesson whose card is open on the path
-  let path = '';
-  PATH.forEach((t,i) => {
-    const st = i < cur ? 'done' : i === cur ? 'current' : 'locked';
-    path += `<button class="node ${st}" style="--x:${OFFSETS[i]}px" data-i="${i}" aria-label="${t}, ${st==='done'?'completed':st==='current'?'next lesson':'locked'}">
-      ${st==='current'?'<span class="ring"></span>':''}${candle(st, i+1)}<span class="lbl">${t}</span></button>`;
-    if(i === pick){
-      const L = LESSONS[i];
-      if(L && i <= cur){
-        const again = i < cur;
-        path += `<div class="callout"><span class="eyebrow">Lesson ${i+1} of 6${again?' · Completed':''}</span><h3>${L.title}</h3>
-          <div class="meta">${lessonMeta(L)}</div>
-          <button class="btn${again?' ghost':''}" id="startBtn">${again?'Practice again':'Start'} · up to +${maxXp(L)} XP</button></div>`;
-      } else if(i === cur){
-        path += `<div class="callout soon"><span class="eyebrow">Lesson ${i+1} of 6</span><h3>${t}</h3>
-          <div class="meta">This lesson comes in the next prototype. Today's lesson is done.</div></div>`;
-      }
+  const firstLocked = UNITS.findIndex((U, u) => UNIT_START[u] > cur);
+  let html = '';
+  UNITS.forEach((U, u) => {
+    const start = UNIT_START[u], len = U.lessons.length;
+    const doneHere = Math.max(0, Math.min(cur - start, len));
+    html += `<div class="unit${start > cur ? ' locked' : ''}"><div><div class="k">Unit ${u+1} · ${U.level}</div><h2>${U.title}</h2></div><div class="prog">${doneHere} / ${len} done</div></div>`;
+    if(u === firstLocked && u > 0){
+      html += `<div class="callout soon testout"><span class="eyebrow">Skip ahead</span><h3>Know Unit ${u} already?</h3>
+        <div class="meta">Get 6 of 8 right on the Unit ${u} check and jump straight to Unit ${u+1}. No lives lost.</div>
+        <button class="btn ghost" id="testOutBtn">Test out of Unit ${u}</button></div>`;
     }
+    let path = '';
+    U.lessons.forEach((L, j) => {
+      const i = start + j;
+      const st = i < cur ? 'done' : i === cur ? 'current' : 'locked';
+      path += `<button class="node ${st}" style="--x:${OFFSETS[j]}px" data-i="${i}" aria-label="${L.title}, ${st==='done'?'completed':st==='current'?'next lesson':'locked'}">
+        ${st==='current'?'<span class="ring"></span>':''}${candle(st, j+1)}<span class="lbl">${L.title}</span></button>`;
+      if(i === pick && i <= cur){
+        const again = i < cur, tested = S.testedOut.includes(i);
+        path += `<div class="callout"><span class="eyebrow">Unit ${u+1} · Lesson ${j+1} of ${len}${again ? (tested ? ' · Tested out' : ' · Completed') : ''}</span><h3>${L.title}</h3>
+          <div class="meta">${lessonMeta(L)}</div>
+          <button class="btn${again?' ghost':''}" id="startBtn">${again?'Practice':'Start'} · up to +${maxXp(L)} XP</button></div>`;
+      }
+    });
+    html += `<div class="path">${path}</div>`;
   });
-  $('#s-learn').innerHTML = statusBar() + `
-    <div class="pad">
-      <div class="unit"><div><div class="k">Unit 1</div><h2>How markets work</h2></div><div class="prog">${S.done} / 6 done</div></div>
-      <div class="path">${path}</div>
-      <div class="next-unit">${I.lock}<div><b>Unit 2 · Reading a price chart</b>Finish Unit 1 to unlock</div></div>
-    </div>`;
+  const allDone = cur >= LESSONS.length;
+  html += `<div class="next-unit">${I.lock}<div><b>Unit 3 · Options basics</b>${allDone ? "You've finished everything built so far. Options come next." : 'Coming in a later prototype'}</div></div>`;
+  const placeLink = S.placed ? '' : `<button class="place-link" id="placeBtn"><span><b>Already know some of this?</b><span>Take the 2-minute placement test and skip ahead.</span></span><span class="go">Test →</span></button>`;
+  $('#s-learn').innerHTML = statusBar() + `<div class="pad">${placeLink}${html}</div>`;
+
   const sb = $('#startBtn'); if(sb) sb.onclick = () => startLesson(pick);
+  const pb = $('#placeBtn'); if(pb) pb.onclick = () => showOnboard('intro');
+  const tb = $('#testOutBtn'); if(tb) tb.onclick = () => {
+    const u = firstLocked - 1;
+    startTest('testout', `Unit ${u+1} test-out`, UNITS[u].lessons[UNITS[u].lessons.length-1].qs, {unit:u});
+  };
   $('#s-learn').querySelectorAll('.node').forEach(n => n.onclick = () => {
     const i = +n.dataset.i;
-    if(i > cur || !LESSONS[i]) return;
+    if(i > cur) return;
     if(i === pick) startLesson(i);          // second tap (or tap on the current lesson) starts it
     else { S.pick = i; renderLearn(); }     // first tap on a finished lesson opens its card
   });
+  if(S.scrollCur){
+    S.scrollCur = false;
+    requestAnimationFrame(() => {
+      const n = $('#s-learn .node.current'), sc = $('#s-learn'); if(!n) return;
+      sc.scrollTop += n.getBoundingClientRect().top - sc.getBoundingClientRect().top - sc.clientHeight / 2 + 60;
+    });
+  }
 }
 
-/* ---------- trade ---------- */
+/* ---------- trade: competitions, clans, portfolio ---------- */
+/* Sample competitions, keyed by join code. Created ones live in S.created. */
+const COMPS = {
+  'AUB-CUP': {name:'AUB Investing Cup', host:'AUB Finance Club', kind:'Campus', vis:'Code', players:186, len:'Semester', starts:'Starts 1 Feb 2027', cash:10000, assets:'Stocks, ETFs, crypto and gold', prize:'Trophy, Cup badge and a prize from the season sponsor'},
+  'FINA-310': {name:'FINA 310 Trading Challenge', host:'Prof. R. Haddad · AUB', kind:'Class', vis:'Code', players:42, len:'6 weeks', starts:'Starts 2 Mar 2027', cash:100000, assets:'Stocks and ETFs', prize:'Trophy and Winner badge'},
+  'IC-2027': {name:'IC Seniors Challenge', host:'IC Economics Department', kind:'School', vis:'Code', players:64, len:'1 month', starts:'Starts 15 Feb 2027', cash:10000, assets:'Stocks and ETFs', prize:'Trophy and Winner badge'},
+  'SPRINT': {name:'Global Weekly Sprint', host:'Bullpen', kind:'Public', vis:'Public', players:4210, len:'1 week', starts:'Live · ends Sunday', cash:10000, assets:'Stocks, ETFs, crypto and gold', prize:'Trophies for the top 3', live:true, me:[388, 0.91]},
+  'MARATHON': {name:'Steady Hands Marathon', host:'Bullpen', kind:'Public', vis:'Public', players:1932, len:'3 months', starts:'Live · week 3 of 13', cash:10000, assets:'Stocks, ETFs and gold', prize:'Trophies for the top 3', live:true, me:[212, 0.79]},
+  'CEDARS-CUP': {name:'Lebanon Crypto Cup', host:'Crypto Cedars clan', kind:'Public', vis:'Public', players:388, len:'1 month', starts:'Starts 1 Nov 2026', cash:10000, assets:'Crypto only', prize:'Trophy and Winner badge'}
+};
+const PUBLIC_COMPS = ['SPRINT', 'MARATHON', 'CEDARS-CUP'];
+const TOP5 = [['layla.q','AE',1.84],['finn.o','UK',1.71],['karim99','LB',1.66],['nour.h','LB',1.58],['omar.s','SA',1.52]];
+const CLANS = [
+  {name:'AUB Finance Club', tag:'AUB', members:142, rank:1, score:1.18, open:true},
+  {name:'LAU Bulls', tag:'LAU', members:96, rank:2, score:1.11, open:true},
+  {name:'USJ Quant Society', tag:'USJ', members:58, rank:3, score:1.07, open:false},
+  {name:'Beirut Value Investors', tag:'Beirut', members:211, rank:4, score:0.98, open:true},
+  {name:'Women in Finance Lebanon', tag:'Lebanon', members:74, rank:5, score:0.94, open:true},
+  {name:'BAU Traders', tag:'BAU', members:47, rank:6, score:0.89, open:true},
+  {name:'Crypto Cedars', tag:'Lebanon', members:388, rank:7, score:0.71, open:true},
+  {name:'IC Class of 2027', tag:'IC', members:61, rank:9, score:0.66, open:false}
+];
+const comp = code => COMPS[code] || S.created[code];
+const inviteLink = code => location.origin + location.pathname + '?join=' + encodeURIComponent(code);
+const allClans = () => S.createdClans.concat(CLANS);
+
 function renderTrade(){
+  const tabs = [['comps','Competitions'],['clans','Clans'],['portfolio','Portfolio']];
+  const body = S.tview === 'clans' ? tradeClans() : S.tview === 'portfolio' ? tradePortfolio() : tradeComps();
+  $('#s-trade').innerHTML = `
+    <div class="pad">
+      <div class="screen-h"><h1>Trading game</h1><p>Fake money. Real prices. Ranked on skill.</p></div>
+      <div class="seg three" role="group" aria-label="Trading game">${tabs.map(t => `<button data-v="${t[0]}" aria-pressed="${S.tview===t[0]}">${t[1]}</button>`).join('')}</div>
+      ${body}
+    </div>`;
+  $('#s-trade').querySelectorAll('.seg button').forEach(b => b.onclick = () => { S.tview = b.dataset.v; renderTrade(); });
+  if(S.tview === 'comps') bindComps();
+  else if(S.tview === 'clans') bindClans();
+  else $('#waitBtn').onclick = () => { S.wait = true; renderTrade(); };
+}
+
+/* competitions */
+function compCard(code){
+  const C = comp(code), joined = S.joined.includes(code), host = !!S.created[code];
+  const tag = host ? '<span class="pill">Host</span>' : joined ? '<span class="pill bull">Joined</span>' : `<span class="pill soft">${C.vis}</span>`;
+  return `<button class="comp" data-code="${esc(code)}"><div class="comp-top"><div><h3>${esc(C.name)}</h3><div class="host">${esc(C.host)}</div></div>${tag}</div>
+    <div class="meta"><span class="chip">${fmt(C.players)} ${C.players === 1 ? 'player' : 'players'}</span><span class="chip">${esc(C.len)}</span><span class="chip">${esc(C.starts)}</span></div></button>`;
+}
+function tradeComps(){
+  const open = PUBLIC_COMPS.filter(c => !S.joined.includes(c));
+  return `
+    <div class="sec-h" style="margin-top:22px">Join with a code</div>
+    <div class="code-row"><input class="field" id="codeIn" placeholder="e.g. FINA-310" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Competition code"><button class="btn sm" id="codeGo">Join</button></div>
+    <div class="msg" id="codeMsg" aria-live="polite"></div>
+    <div class="sec-row"><div class="sec-h">Your competitions</div><button class="link-btn" id="newComp">+ Create</button></div>
+    <div class="card-list">${S.joined.map(compCard).join('') || '<div class="empty">Join one with a code, or create your own.</div>'}</div>
+    ${open.length ? `<div class="sec-h">Open to everyone</div><div class="card-list">${open.map(compCard).join('')}</div>` : ''}
+    <div class="footnote">Demo codes: AUB-CUP, FINA-310, IC-2027.<br>Prizes are trophies and badges, never cash from entry fees.</div>`;
+}
+function bindComps(){
+  const go = () => {
+    const code = $('#codeIn').value.trim().toUpperCase(), m = $('#codeMsg');
+    if(!code){ m.className = 'msg bad'; m.textContent = 'Type the code your host gave you.'; return; }
+    if(!comp(code)){ m.className = 'msg bad'; m.textContent = `No competition uses the code ${code}. Check it with your host.`; return; }
+    if(S.joined.includes(code)){ openComp(code, "You're already in this one."); return; }
+    S.joined.unshift(code); renderTrade(); openComp(code, `You're in! You joined with code ${code}.`);
+  };
+  $('#codeGo').onclick = go;
+  $('#codeIn').onkeydown = e => { if(e.key === 'Enter') go(); };
+  $('#newComp').onclick = openCreate;
+  $('#s-trade').querySelectorAll('.comp').forEach(b => b.onclick = () => openComp(b.dataset.code));
+}
+
+function openSheet(html){ $('#tradeSheet').innerHTML = html; $('#tradeModal').hidden = false; $('#tradeSheet').scrollTop = 0; }
+function closeSheet(){ $('#tradeModal').hidden = true; }
+$('#tradeModal').onclick = e => { if(e.target.id === 'tradeModal') closeSheet(); };
+
+function openComp(code, note){
+  const C = comp(code), joined = S.joined.includes(code);
+  let board = '<div class="demo-note">Rankings appear once it starts.</div>';
+  if(C.live){
+    const rows = TOP5.map((p, i) => `<li><span class="rk ${i<3?'medal m'+(i+1):''}">${i+1}</span><span class="nm">${p[0]} <em>· ${p[1]}</em></span><span class="pts">${p[2].toFixed(2)}</span></li>`).join('');
+    const me = joined ? `<li class="me"><span class="rk">${C.me[0]}</span><span class="nm">You</span><span class="pts">${C.me[1].toFixed(2)}</span></li>` : '';
+    board = `<div class="sec-h" style="margin-top:18px">Standings · season score</div><ol class="mini-board">${rows}${me ? '<li class="gap-row" aria-hidden="true">· · ·</li>' + me : ''}</ol>`;
+  }
+  openSheet(`
+    <div class="sh-head"><div><span class="eyebrow">${esc(C.kind)} competition</span><h2>${esc(C.name)}</h2></div><button class="icon-btn" id="tmClose" aria-label="Close">${I.x}</button></div>
+    <p class="sh-sub">${esc(C.host)} · ${esc(C.starts)}</p>
+    ${note ? `<div class="moved">${I.check}<span>${esc(note)}</span></div>` : ''}
+    <div class="score"><div><b>$${fmt(C.cash)}</b><span>Start cash</span></div><div><b>${esc(C.len)}</b><span>Length</span></div><div><b>${fmt(C.players)}</b><span>Players</span></div></div>
+    <ul class="rules">
+      <li>${I.check}<span>Trade: ${esc(C.assets)}.</span></li>
+      <li>${I.check}<span>Ranked by season score: return divided by swings, so steady skill beats a lucky gamble.</span></li>
+      <li>${I.trophy}<span>Prize: ${esc(C.prize)}. Wins show on your profile.</span></li>
+    </ul>
+    ${board}
+    ${joined ? `<div class="invite"><span class="eyebrow">Invite code</span><div class="code">${esc(code)}</div><div class="link">${esc(inviteLink(code))}</div></div>` : ''}
+    <div class="btn-row" style="margin-top:16px">
+      ${joined ? '<button class="btn" id="tmCopy">Copy invite link</button>' : '<button class="btn" id="tmJoin">Join competition</button>'}
+      <button class="btn ghost" id="tmDone">Done</button>
+    </div>
+    <div class="copy-msg" id="tmMsg" aria-live="polite"></div>`);
+  $('#tmClose').onclick = $('#tmDone').onclick = closeSheet;
+  if(joined) $('#tmCopy').onclick = () => copyText(`Join my Bullpen trading competition "${C.name}". Code ${code}, or tap: ${inviteLink(code)}`, $('#tmMsg'), 'Link copied. Paste it into WhatsApp or your class group.');
+  else $('#tmJoin').onclick = () => { S.joined.unshift(code); renderTrade(); openComp(code, "You're in!"); };
+}
+
+/* create a tournament. Free: up to 30 players for up to a month. Bigger or semester-long uses 1 credit. */
+function openCreate(){
+  const d = S.draft || (S.draft = {name:'', vis:'code', len:'1 month', cash:10000, assets:['Stocks & ETFs','Crypto','Gold'], size:30});
+  const paid = d.size > 30 || d.len === 'Semester';
+  const pills = (k, opts, multi) => `<div class="pills" data-k="${k}"${multi?' data-multi="1"':''}>${opts.map(o => {
+    const on = multi ? d[k].includes(o[0]) : d[k] === o[0];
+    return `<button type="button" data-val="${esc(o[0])}" aria-pressed="${on}">${o[1]}</button>`;
+  }).join('')}</div>`;
+  openSheet(`
+    <div class="sh-head"><div><span class="eyebrow">New tournament</span><h2>Create a tournament</h2></div><button class="icon-btn" id="tmClose" aria-label="Close">${I.x}</button></div>
+    <p class="sh-sub">Run a competition for your class, club or friends. You get a code and a link to share.</p>
+    <div class="form">
+      <div><label class="l" for="cName">Name</label><input class="field" id="cName" maxlength="40" placeholder="e.g. FINA 310 Spring Challenge" value="${esc(d.name)}"></div>
+      <div><span class="l">Who can join</span>${pills('vis', [['code','Anyone with the code'],['public','Public: listed for everyone']])}</div>
+      <div><span class="l">Length</span>${pills('len', [['1 week','1 week'],['1 month','1 month'],['Semester','Semester']])}</div>
+      <div><span class="l">Starting cash</span>${pills('cash', [[10000,'$10,000'],[100000,'$100,000']])}</div>
+      <div><span class="l">What players can trade</span>${pills('assets', [['Stocks & ETFs','Stocks & ETFs'],['Crypto','Crypto'],['Gold','Gold']], true)}</div>
+      <div><span class="l">Players</span>${pills('size', [[30,'Up to 30'],[500,'Up to 500']])}</div>
+      <div class="cost ${paid?'paid':''}"><span>${paid ? `Bigger or semester-long tournament. You have ${S.credits} credit${S.credits===1?'':'s'}.` : 'Small tournament, up to a month'}</span><b>${paid ? '1 credit' : 'Free'}</b></div>
+    </div>
+    <div class="demo-note">Free: up to 30 players for up to a month. Pro includes 1 credit a month for bigger ones.</div>
+    <div class="btn-row" style="margin-top:16px"><button class="btn" id="cGo">Create and get the code</button></div>
+    <div class="msg bad" id="cMsg" aria-live="polite"></div>`);
+  $('#tmClose').onclick = closeSheet;
+  $('#cName').oninput = e => { d.name = e.target.value; };
+  $('#tradeSheet').querySelectorAll('.pills button').forEach(b => b.onclick = () => {
+    const box = b.parentElement, k = box.dataset.k;
+    let v = b.dataset.val; if(k === 'cash' || k === 'size') v = +v;
+    if(box.dataset.multi){
+      d[k] = d[k].includes(v) ? d[k].filter(x => x !== v) : d[k].concat(v);
+      if(!d[k].length) d[k] = [v]; // at least one asset type
+    } else d[k] = v;
+    openCreate();
+  });
+  $('#cGo').onclick = () => {
+    const name = d.name.trim();
+    if(name.length < 3){ $('#cMsg').textContent = 'Give your tournament a name (at least 3 letters).'; return; }
+    if(paid && S.credits < 1){ $('#cMsg').textContent = "You're out of credits. In the app you'd buy one or upgrade to Pro."; return; }
+    if(paid) S.credits--;
+    const stem = (name.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6) || 'BP');
+    let code; do { code = stem + '-' + Math.floor(100 + Math.random() * 900); } while(comp(code));
+    S.created[code] = {name, host:'You · new.player', kind: d.vis === 'public' ? 'Public' : 'Private', vis: d.vis === 'public' ? 'Public' : 'Code',
+      players:1, len:d.len, starts:'Starts when you press go', cash:d.cash, assets:d.assets.join(', '), prize:'Trophy and Winner badge'};
+    S.joined.unshift(code); S.draft = null;
+    renderTrade();
+    openComp(code, paid ? 'Created. 1 credit used. Share the code or link so people can join.' : 'Created. Share the code or link so people can join.');
+  };
+}
+
+/* clans */
+function clanRow(c){
+  const mine = S.clan === c.name, asked = S.requested.includes(c.name);
+  const btn = mine ? '<span class="pill bull">Your clan</span>'
+    : asked ? '<span class="pill soft">Requested</span>'
+    : `<button class="btn ${c.open ? '' : 'ghost'}" data-clan="${esc(c.name)}">${c.open ? 'Join' : 'Ask to join'}</button>`;
+  return `<div class="clan${mine?' mine':''}"><span class="cl-ic" style="background:${avColor(c.name)}">${esc(c.name.split(' ').map(w => w[0]).join('').slice(0,2))}</span>
+    <span style="min-width:0"><b>${esc(c.name)}</b><span class="d">${esc(c.tag)} · ${fmt(c.members)} member${c.members===1?'':'s'} · ${c.rank ? '#' + c.rank + ' in Lebanon' : 'New'}</span></span>${btn}</div>`;
+}
+function clanList(){
+  const q = S.clanQ.trim().toLowerCase();
+  const list = allClans().filter(c => !q || c.name.toLowerCase().includes(q) || c.tag.toLowerCase().includes(q));
+  return list.map(clanRow).join('') || '<div class="empty">No clans match. You could create one.</div>';
+}
+function tradeClans(){
+  const mine = S.clan && allClans().find(c => c.name === S.clan);
+  return `
+    ${mine ? `<div class="sec-row"><div class="sec-h">Your clan</div><button class="link-btn" id="leaveClan">Leave</button></div><div class="card-list">${clanRow(mine)}</div>
+      <div class="demo-note">Clan score ${typeof mine.score === 'number' ? mine.score.toFixed(2) : 'starts after your first season'} · clans can host tournaments for their members.</div>` : ''}
+    <div class="sec-h" style="margin-top:22px">Find a clan</div>
+    <input class="field" id="clanQ" style="margin-top:10px" placeholder="Search by name or school" value="${esc(S.clanQ)}" aria-label="Search clans" autocomplete="off">
+    <div class="card-list" id="clanList">${clanList()}</div>
+    <div style="margin-top:16px"><button class="btn ghost" id="newClan">Create a clan</button></div>
+    <div class="footnote">Clans rank by the average season score of their top 10 members.<br>Under-18 players can only join clans their school sets up.</div>`;
+}
+function bindClanButtons(){
+  $('#s-trade').querySelectorAll('[data-clan]').forEach(b => b.onclick = () => {
+    const c = allClans().find(x => x.name === b.dataset.clan);
+    if(c.open) S.clan = c.name; else S.requested.push(c.name);
+    renderTrade();
+  });
+}
+function bindClans(){
+  $('#clanQ').oninput = e => { S.clanQ = e.target.value; $('#clanList').innerHTML = clanList(); bindClanButtons(); };
+  bindClanButtons();
+  const lv = $('#leaveClan'); if(lv) lv.onclick = () => { S.clan = null; renderTrade(); };
+  $('#newClan').onclick = openCreateClan;
+}
+function openCreateClan(open = true){
+  openSheet(`
+    <div class="sh-head"><div><span class="eyebrow">New clan</span><h2>Create a clan</h2></div><button class="icon-btn" id="tmClose" aria-label="Close">${I.x}</button></div>
+    <p class="sh-sub">A team for your class, club or friends. Your clan's rank is the average season score of its top 10 members.</p>
+    <div class="form">
+      <div><label class="l" for="clName">Clan name</label><input class="field" id="clName" maxlength="32" placeholder="e.g. OSB Bulls"></div>
+      <div><span class="l">Who can join</span><div class="pills"><button type="button" data-open="1" aria-pressed="${open}">Anyone can join</button><button type="button" data-open="0" aria-pressed="${!open}">Approve requests</button></div></div>
+    </div>
+    <div class="btn-row" style="margin-top:16px"><button class="btn" id="clGo">Create clan</button></div>
+    <div class="msg bad" id="clMsg" aria-live="polite"></div>`);
+  $('#tmClose').onclick = closeSheet;
+  $('#tradeSheet').querySelectorAll('[data-open]').forEach(b => b.onclick = () => {
+    const name = $('#clName').value; openCreateClan(b.dataset.open === '1'); $('#clName').value = name;
+  });
+  $('#clGo').onclick = () => {
+    const name = $('#clName').value.trim();
+    if(name.length < 3){ $('#clMsg').textContent = 'Give your clan a name (at least 3 letters).'; return; }
+    if(allClans().some(c => c.name.toLowerCase() === name.toLowerCase())){ $('#clMsg').textContent = 'A clan with that name already exists.'; return; }
+    S.createdClans.unshift({name, tag:'AUB', members:1, rank:0, score:null, open});
+    S.clan = name; S.clanQ = '';
+    closeSheet(); renderTrade();
+  };
+}
+
+/* the original sample portfolio, now its own view */
+function tradePortfolio(){
   const pts = [10000,10040,9980,10110,10090,10180,10150,10260,10210,10330,10290,10380,10350,10440,10410,10482];
   const min = 9940, max = 10520, w = 320, h = 80;
   const xy = pts.map((v,i) => [ (i/(pts.length-1))*(w-8)+4, h-6-((v-min)/(max-min))*(h-12) ]);
   const line = xy.map(p => p.map(n=>n.toFixed(1)).join(',')).join(' ');
   const area = `M${xy[0][0]},${h} L` + xy.map(p=>p.join(',')).join(' L') + ` L${xy[xy.length-1][0]},${h} Z`;
   const last = xy[xy.length-1];
-  $('#s-trade').innerHTML = `
-    <div class="pad">
-      <div class="screen-h"><h1>Trading game</h1><p>Fake money. Real prices. Ranked on skill.</p></div>
+  return `
       <div class="season">
         <div class="tagrow"><span class="pill">Starts Feb 2027</span><span class="eyebrow" style="color:var(--on-banner-2)">Season 1</span></div>
         <h2>AUB Investing Cup</h2>
@@ -938,10 +1595,8 @@ function renderTrade(){
         <li>${I.check}<span>One account per phone number. No resets mid-season.</span></li>
       </ul>
       <div style="margin-top:18px"><button class="btn gold" id="waitBtn">${S.wait?'Noted for the demo':'Get notified when it opens'}</button></div>
-      <div class="demo-note" ${S.wait?'':'hidden'} id="waitNote">Demo only. The real waitlist opens with the landing page.</div>
-      <div class="footnote">Sample portfolio for the prototype. Not real trades or advice.</div>
-    </div>`;
-  $('#waitBtn').onclick = () => { S.wait = true; renderTrade(); };
+      <div class="demo-note" ${S.wait?'':'hidden'}>Demo only. The real waitlist opens with the landing page.</div>
+      <div class="footnote">Sample portfolio for the prototype. Not real trades or advice.</div>`;
 }
 
 /* ---------- league ---------- */
@@ -1015,30 +1670,42 @@ function renderLeague(){
 }
 
 /* ---------- profile ---------- */
+const LEVEL_NAMES = {beginner:'Beginner', intermediate:'Knows the basics', advanced:'Experienced investor'};
+const PLACE_NAMES = ['1st', '2nd', '3rd'];
 function renderProfile(){
   const badges = [
-    {t:'First lesson', s:'Finish a lesson', on:true, ic:I.book},
-    {t:'Week streak', s:'7 days in a row', on:true, ic:I.flame},
-    {t:'Many Baskets', s:'Diversification', on:S.done>2, ic:I.baskets, isNew:S.newBadge},
-    {t:'Podium', s:'Top 3 in a league', on:false, ic:I.trophy},
+    {t:'First lesson', s:'Finish a lesson', on:S.done > 0, ic:I.book},
+    {t:'Week streak', s:'7 days in a row', on:S.streak >= 7, ic:I.flame},
+    {t:'Many Baskets', s:'Diversification', on:S.done > 2, ic:I.baskets},
+    {t:'Market Basics', s:'Clear Unit 1', on:S.done > 5, ic:I.book},
+    {t:'Chart Reader', s:'Clear Unit 2', on:S.done > 11, ic:I.candles},
+    {t:'Podium', s:'Top 3 in a competition', on:S.trophies.length > 0, ic:I.up},
+    {t:'Tournament winner', s:'Win a competition', on:S.trophies.some(t => t.place === 1), ic:I.trophy},
     {t:'Steady hand', s:'Season score above 1', on:false, ic:I.scale},
     {t:'Season finisher', s:'Trade a full season', on:false, ic:I.flag}
   ];
+  const sub = ['AUB', S.level && LEVEL_NAMES[S.level], S.clan].filter(Boolean).map(esc).join(' · ');
   $('#s-profile').innerHTML = `
     <div class="pad">
-      <div class="me-head"><span class="av">Y</span><div><h1>new.player</h1><p>AUB · Joined October 2026</p></div></div>
+      <div class="me-head"><span class="av">Y</span><div><h1>new.player</h1><p>${sub}</p></div></div>
       <div class="stats">
         <div><span style="color:var(--flame)">${I.flame}</span><span><b>${S.streak}</b><span>Day streak</span></span></div>
         <div><span style="color:var(--gold)">${I.bolt}</span><span><b>${fmt(S.xpTotal)}</b><span>Total XP</span></span></div>
         <div><span style="color:var(--gold)">${I.shield}</span><span><b>Gold</b><span>Current league</span></span></div>
         <div><span style="color:var(--sky)">${I.star}</span><span><b>${fmt(S.rating)}</b><span>Bullpen rating</span></span></div>
       </div>
+      <div class="sec-h">Trophies</div>
+      <ul class="trophies">${S.trophies.map(t => `<li><span class="rk medal m${t.place}">${t.place}</span><span><b>${esc(t.name)}</b><span>${PLACE_NAMES[t.place-1]} of ${fmt(t.of)} players · ${esc(t.when)}</span></span></li>`).join('') || '<li><span>Win or place top 3 in a competition to earn one.</span></li>'}</ul>
       <div class="sec-h">Badges</div>
-      <div class="badges">${badges.map(b => `<div class="badge ${b.on?'on':'off'} ${b.isNew?'new':''}"><div class="hex">${b.on?b.ic:I.lock}</div><b>${b.t}</b><span>${b.s}</span></div>`).join('')}</div>
-      <div style="margin-top:26px"><button class="btn ghost" id="resetBtn">Restart the demo</button></div>
+      <div class="badges">${badges.map(b => `<div class="badge ${b.on?'on':'off'} ${S.newBadge===b.t?'new':''}"><div class="hex">${b.on?b.ic:I.lock}</div><b>${b.t}</b><span>${b.s}</span></div>`).join('')}</div>
+      <div class="btn-row" style="margin-top:26px">
+        <button class="btn ghost" id="replaceBtn">${S.placed ? 'Retake the placement test' : 'Take the placement test'}</button>
+        <button class="btn ghost" id="resetBtn">Restart the demo</button>
+      </div>
       <div class="footnote">Prototype · nothing here is saved</div>
     </div>`;
-  $('#resetBtn').onclick = () => { S = JSON.parse(JSON.stringify(INITIAL)); renderAll(); showTab('learn'); };
+  $('#replaceBtn').onclick = () => showOnboard('intro');
+  $('#resetBtn').onclick = () => { S = JSON.parse(JSON.stringify(INITIAL)); closeSheet(); renderAll(); showTab('learn'); showOnboard('welcome'); };
 }
 
 /* ---------- navigation ---------- */
@@ -1054,37 +1721,44 @@ document.querySelectorAll('.tab').forEach(b => b.onclick = () => showTab(b.datas
 function renderAll(){ renderLearn(); renderTrade(); renderLeague(); renderProfile(); }
 
 /* ---------- lesson player ---------- */
+/* Plays a lesson (cards, then a quiz where misses cost a life and come back) or a test
+   (placement or unit test-out: each question once, no lives lost). */
 let P = null;
-const LSN = () => LESSONS[P.lesson];
+const LSN = () => P.L;
 
-function startLesson(idx){
-  P = {lesson:idx, phase:'cards', i:0, queue:LESSONS[idx].qs.map((_,i)=>i), sel:null, checked:false, lastOk:false, missed:new Set(), correct:0, xp:0, mistakes:0};
+function startLesson(idx){ beginPlayer({L:LESSONS[idx], lesson:idx, mode:'lesson'}); }
+function startTest(kind, title, qs, extra = {}){ beginPlayer(Object.assign({L:{title, cards:[], qs}, lesson:null, mode:'test', kind}, extra)); }
+function beginPlayer(o){
+  P = Object.assign({phase: o.L.cards.length ? 'cards' : 'quiz', i:0, queue:o.L.qs.map((_,i)=>i), sel:null, checked:false, lastOk:false,
+    missed:new Set(), correct:0, answered:0, right:[], xp:0, mistakes:0}, o);
+  $('#pHearts').hidden = P.mode === 'test';
   $('#player').hidden = false;
   renderPlayer();
 }
 function setHearts(){ $('#pHearts').innerHTML = I.heart + `<span class="n">${S.hearts}</span>`; }
 function progress(){
-  const L = LSN(), seen = P.phase==='cards' ? P.i : L.cards.length;
+  const L = LSN();
+  if(P.mode === 'test'){ $('#pBar').style.width = (P.answered / L.qs.length * 100) + '%'; return; }
+  const seen = P.phase==='cards' ? P.i : L.cards.length;
   $('#pBar').style.width = ((seen + P.correct) / (L.cards.length + L.qs.length) * 100) + '%';
 }
 function setFoot(mode){ $('#pFoot').className = 'p-foot' + (mode ? ' '+mode : ''); }
 
-function refLink(r){
-  if(!r) return '';
-  return `<a class="ref" href="${r.url}" target="_blank" rel="noopener"><span class="ref-k">Go deeper</span><b>${r.title}</b><span class="ref-go">Investopedia ↗</span></a>`;
-}
 function renderPlayer(){
   setHearts(); progress(); setFoot(''); $('#fb').hidden = true;
   const btn = $('#pBtn'); btn.className = 'btn';
   const body = $('#pBody');
   if(P.phase === 'cards'){
     const c = LSN().cards[P.i];
-    body.innerHTML = `<div class="enter"><span class="eyebrow">${c.k}</span><h2>${c.t}</h2>${c.b}${refLink(c.ref)}</div>`;
+    body.innerHTML = `<div class="enter"><span class="eyebrow">${c.k}</span><h2>${c.t}</h2>${c.b}</div>`;
     btn.disabled = false; btn.textContent = P.i === LSN().cards.length-1 ? 'Start the quiz' : 'Continue';
   } else {
-    const qi = P.queue[0], q = LSN().qs[qi];
+    const qi = P.queue[0], q = LSN().qs[qi], n = LSN().qs.length;
     const keys = 'ABCD';
-    body.innerHTML = `<div class="enter"><span class="eyebrow">Question ${P.correct+1} of ${LSN().qs.length}${P.missed.has(qi)?'<span class="retry">· Try again</span>':''}</span>
+    const eyebrow = P.mode === 'test'
+      ? `${esc(LSN().title)} · Question ${P.answered+1} of ${n}`
+      : `Question ${P.correct+1} of ${n}${P.missed.has(qi)?'<span class="retry">· Try again</span>':''}`;
+    body.innerHTML = `<div class="enter"><span class="eyebrow">${eyebrow}</span>
       <div class="q-text">${q.q}</div>
       <div class="opts">${q.o.map((o,i)=>`<button class="opt" data-i="${i}" aria-pressed="false"><span class="key">${keys[i]}</span><span>${o}</span></button>`).join('')}</div></div>`;
     body.querySelectorAll('.opt').forEach(b => b.onclick = () => {
@@ -1106,44 +1780,155 @@ function onPrimary(){
     if(P.i >= LSN().cards.length){ P.phase = 'quiz'; }
     renderPlayer(); return;
   }
-  const qi = P.queue[0], q = LSN().qs[qi];
+  const qi = P.queue[0], q = LSN().qs[qi], test = P.mode === 'test';
   if(!P.checked){
     if(P.sel === null) return;
     P.checked = true;
     const ok = P.sel === q.a; P.lastOk = ok;
     const opts = $('#pBody').querySelectorAll('.opt');
     opts.forEach((o,i) => { o.disabled = true; if(i===q.a) o.classList.add('right'); else if(i===P.sel) o.classList.add('wrong'); });
+    if(test){ P.right[qi] = ok; P.answered++; }
     if(ok){
-      P.correct++; P.xp += P.missed.has(qi) ? 5 : 10;
+      P.correct++; if(!test) P.xp += P.missed.has(qi) ? 5 : 10;
       setFoot('ok'); $('#fbIc').innerHTML = I.check;
       $('#fbTitle').textContent = ['Correct','Nice work','Exactly','Spot on','Right'][P.correct % 5];
       $('#fbText').textContent = q.e;
       btn.className = 'btn'; btn.textContent = 'Continue';
     } else {
-      P.mistakes++; P.missed.add(qi); S.hearts = Math.max(0, S.hearts-1); setHearts();
+      P.mistakes++; P.missed.add(qi);
+      if(!test){ S.hearts = Math.max(0, S.hearts-1); setHearts(); }
       setFoot('bad'); $('#fbIc').innerHTML = I.x;
       $('#fbTitle').textContent = 'Not quite';
       $('#fbText').textContent = 'Answer: ' + q.o[q.a] + '. ' + q.e;
-      btn.className = 'btn bad'; btn.textContent = 'Got it';
+      btn.className = 'btn bad'; btn.textContent = test ? 'Continue' : 'Got it';
     }
     $('#fb').hidden = false; progress();
     return;
   }
-  // checked → advance
-  if(P.lastOk) P.queue.shift(); else P.queue.push(P.queue.shift());
+  // checked → advance. Tests ask each question once; lessons bring misses back at the end.
+  if(P.lastOk || test) P.queue.shift(); else P.queue.push(P.queue.shift());
   P.sel = null; P.checked = false;
-  if(P.queue.length === 0){ finish(); return; }
-  if(S.hearts <= 0){ $('#heartsModal').hidden = false; return; }
+  if(P.queue.length === 0){ test ? finishTest() : finish(); return; }
+  if(!test && S.hearts <= 0){ $('#heartsModal').hidden = false; return; }
   renderPlayer();
 }
 $('#pBtn').onclick = onPrimary;
 
-$('#pClose').onclick = () => { $('#quitModal').hidden = false; };
+$('#pClose').onclick = () => {
+  const test = P && P.mode === 'test';
+  $('#qmT').textContent = test ? 'Leave this test?' : 'Leave this lesson?';
+  $('#quitModal p').textContent = test ? "Your answers so far won't count." : "You'll lose the XP from this attempt.";
+  $('#quitModal').hidden = false;
+};
 $('#qmStay').onclick = () => { $('#quitModal').hidden = true; };
 $('#qmLeave').onclick = () => { $('#quitModal').hidden = true; closePlayer(); };
 $('#refill').onclick = () => { S.hearts = 5; $('#heartsModal').hidden = true; renderPlayer(); };
 $('#hmQuit').onclick = () => { $('#heartsModal').hidden = true; S.hearts = 5; closePlayer(); };
-function closePlayer(){ P = null; $('#player').hidden = true; renderLearn(); }
+function closePlayer(){
+  const kind = P && P.kind;
+  P = null; $('#player').hidden = true; $('#pHearts').hidden = false;
+  if(kind === 'placement' && !S.onboarded) showOnboard('welcome');
+  renderLearn();
+}
+
+/* ---------- tests: placement and unit test-out ---------- */
+function markTestedOut(from, to){ for(let i = from; i < to; i++) if(!S.testedOut.includes(i)) S.testedOut.push(i); }
+function finishTest(){
+  const r = P.right, kind = P.kind, unit = P.unit;
+  P = null; $('#player').hidden = true; $('#pHearts').hidden = false;
+  if(kind === 'placement'){
+    // Skip a unit with 4+ of its 5 right; otherwise start at the first lesson missed in it.
+    const u1 = r.slice(0,5).filter(Boolean).length, u2 = r.slice(5).filter(Boolean).length;
+    let start = LESSONS.length;
+    if(u1 < 4) start = PLACE_AT[r.findIndex(x => !x)];
+    else if(u2 < 4) start = PLACE_AT[5 + r.slice(5).findIndex(x => !x)];
+    const from = S.onboarded ? S.done : 0, moved = !S.onboarded || start > S.done;
+    if(moved){ markTestedOut(from, start); S.done = start; }
+    S.placed = true; S.pick = null;
+    showOnboard('placed', {u1, u2, start, skipped: moved ? start - from : 0, moved});
+  } else {
+    const score = r.filter(Boolean).length, pass = score >= 6;
+    if(pass){ const target = UNIT_START[unit+1]; markTestedOut(S.done, target); S.done = Math.max(S.done, target); S.pick = null; }
+    showOnboard('testout', {score, pass, unit});
+  }
+  renderAll();
+}
+
+/* ---------- onboarding: level pick, placement result, invites ---------- */
+function choice(lv, ic, bg, fg, title, desc){
+  return `<button class="choice" data-lv="${lv}"><span class="lv-ic" style="background:${bg}; color:${fg}">${ic}</span><span><b>${title}</b><span class="d">${desc}</span></span></button>`;
+}
+function closeOnboard(){
+  S.onboarded = true; S.pick = null; S.scrollCur = true;
+  $('#onboard').hidden = true;
+  renderAll(); showTab('learn');
+}
+function showOnboard(step, data = {}){
+  const body = $('#obBody'), foot = $('#obFoot');
+  $('#onboard').hidden = false; body.scrollTop = 0;
+  foot.innerHTML = '';
+  if(step === 'welcome'){
+    body.innerHTML = `<div class="wm">Bullpen</div>
+      ${data.joined ? `<div class="ob-note">You joined ${esc(data.joined)}. Now let's find your level.</div>` : ''}
+      <h1>How much do you know about investing?</h1>
+      <p class="sub">We'll start you in the right place. Earlier lessons always stay open.</p>
+      <div class="choices">
+        ${choice('beginner', I.book, 'var(--bull-tint)', 'var(--bull-ink)', "I'm new to this", 'Start from the basics: what a stock is, risk, and spreading your money out.')}
+        ${choice('intermediate', I.candles, 'var(--sky-tint)', 'var(--sky)', 'I know the basics', 'Take a 2-minute placement test and skip what you already know.')}
+        ${choice('advanced', I.up, 'var(--gold-tint)', 'var(--gold-ink)', 'I already invest', 'Same test. Prove it and jump straight to harder units.')}
+      </div>`;
+    body.querySelectorAll('.choice').forEach(b => b.onclick = () => {
+      S.level = b.dataset.lv;
+      if(S.level === 'beginner'){ S.done = 0; S.testedOut = []; closeOnboard(); }
+      else showOnboard('intro');
+    });
+  } else if(step === 'intro'){
+    body.innerHTML = `<div class="wm">Bullpen</div>
+      <h1>Placement test</h1>
+      <p class="sub">10 questions, about 2 minutes. You won't lose any lives.</p>
+      <div class="ob-card"><span class="eyebrow" style="color:var(--on-banner-2)">How it works</span>
+        <h2>Start where you need to</h2>
+        <p>Questions 1-5 cover Unit 1 and questions 6-10 cover Unit 2. Get 4 or more of a unit right and you skip it. Otherwise you start at the first lesson you missed.</p></div>`;
+    foot.innerHTML = `<button class="btn" id="obStart">Start the test</button><button class="text-btn" id="obSkip">${S.onboarded ? 'Not now' : 'Skip it and start from the beginning'}</button>`;
+    $('#obStart').onclick = () => { $('#onboard').hidden = true; startTest('placement', 'Placement test', PLACEMENT); };
+    $('#obSkip').onclick = () => { if(!S.onboarded){ S.done = 0; S.testedOut = []; } closeOnboard(); };
+  } else if(step === 'placed'){
+    const at = data.start < LESSONS.length ? LESSONS[data.start] : null;
+    const title = !data.moved ? "You're already past that point" : at ? `You start at Unit ${at.unit+1}` : "You've tested out of everything";
+    const sub = !data.moved ? 'Keep going from where you are.' : at ? `Lesson ${at.n}: ${at.title}` : 'Options (Unit 3) come next. Until then, try a trading competition.';
+    body.innerHTML = `<div class="wm">Bullpen</div>
+      <h1>${title}</h1><p class="sub">${sub}</p>
+      <div class="tiles">
+        <div class="tile acc"><div class="t-h">Unit 1</div><div class="t-v">${data.u1}/5</div></div>
+        <div class="tile xp"><div class="t-h">Unit 2</div><div class="t-v">${data.u2}/5</div></div>
+        <div class="tile str"><div class="t-h">Skipped</div><div class="t-v">${data.skipped}</div></div>
+      </div>
+      ${data.skipped ? '<div class="ob-note">Lessons you skipped stay open. Tap any of them to practise.</div>' : ''}`;
+    foot.innerHTML = at || !data.moved ? '<button class="btn" id="obGo">Start learning</button>'
+      : '<button class="btn" id="obComp">Go to competitions</button><button class="text-btn" id="obGo">See the lessons</button>';
+    $('#obGo').onclick = closeOnboard;
+    const oc = $('#obComp'); if(oc) oc.onclick = () => { closeOnboard(); S.tview = 'comps'; renderTrade(); showTab('trade'); };
+  } else if(step === 'testout'){
+    const u = data.unit;
+    body.innerHTML = `<div class="wm">Bullpen</div>
+      <h1>${data.pass ? `Unit ${u+1} skipped` : 'Not yet'}</h1>
+      <p class="sub">${data.pass ? `${data.score} of 8 right. You're on to Unit ${u+2}: ${UNITS[u+1].title}.` : `${data.score} of 8 right. You need 6 to skip. Keep going with Unit ${u+1} and try again any time.`}</p>
+      ${data.pass ? '<div class="ob-note">Unit ' + (u+1) + ' lessons stay open if you want to practise.</div>' : ''}`;
+    foot.innerHTML = '<button class="btn" id="obGo">Back to lessons</button>';
+    $('#obGo').onclick = closeOnboard;
+  } else if(step === 'invite'){
+    const C = comp(data.code);
+    body.innerHTML = `<div class="wm">Bullpen</div>
+      <h1>You're invited</h1>
+      <p class="sub">${esc(C.host)} invited you to a trading competition.</p>
+      <div class="ob-card"><span class="eyebrow" style="color:var(--on-banner-2)">${esc(C.kind)} competition · code ${esc(data.code)}</span>
+        <h2>${esc(C.name)}</h2>
+        <p>${esc(C.starts)} · ${esc(C.len)} · $${fmt(C.cash)} in fake money · ${fmt(C.players)} players so far</p></div>`;
+    foot.innerHTML = `<button class="btn" id="obJoin">Join ${esc(C.name)}</button><button class="text-btn" id="obNo">Not now</button>`;
+    $('#obJoin').onclick = () => { if(!S.joined.includes(data.code)) S.joined.unshift(data.code); renderTrade(); showOnboard('welcome', {joined:C.name}); };
+    $('#obNo').onclick = () => showOnboard('welcome');
+  }
+}
 
 /* ---------- result ---------- */
 function finish(){
@@ -1154,7 +1939,7 @@ function finish(){
   if(!S.streakToday){ S.streak++; S.streakToday = true; }
   const L = LSN(), first = P.lesson === S.done, badge = first ? L.badge : null;
   if(first) S.done = P.lesson + 1;
-  if(badge) S.newBadge = true;
+  if(badge) S.newBadge = badge.name;
   S.pick = null;
   const acc = Math.round(L.qs.length / (L.qs.length + P.mistakes) * 100);
   S.last = {lesson:P.lesson, xp:P.xp, acc, prevWeek, newWeek:weekRank(S.weekly), prevAub, mistakes:P.mistakes};
@@ -1172,13 +1957,13 @@ function finish(){
       <path d="M120 44l5 5 9-10" fill="none" stroke="var(--on-gold)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
     <h1>Lesson complete</h1>
-    <div class="sub">${L.title} · Unit 1</div>
+    <div class="sub">${L.title} · Unit ${L.unit+1}</div>
     <div class="tiles">
       <div class="tile xp"><div class="t-h">Total XP</div><div class="t-v">${I.bolt}<span id="xpCount">0</span></div></div>
       <div class="tile acc"><div class="t-h">Accuracy</div><div class="t-v">${acc}%</div></div>
       <div class="tile str"><div class="t-h">Streak</div><div class="t-v">${I.flame}${S.streak}</div></div>
     </div>
-    ${badge ? `<div class="unlock"><div class="hex">${I[badge.icon]}</div><div><b>Badge unlocked: ${badge.name}</b><span>For finishing ${L.title}</span></div></div>` : ''}`;
+    ${badge ? `<div class="unlock"><div class="hex">${I[badge.icon]}</div><div><b>Badge unlocked: ${badge.name}</b><span>For finishing ${L.cards.length ? L.title : 'Unit ' + (L.unit+1)}</span></div></div>` : ''}`;
   $('#result').hidden = false;
   countUp($('#xpCount'), P.xp);
 }
@@ -1212,22 +1997,24 @@ function openShare(){
   $('#shareModal').hidden = false;
 }
 $('#closeShare').onclick = () => { $('#shareModal').hidden = true; };
-$('#copyShare').onclick = () => {
-  const txt = shareText();
-  const done = () => { $('#copyMsg').textContent = 'Copied. Paste it into WhatsApp or Instagram.'; };
+function copyText(txt, el, okMsg){
+  const done = () => { el.textContent = okMsg; };
   const fallback = () => {
     const ta = document.createElement('textarea'); ta.value = txt; ta.setAttribute('readonly',''); ta.style.position='absolute'; ta.style.left='-9999px';
     document.body.appendChild(ta); ta.select();
     let ok = false; try { ok = document.execCommand('copy'); } catch(e) {}
     document.body.removeChild(ta);
-    $('#copyMsg').textContent = ok ? 'Copied. Paste it into WhatsApp or Instagram.' : txt;
+    el.textContent = ok ? okMsg : txt;
   };
   try { navigator.clipboard.writeText(txt).then(done, fallback); } catch(e){ fallback(); }
-};
+}
+$('#copyShare').onclick = () => copyText(shareText(), $('#copyMsg'), 'Copied. Paste it into WhatsApp or Instagram.');
 
 /* ---------- boot ---------- */
 renderAll();
 showTab('learn');
+const invite = (new URLSearchParams(location.search).get('join') || '').trim().toUpperCase();
+if(comp(invite)) showOnboard('invite', {code:invite}); else showOnboard('welcome');
 })();
 </script>
 

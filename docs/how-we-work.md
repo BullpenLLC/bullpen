@@ -49,6 +49,6 @@ A conflict means both of us changed the same lines. Nothing is lost. Ask Claude 
 
 ## Content rules (short version)
 
-- Lesson text is always our own words. We link to Investopedia for "go deeper" reading but never copy its text.
+- Lesson text is always our own words. No outside links inside lessons.
 - Check every number and every right answer.
 - Nothing in the app tells a user to buy, sell or hold a real asset.
