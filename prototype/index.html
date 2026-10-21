@@ -364,6 +364,7 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
 .choice .lv-ic svg{width:26px; height:26px}
 .choice b{display:block; font-family:var(--font-display); font-size:17px}
 .choice .d{display:block; font-size:13.5px; color:var(--ink-2); margin-top:2px}
+.ob .tiles{grid-template-columns:1fr; margin-top:14px}
 .ob-card{margin-top:20px; background:var(--banner); color:var(--on-banner); border-radius:22px; padding:18px}
 .ob-card h2{font-size:22px; margin-top:8px}
 .ob-card p{color:var(--on-banner-2); margin:6px 0 0; font-size:14px}
@@ -1185,39 +1186,44 @@ const UNIT2_CHECK = {
   ]
 };
 
-/* Placement test: question i checks lesson PLACE_AT[i]. Kept separate from lesson quizzes. */
-const PLACEMENT = [
-  {q:'A company has 1 million shares. You own 10,000. What share of the company do you own?',
+/* Placement questions, 5 per unit. n = the lesson in that unit each one checks. Kept separate from lesson quizzes. */
+const PLACEMENT_U1 = [
+  {n:1, q:'A company has 1 million shares. You own 10,000. What share of the company do you own?',
    o:['0.1%','1%','10%','100%'], a:1, e:'10,000 ÷ 1,000,000 = 0.01, which is 1%.'},
-  {q:'Which of these usually has the widest range of possible outcomes?',
+  {n:2, q:'Which of these usually has the widest range of possible outcomes?',
    o:['Shares in a single young company','A bank savings account','A short-term government bond','A broad stock index fund'], a:0,
    e:'One young company can soar or go to zero. The others swing far less.'},
-  {q:'Why does owning 20 airline stocks give limited protection?',
+  {n:3, q:'Why does owning 20 airline stocks give limited protection?',
    o:['They tend to rise and fall together','Airlines never pay dividends','20 companies is too many to track','Airline shares are too cheap'], a:0,
    e:'Investments that move together don\'t spread your risk much.'},
-  {q:'What does an S&P 500 index fund aim to do?',
+  {n:4, q:'What does an S&P 500 index fund aim to do?',
    o:['Match the return of about 500 large US companies','Beat the market by picking winners','Avoid any losses','Invest in 500 different countries'], a:0,
    e:'It copies the index rather than trying to beat it.'},
-  {q:'$5,000 earns 10% a year for 2 years, with the gains reinvested. What is it worth?',
-   o:['$5,500','$6,000','$6,050','$10,000'], a:2, e:'$5,000 → $5,500 → $6,050.'},
-  {q:'A daily candle opens at $80, closes at $76, and its low is $74. Where is the bottom of the lower wick?',
+  {n:5, q:'$5,000 earns 10% a year for 2 years, with the gains reinvested. What is it worth?',
+   o:['$5,500','$6,000','$6,050','$10,000'], a:2, e:'$5,000 → $5,500 → $6,050.'}
+];
+const PLACEMENT_U2 = [
+  {n:1, q:'A daily candle opens at $80, closes at $76, and its low is $74. Where is the bottom of the lower wick?',
    o:['$76','$80','$74','$78'], a:2, e:'The lower wick reaches the day\'s low: $74.'},
-  {q:'Shares cost $25, and there are 4 billion of them. What is the market cap?',
+  {n:2, q:'Shares cost $25, and there are 4 billion of them. What is the market cap?',
    o:['$4 billion','$25 billion','$100 billion','$1 trillion'], a:2, e:'$25 × 4 billion = $100 billion.'},
-  {q:'A share costs $90 and earnings per share are $4.50. What is the P/E ratio?',
+  {n:3, q:'A share costs $90 and earnings per share are $4.50. What is the P/E ratio?',
    o:['4.5','20','40.5','85.5'], a:1, e:'$90 ÷ $4.50 = 20.'},
-  {q:'You only want to sell if you get $120 a share or more. Which order fits?',
+  {n:4, q:'You only want to sell if you get $120 a share or more. Which order fits?',
    o:['A market sell','A limit sell at $120','A limit buy at $120','A market buy'], a:1, e:'A limit sell at $120 only fills at $120 or higher.'},
-  {q:'A stock falls 40%. What rise brings it back to where it started?',
+  {n:5, q:'A stock falls 40%. What rise brings it back to where it started?',
    o:['40%','60%','About 67%','140%'], a:2, e:'It\'s at 60% of its old price. 100 ÷ 60 ≈ 1.67, so it needs about +67%.'}
 ];
-const PLACE_AT = [0,1,2,3,4,6,7,8,9,10];
 
-/* Units in order. LESSONS is the flat list the path and player use; UNIT_START[u] is where unit u begins. */
-const UNITS = [
-  {title:'How markets work', level:'Beginner', lessons:[WHAT_A_STOCK, RISK_AND_RETURN, DIVERSIFICATION, INDEX_FUNDS, FEES_AND_COMPOUNDING, UNIT1_CHECK]},
-  {title:'Reading the market', level:'Intermediate', lessons:[PRICE_CHARTS, MARKET_CAP, EARNINGS_PE, PLACING_ORDERS, BULLS_AND_BEARS, UNIT2_CHECK]}
-];
+const UNIT_1 = {title:'How markets work', level:'Beginner', lessons:[WHAT_A_STOCK, RISK_AND_RETURN, DIVERSIFICATION, INDEX_FUNDS, FEES_AND_COMPOUNDING, UNIT1_CHECK]};
+const UNIT_2 = {title:'Reading the market', level:'Intermediate', lessons:[PRICE_CHARTS, MARKET_CAP, EARNINGS_PE, PLACING_ORDERS, BULLS_AND_BEARS, UNIT2_CHECK]};
+
+/* Units in order, each with its 5 placement questions. LESSONS is the flat list the path and player use;
+   UNIT_START[u] is where unit u begins. NEXT_UNIT is the "coming next" teaser after the last unit. */
+const UNITS = [UNIT_1, UNIT_2];
+const PLACEMENT_BLOCKS = [PLACEMENT_U1, PLACEMENT_U2];
+const NEXT_UNIT = 'Options basics';
+const PLACE_PASS = 4; // right answers out of 5 needed to skip a unit
 const LESSONS = [], UNIT_START = [];
 UNITS.forEach((U, u) => {
   UNIT_START.push(LESSONS.length);
@@ -1311,8 +1317,8 @@ function renderLearn(){
     html += `<div class="path">${path}</div>`;
   });
   const allDone = cur >= LESSONS.length;
-  html += `<div class="next-unit">${I.lock}<div><b>Unit 3 · Options basics</b>${allDone ? "You've finished everything built so far. Options come next." : 'Coming in a later prototype'}</div></div>`;
-  const placeLink = S.placed ? '' : `<button class="place-link" id="placeBtn"><span><b>Already know some of this?</b><span>Take the 2-minute placement test and skip ahead.</span></span><span class="go">Test →</span></button>`;
+  html += `<div class="next-unit">${I.lock}<div><b>Unit ${UNITS.length+1} · ${NEXT_UNIT}</b>${allDone ? "You've finished everything built so far. This unit comes next." : 'Coming in a later prototype'}</div></div>`;
+  const placeLink = S.placed ? '' : `<button class="place-link" id="placeBtn"><span><b>Already know some of this?</b><span>Take the placement test and skip ahead.</span></span><span class="go">Test →</span></button>`;
   $('#s-learn').innerHTML = statusBar() + `<div class="pad">${placeLink}${html}</div>`;
 
   const sb = $('#startBtn'); if(sb) sb.onclick = () => startLesson(pick);
@@ -1359,6 +1365,9 @@ const CLANS = [
   {name:'IC Class of 2027', tag:'IC', members:61, rank:9, score:0.66, open:false}
 ];
 const comp = code => COMPS[code] || S.created[code];
+/* Options trading unlocks once the unit titled 'Options basics' is finished (if that unit exists). */
+const optionsUnit = () => UNITS.findIndex(U => U.title === 'Options basics');
+const optionsUnlocked = () => { const u = optionsUnit(); return u >= 0 && S.done >= UNIT_START[u] + UNITS[u].lessons.length; };
 const inviteLink = code => location.origin + location.pathname + '?join=' + encodeURIComponent(code);
 const allClans = () => S.createdClans.concat(CLANS);
 
@@ -1459,7 +1468,7 @@ function openCreate(){
       <div><span class="l">Who can join</span>${pills('vis', [['code','Anyone with the code'],['public','Public: listed for everyone']])}</div>
       <div><span class="l">Length</span>${pills('len', [['1 week','1 week'],['1 month','1 month'],['Semester','Semester']])}</div>
       <div><span class="l">Starting cash</span>${pills('cash', [[10000,'$10,000'],[100000,'$100,000']])}</div>
-      <div><span class="l">What players can trade</span>${pills('assets', [['Stocks & ETFs','Stocks & ETFs'],['Crypto','Crypto'],['Gold','Gold']], true)}</div>
+      <div><span class="l">What players can trade</span>${pills('assets', [['Stocks & ETFs','Stocks & ETFs'],['Crypto','Crypto'],['Gold','Gold']].concat(optionsUnit() >= 0 ? [['Options', optionsUnlocked() ? 'Options' : 'Options 🔒']] : []), true)}</div>
       <div><span class="l">Players</span>${pills('size', [[30,'Up to 30'],[500,'Up to 500']])}</div>
       <div class="cost ${paid?'paid':''}"><span>${paid ? `Bigger or semester-long tournament. You have ${S.credits} credit${S.credits===1?'':'s'}.` : 'Small tournament, up to a month'}</span><b>${paid ? '1 credit' : 'Free'}</b></div>
     </div>
@@ -1471,6 +1480,7 @@ function openCreate(){
   $('#tradeSheet').querySelectorAll('.pills button').forEach(b => b.onclick = () => {
     const box = b.parentElement, k = box.dataset.k;
     let v = b.dataset.val; if(k === 'cash' || k === 'size') v = +v;
+    if(v === 'Options' && !optionsUnlocked() && !d[k].includes(v)){ $('#cMsg').textContent = `Finish Unit ${optionsUnit()+1}, Options basics, to add options to a tournament.`; return; }
     if(box.dataset.multi){
       d[k] = d[k].includes(v) ? d[k].filter(x => x !== v) : d[k].concat(v);
       if(!d[k].length) d[k] = [v]; // at least one asset type
@@ -1593,6 +1603,7 @@ function tradePortfolio(){
         <li>${I.check}<span>Season score is return divided by how much your portfolio swung, so steady skill beats a lucky gamble.</span></li>
         <li>${I.check}<span>Orders fill at the next market price after you tap, never at an old price on screen.</span></li>
         <li>${I.check}<span>One account per phone number. No resets mid-season.</span></li>
+        ${optionsUnit() >= 0 ? `<li>${optionsUnlocked() ? I.check : I.lock}<span>${optionsUnlocked() ? 'Options trading is unlocked for your tournaments.' : `Options trading unlocks when you finish Unit ${optionsUnit()+1}, Options basics.`}</span></li>` : ''}
       </ul>
       <div style="margin-top:18px"><button class="btn gold" id="waitBtn">${S.wait?'Noted for the demo':'Get notified when it opens'}</button></div>
       <div class="demo-note" ${S.wait?'':'hidden'}>Demo only. The real waitlist opens with the landing page.</div>
@@ -1677,8 +1688,7 @@ function renderProfile(){
     {t:'First lesson', s:'Finish a lesson', on:S.done > 0, ic:I.book},
     {t:'Week streak', s:'7 days in a row', on:S.streak >= 7, ic:I.flame},
     {t:'Many Baskets', s:'Diversification', on:S.done > 2, ic:I.baskets},
-    {t:'Market Basics', s:'Clear Unit 1', on:S.done > 5, ic:I.book},
-    {t:'Chart Reader', s:'Clear Unit 2', on:S.done > 11, ic:I.candles},
+    ...UNITS.map((U, u) => { const b = U.lessons[U.lessons.length-1].badge; return {t:b.name, s:`Clear Unit ${u+1}`, on:S.done >= UNIT_START[u] + U.lessons.length, ic:I[b.icon]}; }),
     {t:'Podium', s:'Top 3 in a competition', on:S.trophies.length > 0, ic:I.up},
     {t:'Tournament winner', s:'Win a competition', on:S.trophies.some(t => t.place === 1), ic:I.trophy},
     {t:'Steady hand', s:'Season score above 1', on:false, ic:I.scale},
@@ -1755,7 +1765,10 @@ function renderPlayer(){
   } else {
     const qi = P.queue[0], q = LSN().qs[qi], n = LSN().qs.length;
     const keys = 'ABCD';
-    const eyebrow = P.mode === 'test'
+    const block = P.kind === 'placement' ? LSN().qs.filter(x => x.u === q.u) : null;
+    const eyebrow = block
+      ? `Placement test · Unit ${q.u+1} · Question ${block.indexOf(q)+1} of ${block.length}`
+      : P.mode === 'test'
       ? `${esc(LSN().title)} · Question ${P.answered+1} of ${n}`
       : `Question ${P.correct+1} of ${n}${P.missed.has(qi)?'<span class="retry">· Try again</span>':''}`;
     body.innerHTML = `<div class="enter"><span class="eyebrow">${eyebrow}</span>
@@ -1808,6 +1821,14 @@ function onPrimary(){
   // checked → advance. Tests ask each question once; lessons bring misses back at the end.
   if(P.lastOk || test) P.queue.shift(); else P.queue.push(P.queue.shift());
   P.sel = null; P.checked = false;
+  // Placement goes unit by unit and stops at the first unit you don't pass.
+  if(P.kind === 'placement'){
+    const L = LSN(), next = P.queue[0];
+    if(next === undefined || L.qs[next].u !== q.u){
+      const right = L.qs.filter((x, i) => x.u === q.u && P.right[i]).length;
+      if(right < PLACE_PASS){ finishTest(); return; }
+    }
+  }
   if(P.queue.length === 0){ test ? finishTest() : finish(); return; }
   if(!test && S.hearts <= 0){ $('#heartsModal').hidden = false; return; }
   renderPlayer();
@@ -1834,18 +1855,22 @@ function closePlayer(){
 /* ---------- tests: placement and unit test-out ---------- */
 function markTestedOut(from, to){ for(let i = from; i < to; i++) if(!S.testedOut.includes(i)) S.testedOut.push(i); }
 function finishTest(){
-  const r = P.right, kind = P.kind, unit = P.unit;
+  const r = P.right, kind = P.kind, unit = P.unit, qs = P.L.qs;
   P = null; $('#player').hidden = true; $('#pHearts').hidden = false;
   if(kind === 'placement'){
-    // Skip a unit with 4+ of its 5 right; otherwise start at the first lesson missed in it.
-    const u1 = r.slice(0,5).filter(Boolean).length, u2 = r.slice(5).filter(Boolean).length;
-    let start = LESSONS.length;
-    if(u1 < 4) start = PLACE_AT[r.findIndex(x => !x)];
-    else if(u2 < 4) start = PLACE_AT[5 + r.slice(5).findIndex(x => !x)];
+    // Skip each unit with PLACE_PASS+ of its 5 right; at the first unit you don't pass, start at the first lesson you missed.
+    let start = LESSONS.length; const scores = [];
+    for(let u = 0; u < UNITS.length; u++){
+      const asked = qs.map((x, i) => i).filter(i => qs[i].u === u && r[i] !== undefined);
+      if(!asked.length) break;
+      const right = asked.filter(i => r[i]).length;
+      scores.push({u, right, of:asked.length, pass:right >= PLACE_PASS});
+      if(right < PLACE_PASS){ start = UNIT_START[u] + qs[asked.find(i => !r[i])].n - 1; break; }
+    }
     const from = S.onboarded ? S.done : 0, moved = !S.onboarded || start > S.done;
     if(moved){ markTestedOut(from, start); S.done = start; }
     S.placed = true; S.pick = null;
-    showOnboard('placed', {u1, u2, start, skipped: moved ? start - from : 0, moved});
+    showOnboard('placed', {scores, start, skipped: moved ? start - from : 0, moved});
   } else {
     const score = r.filter(Boolean).length, pass = score >= 6;
     if(pass){ const target = UNIT_START[unit+1]; markTestedOut(S.done, target); S.done = Math.max(S.done, target); S.pick = null; }
@@ -1874,7 +1899,7 @@ function showOnboard(step, data = {}){
       <p class="sub">We'll start you in the right place. Earlier lessons always stay open.</p>
       <div class="choices">
         ${choice('beginner', I.book, 'var(--bull-tint)', 'var(--bull-ink)', "I'm new to this", 'Start from the basics: what a stock is, risk, and spreading your money out.')}
-        ${choice('intermediate', I.candles, 'var(--sky-tint)', 'var(--sky)', 'I know the basics', 'Take a 2-minute placement test and skip what you already know.')}
+        ${choice('intermediate', I.candles, 'var(--sky-tint)', 'var(--sky)', 'I know the basics', 'Take a short placement test and skip what you already know.')}
         ${choice('advanced', I.up, 'var(--gold-tint)', 'var(--gold-ink)', 'I already invest', 'Same test. Prove it and jump straight to harder units.')}
       </div>`;
     body.querySelectorAll('.choice').forEach(b => b.onclick = () => {
@@ -1885,24 +1910,24 @@ function showOnboard(step, data = {}){
   } else if(step === 'intro'){
     body.innerHTML = `<div class="wm">Bullpen</div>
       <h1>Placement test</h1>
-      <p class="sub">10 questions, about 2 minutes. You won't lose any lives.</p>
+      <p class="sub">5 questions per unit, about 1 minute each. You won't lose any lives.</p>
       <div class="ob-card"><span class="eyebrow" style="color:var(--on-banner-2)">How it works</span>
         <h2>Start where you need to</h2>
-        <p>Questions 1-5 cover Unit 1 and questions 6-10 cover Unit 2. Get 4 or more of a unit right and you skip it. Otherwise you start at the first lesson you missed.</p></div>`;
+        <p>The test goes unit by unit, from the basics up to options. Get ${PLACE_PASS} of a unit's 5 right and you move on to the next. The first unit you don't pass is where you start, at the first lesson you missed.</p></div>`;
     foot.innerHTML = `<button class="btn" id="obStart">Start the test</button><button class="text-btn" id="obSkip">${S.onboarded ? 'Not now' : 'Skip it and start from the beginning'}</button>`;
-    $('#obStart').onclick = () => { $('#onboard').hidden = true; startTest('placement', 'Placement test', PLACEMENT); };
+    $('#obStart').onclick = () => {
+      $('#onboard').hidden = true;
+      startTest('placement', 'Placement test', PLACEMENT_BLOCKS.flatMap((b, u) => b.map(x => Object.assign({u}, x))));
+    };
     $('#obSkip').onclick = () => { if(!S.onboarded){ S.done = 0; S.testedOut = []; } closeOnboard(); };
   } else if(step === 'placed'){
     const at = data.start < LESSONS.length ? LESSONS[data.start] : null;
     const title = !data.moved ? "You're already past that point" : at ? `You start at Unit ${at.unit+1}` : "You've tested out of everything";
-    const sub = !data.moved ? 'Keep going from where you are.' : at ? `Lesson ${at.n}: ${at.title}` : 'Options (Unit 3) come next. Until then, try a trading competition.';
+    const sub = !data.moved ? 'Keep going from where you are.' : at ? `Lesson ${at.n}: ${at.title}` : `${NEXT_UNIT} (Unit ${UNITS.length+1}) comes next. Until then, try a trading competition.`;
     body.innerHTML = `<div class="wm">Bullpen</div>
       <h1>${title}</h1><p class="sub">${sub}</p>
-      <div class="tiles">
-        <div class="tile acc"><div class="t-h">Unit 1</div><div class="t-v">${data.u1}/5</div></div>
-        <div class="tile xp"><div class="t-h">Unit 2</div><div class="t-v">${data.u2}/5</div></div>
-        <div class="tile str"><div class="t-h">Skipped</div><div class="t-v">${data.skipped}</div></div>
-      </div>
+      <ul class="trophies">${data.scores.map(x => `<li><span class="rk medal ${x.pass ? 'm1' : 'm2'}">${x.pass ? '✓' : x.u+1}</span><span><b>Unit ${x.u+1} · ${UNITS[x.u].title}</b><span>${x.right} of ${x.of} right · ${x.pass ? 'skipped' : 'start here'}</span></span></li>`).join('')}</ul>
+      <div class="tiles"><div class="tile str"><div class="t-h">Lessons skipped</div><div class="t-v">${data.skipped}</div></div></div>
       ${data.skipped ? '<div class="ob-note">Lessons you skipped stay open. Tap any of them to practise.</div>' : ''}`;
     foot.innerHTML = at || !data.moved ? '<button class="btn" id="obGo">Start learning</button>'
       : '<button class="btn" id="obComp">Go to competitions</button><button class="text-btn" id="obGo">See the lessons</button>';
