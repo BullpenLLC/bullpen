@@ -9,8 +9,9 @@ is saved, all players and numbers are fake.
 
 ## What the prototype shows (the core loop)
 1. **Learn** tab: Unit 1 "How markets work", six lessons on a candlestick path
-   (green = done, gold = next, grey = locked). Lessons 1-3 are playable (What a stock is,
-   Risk and return, Diversification): 4 teaching cards, then 5 multiple-choice questions each.
+   (green = done, gold = next, grey = locked). Lessons 1-5 are playable (What a stock is,
+   Risk and return, Diversification, Index funds, Fees and compounding): 4 teaching cards, then
+   5 multiple-choice questions each. Lesson 6 (Unit check) isn't written yet.
    The demo starts with lessons 1-2 done; tap a finished lesson to open it, tap again to practise it.
    Replays give XP but don't move you along the path or unlock badges.
 2. Quiz rules: wrong answers cost a life (5 lives) and the question comes back at the end of
@@ -53,6 +54,9 @@ Full brief: `docs/Bullpen_Project_Brief.pdf`. Settled decisions:
 - Each lesson card can carry `ref: {title, url}`; the player shows it as a "Go deeper on Investopedia" link. `PATH_REFS` holds one reference per lesson on the unit path for when those lessons are written.
 - We link to Investopedia for depth. We never copy its text, definitions or images into lessons: all lesson wording is our own.
 - Link to stable term pages (`https://www.investopedia.com/terms/<letter>/<slug>.asp`).
+
+## Progress
+`docs/ROADMAP.md` is the progress tracker. Tick its boxes in the same PR that finishes the work.
 
 ## Working together (two founders, one repo)
 See `docs/how-we-work.md`. In short: never commit straight to `main`; one branch per task; pull `main` before starting; open a pull request and let the other founder review before merging.
