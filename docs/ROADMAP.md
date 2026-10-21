@@ -5,6 +5,7 @@ Where we are and what's next. Tick a box in the same pull request that finishes 
 **Last updated:** 21 October 2026
 **Now:** Phase 1, the clickable prototype. Unit 1 lessons 1-5 are playable.
 **Next:** Lesson 6 (Unit check), then student interviews at AUB and IC.
+**Live prototype:** https://bullpenllc.github.io/bullpen/prototype/
 
 ## How the pieces fit
 
@@ -35,7 +36,7 @@ The prototype's code will not become the real app. It is a sketch for testing. W
 - [x] Lesson 4: Index funds
 - [x] Lesson 5: Fees and compounding
 - [ ] Lesson 6: Unit check (mixed review of lessons 1-5)
-- [ ] Put the prototype online so anyone can open it with a link (phones included)
+- [x] Put the prototype online so anyone can open it with a link (phones included): https://bullpenllc.github.io/bullpen/prototype/
 - [ ] Finance professor reviews all Unit 1 content
 
 ## Phase 2: Test demand (weeks 1-3)
