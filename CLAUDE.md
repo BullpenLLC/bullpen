@@ -9,8 +9,10 @@ is saved, all players and numbers are fake.
 
 ## What the prototype shows (the core loop)
 1. **Learn** tab: Unit 1 "How markets work", six lessons on a candlestick path
-   (green = done, gold = next, grey = locked). Only lesson 3, Diversification, is playable:
-   4 teaching cards, then 5 multiple-choice questions.
+   (green = done, gold = next, grey = locked). Lessons 1-3 are playable (What a stock is,
+   Risk and return, Diversification): 4 teaching cards, then 5 multiple-choice questions each.
+   The demo starts with lessons 1-2 done; tap a finished lesson to open it, tap again to practise it.
+   Replays give XP but don't move you along the path or unlock badges.
 2. Quiz rules: wrong answers cost a life (5 lives) and the question comes back at the end of
    the queue. 10 XP per first-try correct answer, 5 XP on a retry, +15 XP for finishing.
    Out of lives shows a "refill or go Pro" sheet.
@@ -23,10 +25,11 @@ is saved, all players and numbers are fake.
 6. **Profile** tab: streak, XP, league, rating, badges.
 
 ## Where things live in the file
-- `PATH`, `LESSON` (cards + questions): all lesson content.
+- `PATH`, `LESSONS` (one object per lesson: `title`, `min`, optional `badge`, `cards`, `qs`): all lesson content.
+  Add a new lesson by writing its object and appending it to `LESSONS` in path order.
 - `LEAGUE`, `AUB`, `LEB`, `GLOBAL`: sample leaderboard data.
 - `INITIAL` / `S`: the demo state (streak, hearts, XP, rating).
-- `render*` functions: one per tab. `startLesson`, `onPrimary`, `finish`: the lesson player.
+- `render*` functions: one per tab. `startLesson(index)`, `onPrimary`, `finish`: the lesson player.
 - Colours are CSS variables on `:root`, with a dark theme.
 
 ## Open decisions (not settled yet)
