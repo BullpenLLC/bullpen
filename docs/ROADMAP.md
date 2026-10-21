@@ -3,8 +3,8 @@
 Where we are and what's next. Tick a box in the same pull request that finishes the work, so this page is always current.
 
 **Last updated:** 21 October 2026
-**Now:** Phase 1, the clickable prototype. Units 1 and 2 are complete, with a placement test, competitions and clans.
-**Next:** Student interviews at AUB and IC, and a finance professor's review of Units 1-2.
+**Now:** Phase 1, the clickable prototype. Units 1-6 are complete (36 lessons, including three options units), with an adaptive placement test, competitions and clans.
+**Next:** Student interviews at AUB and IC, a finance professor's review of all six units, and Unit 7 (Building a portfolio).
 **Live prototype:** https://bullpenllc.github.io/bullpen/prototype/
 
 ## How the pieces fit
@@ -12,7 +12,7 @@ Where we are and what's next. Tick a box in the same pull request that finishes 
 | Piece | What it is | Status |
 |---|---|---|
 | Prototype (`prototype/index.html`) | One HTML file that runs in any browser. Fake data, nothing saved. For showing students and testing the idea. | In progress |
-| Lesson content | The cards and questions. Written once, reused in the real app. | Units 1-2 done (12 lessons) |
+| Lesson content | The cards and questions. Written once, reused in the real app. | Units 1-6 done (36 lessons) |
 | Real app | Expo (React Native): one codebase that builds the iPhone app, the Android app and a web version. Supabase for accounts and leaderboards. | Not started |
 | Marketing website | Landing page and waitlist on Vercel (Next.js). Separate from the app. | Not started |
 
@@ -22,6 +22,7 @@ The prototype's code will not become the real app. It is a sketch for testing. W
 - [x] GitHub repo (`BullpenLLC/bullpen`) with `main` and pull requests
 - [x] Project brief and teamwork guide (`docs/`)
 - [ ] Make the GitHub repo private
+- [ ] Add Alex's GitHub account as a collaborator (repo Settings → Collaborators)
 - [ ] LLC and operating agreement
 - [ ] Shared business bank account
 - [ ] D-U-N-S number (needed for the Apple developer account)
@@ -41,9 +42,15 @@ The prototype's code will not become the real app. It is a sketch for testing. W
 - [x] Trade tab: join competitions by code or invite link, public competitions, create a tournament (free small, credits for big)
 - [x] Clans: search, join or request, create
 - [x] Trophies on the profile
-- [ ] Unit 3: Options basics
+- [x] Unit 3: Options basics
+- [x] Unit 4: Pricing options (time value, time decay, volatility, delta, option chains)
+- [x] Unit 5: Option strategies (covered calls, protective puts, spreads, leverage and risk)
+- [x] Unit 6: Reading company accounts
+- [x] Adaptive placement test across all units; answer options shuffled
+- [x] Options unlock as a tournament asset after Unit 3
+- [ ] Unit 7: Building a portfolio
 - [x] Put the prototype online so anyone can open it with a link (phones included): https://bullpenllc.github.io/bullpen/prototype/
-- [ ] Finance professor reviews all Unit 1 and Unit 2 content
+- [ ] Finance professor reviews all six units
 
 ## Phase 2: Test demand (weeks 1-3)
 - [ ] Interview 15-20 AUB students and a few at IC, using the prototype
