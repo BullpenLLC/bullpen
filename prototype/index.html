@@ -1,0 +1,936 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Bullpen Prototype (Copy)</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: one phone-shaped app frame centred on desktop, full-bleed on phones. Lessons sit on a path of candlesticks: green = done, gold = next, grey = locked. */
+:root{
+  --bg:#E8ECF4; --surface:#FFFFFF; --surface-2:#F1F4F9; --ink:#111833; --ink-2:#56607E; --line:#DBE0EB;
+  --bull:#14A44D; --bull-deep:#0C7A37; --bull-ink:#0C7A37; --bull-tint:#E2F5E9; --on-bull:#FFFFFF;
+  --bear:#E0424B; --bear-deep:#A92A31; --bear-ink:#B8323A; --bear-tint:#FDE7E8;
+  --gold:#F2AB00; --gold-deep:#B47C00; --gold-ink:#8F6200; --gold-tint:#FFF3D3; --on-gold:#3A2800;
+  --sky:#2D6BFF; --sky-tint:#E7EEFF; --flame:#FF6B1A;
+  --silver:#9AA5B8; --bronze:#C77B3B;
+  --av1:#7A5CFA; --av2:#0E9FB0; --av3:#DD4F76; --av4:#C98100; --av5:#3B7BF0;
+  --banner:#111833; --on-banner:#F3F5FB; --on-banner-2:#A9B2CF;
+  --frame-shadow:0 40px 90px -40px rgba(17,24,51,.55);
+  --font-display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --font-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#060A14; --surface:#0E1427; --surface-2:#161F37; --ink:#E9EDF8; --ink-2:#98A2C0; --line:#263050;
+    --bull:#2BC266; --bull-deep:#178A45; --bull-ink:#3FD27A; --bull-tint:#0E2C1B; --on-bull:#04200E;
+    --bear:#F26169; --bear-deep:#B13C43; --bear-ink:#FF7D84; --bear-tint:#381418;
+    --gold:#FFC53D; --gold-deep:#C48F10; --gold-ink:#FFCF5C; --gold-tint:#33280C; --on-gold:#2A1E00;
+    --sky:#6E9BFF; --sky-tint:#16264A; --flame:#FF8A3D;
+    --silver:#B4BDCF; --bronze:#DB9257;
+    --av1:#9479FF; --av2:#27B8C9; --av3:#F06B8F; --av4:#E09A1F; --av5:#5B93FF;
+    --banner:#1A2442; --on-banner:#F3F5FB; --on-banner-2:#A9B2CF;
+    --frame-shadow:0 40px 90px -30px rgba(0,0,0,.8);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#060A14; --surface:#0E1427; --surface-2:#161F37; --ink:#E9EDF8; --ink-2:#98A2C0; --line:#263050;
+  --bull:#2BC266; --bull-deep:#178A45; --bull-ink:#3FD27A; --bull-tint:#0E2C1B; --on-bull:#04200E;
+  --bear:#F26169; --bear-deep:#B13C43; --bear-ink:#FF7D84; --bear-tint:#381418;
+  --gold:#FFC53D; --gold-deep:#C48F10; --gold-ink:#FFCF5C; --gold-tint:#33280C; --on-gold:#2A1E00;
+  --sky:#6E9BFF; --sky-tint:#16264A; --flame:#FF8A3D;
+  --silver:#B4BDCF; --bronze:#DB9257;
+  --av1:#9479FF; --av2:#27B8C9; --av3:#F06B8F; --av4:#E09A1F; --av5:#5B93FF;
+  --banner:#1A2442; --on-banner:#F3F5FB; --on-banner-2:#A9B2CF;
+  --frame-shadow:0 40px 90px -30px rgba(0,0,0,.8);
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  background:var(--bg); color:var(--ink); font-family:var(--font-body); font-size:15px; line-height:1.45;
+  display:flex; align-items:center; justify-content:center; gap:56px;
+  padding-block:24px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px));
+  overflow:hidden;
+}
+button{font:inherit; color:inherit; cursor:pointer}
+button:focus-visible,.opt:focus-visible{outline:3px solid var(--sky); outline-offset:2px}
+.mono{font-family:var(--font-mono); font-variant-numeric:tabular-nums}
+.pad{padding-left:max(18px, env(safe-area-inset-left, 0px)); padding-right:max(18px, env(safe-area-inset-right, 0px))}
+h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-height:1.1}
+
+/* desktop note beside the phone */
+.about{max-width:300px; display:none}
+.about .wm{font-family:var(--font-display); font-weight:800; font-size:44px; letter-spacing:-.02em; line-height:1}
+.about .ver{font-family:var(--font-mono); font-size:12px; color:var(--ink-2); letter-spacing:.06em; text-transform:uppercase; margin-top:10px}
+.about p{color:var(--ink-2); margin:18px 0 0}
+.about ol{margin:14px 0 0; padding-left:20px; color:var(--ink-2); display:grid; gap:6px}
+@media (min-width:900px){ .about{display:block} }
+
+/* phone frame */
+.device{
+  width:400px; max-width:100%; height:min(860px, 100%);
+  background:var(--surface); border-radius:38px; box-shadow:var(--frame-shadow);
+  border:1px solid var(--line);
+  display:flex; flex-direction:column; position:relative; overflow:hidden;
+}
+@media (max-width:520px){
+  body{padding:0; display:block}
+  .device{width:100%; height:100%; border-radius:0; box-shadow:none; border:0}
+}
+
+.screen{flex:1; min-height:0; overflow-y:auto; overscroll-behavior:contain}
+
+/* top status bar */
+.status{position:sticky; top:0; z-index:5; background:var(--surface); border-bottom:1px solid var(--line);
+  display:flex; align-items:center; justify-content:space-between; padding-block:14px}
+.stat{display:flex; align-items:center; gap:5px; font-family:var(--font-mono); font-weight:700; font-size:15px}
+.stat svg{width:22px; height:22px}
+.stat.flame{color:var(--flame)} .stat.flame.cold{color:var(--ink-2)}
+.stat.heart{color:var(--bear)} .stat.xp{color:var(--gold-ink)} .stat.xp svg{color:var(--gold)}
+.stat.league{color:var(--gold-ink)} .stat.league svg{color:var(--gold)}
+.stat .n{color:inherit}
+
+/* unit banner */
+.unit{margin-top:18px; background:var(--banner); color:var(--on-banner); border-radius:20px; padding:16px 18px; display:flex; justify-content:space-between; align-items:center; gap:12px}
+.unit .k{font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--on-banner-2)}
+.unit h2{font-size:21px; margin-top:4px; color:var(--on-banner)}
+.unit .prog{font-family:var(--font-mono); font-size:13px; color:var(--on-banner-2); white-space:nowrap}
+
+/* candlestick path */
+.path{display:flex; flex-direction:column; align-items:center; gap:6px; padding-block:22px 28px}
+.node{background:none; border:0; padding:0; display:flex; flex-direction:column; align-items:center; gap:2px; transform:translateX(var(--x,0)); position:relative; -webkit-tap-highlight-color:transparent}
+.node svg{display:block; transition:transform .12s}
+.node:active svg{transform:translateY(3px)}
+.node .lbl{font-size:13px; font-weight:600; color:var(--ink-2)}
+.node.current .lbl{color:var(--ink)}
+.node.current .ring{position:absolute; left:50%; top:52px; width:96px; height:96px; margin:-48px 0 0 -48px; border-radius:50%; border:3px solid var(--gold); opacity:.0; animation:ring 2s ease-out infinite; pointer-events:none}
+@keyframes ring{0%{transform:scale(.6); opacity:.7}100%{transform:scale(1.25); opacity:0}}
+.callout{width:100%; max-width:320px; background:var(--surface); border:2px solid var(--line); border-radius:20px; padding:16px; margin:4px 0 10px; box-shadow:0 4px 0 var(--line)}
+.callout h3{font-size:20px}
+.callout .meta{color:var(--ink-2); font-size:13px; margin:4px 0 14px}
+.callout.soon{border-style:dashed; box-shadow:none}
+.next-unit{border:2px dashed var(--line); border-radius:20px; padding:14px 16px; color:var(--ink-2); display:flex; gap:12px; align-items:center; margin-bottom:24px}
+.next-unit svg{width:22px; height:22px; flex:none}
+.next-unit b{color:var(--ink); display:block}
+
+/* buttons */
+.btn{display:block; width:100%; border:0; border-radius:16px; padding:14px 18px; font-family:var(--font-display); font-weight:800; font-size:17px; letter-spacing:.01em;
+  background:var(--bull); color:var(--on-bull); box-shadow:0 4px 0 var(--bull-deep); transition:transform .08s, box-shadow .08s}
+.btn:active:not(:disabled){transform:translateY(4px); box-shadow:0 0 0 var(--bull-deep)}
+.btn:disabled{background:var(--surface-2); color:var(--ink-2); box-shadow:0 4px 0 var(--line); cursor:not-allowed}
+.btn.bad{background:var(--bear); box-shadow:0 4px 0 var(--bear-deep); color:#fff}
+.btn.ghost{background:var(--surface); color:var(--ink); border:2px solid var(--line); box-shadow:0 4px 0 var(--line)}
+.btn.gold{background:var(--gold); color:var(--on-gold); box-shadow:0 4px 0 var(--gold-deep)}
+.btn-row{display:grid; gap:12px}
+
+/* tab bar */
+.tabbar{display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--line); background:var(--surface); padding-block:6px 8px}
+.tab{background:none; border:0; display:flex; flex-direction:column; align-items:center; gap:2px; padding:6px 0; font-size:11.5px; font-weight:600; color:var(--ink-2); border-radius:12px}
+.tab svg{width:24px; height:24px}
+.tab[aria-current="page"]{color:var(--bull-ink)}
+.tab[aria-current="page"] .tab-ic{background:var(--bull-tint)}
+.tab-ic{display:grid; place-items:center; width:46px; height:30px; border-radius:10px}
+
+/* section headers on tab screens */
+.screen-h{padding-block:20px 6px}
+.screen-h h1{font-size:28px; letter-spacing:-.01em}
+.screen-h p{color:var(--ink-2); margin:6px 0 0}
+.eyebrow{font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-2)}
+
+/* league */
+.seg{display:grid; grid-template-columns:repeat(4,1fr); background:var(--surface-2); border-radius:14px; padding:4px; gap:4px; margin-top:14px}
+.seg button{border:0; background:none; border-radius:10px; padding:8px 4px; font-weight:700; font-size:13px; color:var(--ink-2)}
+.seg button[aria-pressed="true"]{background:var(--surface); color:var(--ink); box-shadow:0 1px 0 var(--line), 0 0 0 1px var(--line)}
+.lg-card{display:flex; gap:14px; align-items:center; margin-top:16px; padding:16px; border-radius:20px; background:var(--gold-tint)}
+.lg-card svg.shield{width:54px; height:54px; flex:none; color:var(--gold)}
+.lg-card h2{font-size:22px}
+.lg-card p{margin:3px 0 0; font-size:13px; color:var(--ink-2)}
+.lg-card .big{font-family:var(--font-display); font-weight:800; font-size:44px; line-height:1; color:var(--gold-ink); font-variant-numeric:tabular-nums}
+.moved{margin-top:12px; padding:12px 14px; border-radius:16px; background:var(--bull-tint); color:var(--bull-ink); font-weight:600; display:flex; gap:10px; align-items:center}
+.moved svg{width:22px; height:22px; flex:none}
+.moved.near{background:var(--sky-tint); color:var(--sky)}
+.board{list-style:none; margin:14px 0 0; padding:0}
+.row{display:grid; grid-template-columns:30px 36px minmax(0,1fr) auto auto; align-items:center; gap:10px; padding:9px 10px; border-radius:14px}
+.row + .row{margin-top:2px}
+.rk{font-family:var(--font-mono); font-weight:700; font-size:14px; text-align:center; color:var(--ink-2)}
+.rk.medal{width:26px; height:26px; border-radius:50%; display:grid; place-items:center; color:#fff; font-size:12px; margin:auto}
+.rk.m1{background:var(--gold); color:var(--on-gold)} .rk.m2{background:var(--silver); color:#1b2233} .rk.m3{background:var(--bronze); color:#fff}
+.rk.up{color:var(--bull-ink)} .rk.down{color:var(--bear-ink)}
+.av{width:36px; height:36px; border-radius:50%; display:grid; place-items:center; color:#fff; font-family:var(--font-display); font-weight:800; font-size:15px}
+.nm{font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.nm em{font-style:normal; color:var(--ink-2); font-weight:500}
+.chip{font-family:var(--font-mono); font-size:11px; font-weight:700; letter-spacing:.04em; padding:3px 7px; border-radius:7px; background:var(--surface-2); color:var(--ink-2)}
+.pts{font-family:var(--font-mono); font-size:13.5px; font-weight:500; text-align:right; min-width:66px}
+.row.me{background:var(--sky-tint)}
+.row.me .nm{color:var(--sky)}
+.row.flash{animation:flash 1.6s ease-out}
+@keyframes flash{0%{box-shadow:0 0 0 3px var(--sky)}100%{box-shadow:0 0 0 0 transparent}}
+.zone{display:flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:10px 4px}
+.zone::before,.zone::after{content:""; flex:1; height:2px; background:currentColor; opacity:.35; border-radius:2px}
+.zone.up{color:var(--bull-ink)} .zone.down{color:var(--bear-ink)}
+.gap-row{text-align:center; color:var(--ink-2); letter-spacing:.3em; padding:4px 0}
+.footnote{color:var(--ink-2); font-size:12px; text-align:center; padding-block:16px 24px}
+
+/* trade */
+.season{margin-top:16px; background:var(--banner); color:var(--on-banner); border-radius:22px; padding:18px}
+.season .tagrow{display:flex; justify-content:space-between; align-items:center; gap:8px}
+.season h2{font-size:24px; margin-top:10px}
+.season p{color:var(--on-banner-2); margin:8px 0 0; font-size:14px}
+.pill{display:inline-block; font-family:var(--font-mono); font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:4px 8px; border-radius:8px; background:var(--gold); color:var(--on-gold)}
+.pill.soft{background:var(--surface-2); color:var(--ink-2)}
+.pf-card{margin-top:16px; border:2px solid var(--line); border-radius:22px; padding:16px}
+.pf-top{display:flex; justify-content:space-between; align-items:flex-start; gap:10px}
+.pf-val{font-family:var(--font-mono); font-weight:700; font-size:28px; letter-spacing:-.02em; margin-top:4px}
+.up-t{color:var(--bull-ink); font-family:var(--font-mono); font-weight:700; font-size:14px}
+.spark{display:block; width:100%; height:80px; margin:12px 0 4px}
+.hold{list-style:none; margin:8px 0 0; padding:0}
+.hold li{display:grid; grid-template-columns:minmax(0,1fr) auto 64px; gap:10px; padding:9px 0; border-top:1px solid var(--line); align-items:center; font-size:14px}
+.hold li span:nth-child(2){font-family:var(--font-mono); color:var(--ink-2)}
+.hold li span:last-child{font-family:var(--font-mono); text-align:right}
+.score{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px}
+.score div{background:var(--surface-2); border-radius:14px; padding:10px; text-align:center}
+.score b{display:block; font-family:var(--font-mono); font-size:17px}
+.score span{font-size:11.5px; color:var(--ink-2)}
+.score .hl{background:var(--gold-tint)} .score .hl b{color:var(--gold-ink)}
+.rules{margin:16px 0 0; padding:0; list-style:none; display:grid; gap:10px}
+.rules li{display:flex; gap:10px; font-size:14px; color:var(--ink-2)}
+.rules li svg{width:20px; height:20px; flex:none; color:var(--bull-ink); margin-top:1px}
+.demo-note{margin-top:10px; font-size:13px; color:var(--ink-2); text-align:center}
+
+/* profile */
+.me-head{display:flex; gap:14px; align-items:center; padding-block:22px 4px}
+.me-head .av{width:64px; height:64px; font-size:26px; background:var(--sky)}
+.me-head h1{font-size:24px}
+.me-head p{margin:2px 0 0; color:var(--ink-2); font-size:14px}
+.stats{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px}
+.stats div{border:2px solid var(--line); border-radius:16px; padding:12px; display:flex; gap:10px; align-items:center}
+.stats svg{width:26px; height:26px; flex:none}
+.stats b{display:block; font-family:var(--font-mono); font-size:18px}
+.stats span{font-size:12px; color:var(--ink-2)}
+.badges{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:12px}
+.badge{border-radius:18px; padding:14px 8px; text-align:center; background:var(--surface-2)}
+.badge .hex{width:52px; height:52px; margin:0 auto 8px; display:grid; place-items:center; border-radius:16px; transform:rotate(45deg)}
+.badge .hex svg{width:24px; height:24px; transform:rotate(-45deg)}
+.badge b{display:block; font-size:12.5px; line-height:1.2}
+.badge span{font-size:11px; color:var(--ink-2)}
+.badge.on .hex{background:var(--gold); color:var(--on-gold)}
+.badge.off .hex{background:var(--line); color:var(--ink-2)}
+.badge.off b{color:var(--ink-2)}
+.badge.new{outline:2px solid var(--gold); outline-offset:-2px}
+.sec-h{margin-top:26px; font-family:var(--font-display); font-size:18px; font-weight:800}
+
+/* lesson player */
+.player{position:absolute; inset:0; background:var(--surface); display:flex; flex-direction:column; z-index:20}
+.p-head{display:flex; align-items:center; gap:12px; padding-block:16px 8px}
+.icon-btn{background:none; border:0; padding:6px; border-radius:10px; color:var(--ink-2); display:grid; place-items:center}
+.icon-btn svg{width:24px; height:24px}
+.bar{flex:1; height:16px; background:var(--surface-2); border-radius:99px; overflow:hidden}
+.bar i{display:block; height:100%; width:0; background:var(--bull); border-radius:99px; transition:width .35s ease; position:relative}
+.bar i::after{content:""; position:absolute; left:10px; right:10px; top:4px; height:3px; border-radius:3px; background:rgba(255,255,255,.35)}
+.p-body{flex:1; min-height:0; overflow-y:auto; padding-block:12px 20px}
+.p-body .eyebrow{display:block; margin-top:8px}
+.p-body h2{font-size:27px; margin-top:6px; letter-spacing:-.01em}
+.p-body p{margin:14px 0 0; max-width:62ch}
+.p-body .lead{font-size:17.5px; line-height:1.5}
+.enter{animation:enter .28s ease-out}
+@keyframes enter{from{transform:translateX(18px); opacity:0}to{transform:none; opacity:1}}
+.term{margin-top:18px; border-radius:16px; padding:14px; background:var(--sky-tint)}
+.term .term-k{display:block; font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--sky); margin-bottom:4px}
+.intro-meta{display:flex; flex-wrap:wrap; gap:8px; margin-top:18px}
+.intro-meta span{font-family:var(--font-mono); font-size:12px; padding:5px 9px; border-radius:8px; background:var(--surface-2); color:var(--ink-2)}
+
+.compare{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px}
+.pf{border:2px solid var(--line); border-radius:16px; padding:12px; display:flex; flex-direction:column; gap:8px; min-width:0}
+.pf-h{font-family:var(--font-display); font-weight:800; font-size:15px}
+.pf p{margin:0; font-size:12.5px; color:var(--ink-2)}
+.slots{display:flex; gap:3px; height:72px; align-items:stretch}
+.slot{flex:1; border:1.5px dashed transparent; border-radius:5px; display:flex; align-items:flex-end; overflow:hidden}
+.slot i{display:block; width:100%; height:var(--h,100%); background:var(--bull); border-radius:3px}
+.slot.drop{border-color:var(--line)}
+.slot.drop i{background:var(--bear)}
+.pf-r{font-size:12px; color:var(--ink-2); line-height:1.3}
+.pf-r b{display:block; font-size:22px; margin-top:4px}
+.good-t{color:var(--bull-ink)} .bad-t{color:var(--bear-ink)}
+
+.mix{margin-top:14px; border:2px solid var(--line); border-radius:16px; padding:12px}
+.mix-h{display:flex; justify-content:space-between; align-items:center; gap:8px; font-weight:700; font-size:14px}
+.tag{font-family:var(--font-mono); font-size:10.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:3px 7px; border-radius:7px}
+.tag.bad{background:var(--bear-tint); color:var(--bear-ink)} .tag.good{background:var(--bull-tint); color:var(--bull-ink)}
+.chips{display:flex; flex-wrap:wrap; gap:6px; margin-top:10px}
+.chips span{font-size:12.5px; font-weight:600; padding:5px 9px; border-radius:9px; background:var(--surface-2)}
+
+.split{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px}
+.col{border-radius:16px; padding:12px; min-width:0}
+.col.good{background:var(--bull-tint)} .col.bad{background:var(--bear-tint)}
+.col-h{font-family:var(--font-mono); font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase}
+.col.good .col-h{color:var(--bull-ink)} .col.bad .col-h{color:var(--bear-ink)}
+.col b{display:block; margin-top:6px; font-size:15px}
+.col p{margin:4px 0 0; font-size:13px; color:var(--ink-2)}
+
+.q-text{font-family:var(--font-display); font-weight:600; font-size:21px; line-height:1.25; margin-top:6px}
+.opts{display:grid; gap:10px; margin-top:20px}
+.opt{display:flex; align-items:center; gap:12px; text-align:left; width:100%; background:var(--surface); border:2px solid var(--line); box-shadow:0 3px 0 var(--line); border-radius:16px; padding:13px 14px; font-weight:600; font-size:15.5px; transition:transform .08s}
+.opt:active{transform:translateY(2px)}
+.opt .key{flex:none; width:28px; height:28px; border-radius:9px; border:2px solid var(--line); display:grid; place-items:center; font-family:var(--font-mono); font-size:12px; color:var(--ink-2)}
+.opt[aria-pressed="true"]{border-color:var(--sky); box-shadow:0 3px 0 var(--sky); background:var(--sky-tint)}
+.opt[aria-pressed="true"] .key{border-color:var(--sky); color:var(--sky)}
+.opt.right{border-color:var(--bull); box-shadow:0 3px 0 var(--bull-deep); background:var(--bull-tint)}
+.opt.right .key{border-color:var(--bull); color:var(--bull-ink)}
+.opt.wrong{border-color:var(--bear); box-shadow:0 3px 0 var(--bear-deep); background:var(--bear-tint)}
+.opt.wrong .key{border-color:var(--bear); color:var(--bear-ink)}
+.opt:disabled{cursor:default}
+.retry{display:inline-block; margin-left:8px; color:var(--bear-ink)}
+
+.p-foot{border-top:1px solid var(--line); padding-block:14px 18px; background:var(--surface); transition:background .2s}
+.p-foot.ok{background:var(--bull-tint); border-color:transparent}
+.p-foot.bad{background:var(--bear-tint); border-color:transparent}
+.fb{margin-bottom:14px; display:flex; gap:12px; align-items:flex-start}
+.fb .fb-ic{flex:none; width:36px; height:36px; border-radius:50%; display:grid; place-items:center; color:#fff}
+.fb .fb-ic svg{width:20px; height:20px}
+.p-foot.ok .fb-ic{background:var(--bull)} .p-foot.bad .fb-ic{background:var(--bear)}
+.fb h3{font-size:19px}
+.p-foot.ok .fb h3{color:var(--bull-ink)} .p-foot.bad .fb h3{color:var(--bear-ink)}
+.fb p{margin:3px 0 0; font-size:14px}
+.p-foot.ok .fb p{color:var(--bull-ink)} .p-foot.bad .fb p{color:var(--bear-ink)}
+
+/* overlays */
+.overlay{position:absolute; inset:0; z-index:40; background:rgba(8,12,24,.55); display:flex; align-items:flex-end}
+.sheet{width:100%; background:var(--surface); border-radius:26px 26px 0 0; padding-block:22px 24px; animation:up .25s ease-out}
+@keyframes up{from{transform:translateY(40px); opacity:.4}to{transform:none; opacity:1}}
+.sheet h2{font-size:24px}
+.sheet p{color:var(--ink-2); margin:8px 0 18px}
+.sheet .big-ic{width:64px; height:64px; margin-bottom:12px; color:var(--bear)}
+.share-card{background:var(--banner); color:var(--on-banner); border-radius:22px; padding:20px; margin-bottom:16px; position:relative; overflow:hidden}
+.share-card .wm{font-family:var(--font-display); font-weight:800; font-size:18px}
+.share-card .sc-big{font-family:var(--font-display); font-weight:800; font-size:40px; line-height:1; margin-top:18px}
+.share-card .sc-sub{color:var(--on-banner-2); margin-top:6px}
+.share-card .sc-row{display:flex; gap:8px; flex-wrap:wrap; margin-top:16px}
+.share-card .sc-row span{font-family:var(--font-mono); font-size:12px; font-weight:700; padding:5px 9px; border-radius:8px; background:rgba(255,255,255,.1)}
+.share-card svg.deco{position:absolute; right:-6px; top:10px; width:120px; height:110px; opacity:.9}
+.copy-msg{min-height:20px; font-size:13px; color:var(--bull-ink); text-align:center; margin-top:10px}
+
+/* result */
+.result{position:absolute; inset:0; z-index:25; background:var(--surface); display:flex; flex-direction:column}
+.res-body{flex:1; min-height:0; overflow-y:auto; display:flex; flex-direction:column; justify-content:center; padding-block:24px}
+.res-art{width:160px; height:120px; margin:0 auto}
+.res-body h1{font-size:34px; text-align:center; margin-top:14px; color:var(--gold-ink)}
+.res-body .sub{text-align:center; color:var(--ink-2); margin-top:6px}
+.tiles{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:24px}
+.tile{border-radius:16px; border:2px solid; overflow:hidden; text-align:center}
+.tile .t-h{font-family:var(--font-mono); font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:5px 4px; color:#fff}
+.tile .t-v{font-family:var(--font-mono); font-weight:700; font-size:22px; padding:12px 4px; display:flex; align-items:center; justify-content:center; gap:4px}
+.tile .t-v svg{width:20px; height:20px}
+.tile.xp{border-color:var(--gold)} .tile.xp .t-h{background:var(--gold); color:var(--on-gold)} .tile.xp .t-v{color:var(--gold-ink)}
+.tile.acc{border-color:var(--bull)} .tile.acc .t-h{background:var(--bull); color:var(--on-bull)} .tile.acc .t-v{color:var(--bull-ink)}
+.tile.str{border-color:var(--flame)} .tile.str .t-h{background:var(--flame)} .tile.str .t-v{color:var(--flame)}
+.unlock{margin-top:16px; display:flex; gap:12px; align-items:center; padding:12px 14px; border-radius:16px; background:var(--gold-tint)}
+.unlock .hex{width:40px; height:40px; border-radius:12px; transform:rotate(45deg); background:var(--gold); color:var(--on-gold); display:grid; place-items:center; flex:none; margin:4px}
+.unlock .hex svg{width:20px; height:20px; transform:rotate(-45deg)}
+.unlock b{display:block}
+.unlock span{font-size:13px; color:var(--ink-2)}
+.res-foot{padding-block:12px 20px}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important; transition:none!important}
+}
+</style>
+
+<aside class="about">
+  <div class="wm">Bullpen</div>
+  <div class="ver">Prototype v0.1 · working name</div>
+  <p>A clickable demo of the core loop for AUB student interviews.</p>
+  <ol>
+    <li>Start the gold lesson on the path</li>
+    <li>Answer five quiz questions</li>
+    <li>See where the XP puts you in the weekly league</li>
+  </ol>
+  <p>Players and numbers are samples. Nothing you do here is saved or sent.</p>
+</aside>
+
+<div class="device" id="app">
+  <!-- LEARN -->
+  <section class="screen" id="s-learn" aria-label="Learn"></section>
+  <!-- TRADE -->
+  <section class="screen" id="s-trade" aria-label="Trade" hidden></section>
+  <!-- LEAGUE -->
+  <section class="screen" id="s-league" aria-label="League" hidden></section>
+  <!-- PROFILE -->
+  <section class="screen" id="s-profile" aria-label="Profile" hidden></section>
+
+  <nav class="tabbar pad" id="tabbar" aria-label="Main">
+    <button class="tab" data-tab="learn"><span class="tab-ic" data-ic="book"></span>Learn</button>
+    <button class="tab" data-tab="trade"><span class="tab-ic" data-ic="candles"></span>Trade</button>
+    <button class="tab" data-tab="league"><span class="tab-ic" data-ic="trophy"></span>League</button>
+    <button class="tab" data-tab="profile"><span class="tab-ic" data-ic="user"></span>Profile</button>
+  </nav>
+
+  <!-- LESSON PLAYER -->
+  <section class="player" id="player" hidden aria-label="Lesson">
+    <header class="p-head pad">
+      <button class="icon-btn" id="pClose" aria-label="Leave lesson"></button>
+      <div class="bar" role="progressbar" aria-label="Lesson progress"><i id="pBar"></i></div>
+      <div class="stat heart" id="pHearts"></div>
+    </header>
+    <div class="p-body pad" id="pBody"></div>
+    <footer class="p-foot" id="pFoot">
+      <div class="pad">
+        <div class="fb" id="fb" hidden>
+          <div class="fb-ic" id="fbIc"></div>
+          <div><h3 id="fbTitle"></h3><p id="fbText"></p></div>
+        </div>
+        <button class="btn" id="pBtn">Continue</button>
+      </div>
+    </footer>
+  </section>
+
+  <!-- RESULT -->
+  <section class="result" id="result" hidden aria-label="Lesson complete">
+    <div class="res-body pad" id="resBody"></div>
+    <div class="res-foot pad btn-row">
+      <button class="btn" id="resLeague">See your league</button>
+      <button class="btn ghost" id="resShare">Share result</button>
+    </div>
+  </section>
+
+  <!-- OVERLAYS -->
+  <div class="overlay" id="heartsModal" hidden>
+    <div class="sheet pad" role="dialog" aria-modal="true" aria-labelledby="hmT">
+      <svg class="big-ic" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 20.5s-7.5-4.6-9.2-9.3C1.6 7.8 3.8 4.5 7.1 4.5c2 0 3.6 1.1 4.9 2.8 1.3-1.7 2.9-2.8 4.9-2.8 3.3 0 5.5 3.3 4.3 6.7-1.7 4.7-9.2 9.3-9.2 9.3z" opacity=".35"/></svg>
+      <h2 id="hmT">You're out of lives</h2>
+      <p>In the app, lives refill over a few hours, or Pro gives you unlimited lives. For this demo you can refill now.</p>
+      <div class="btn-row">
+        <button class="btn" id="refill">Refill lives (demo)</button>
+        <button class="btn ghost" id="hmQuit">Leave lesson</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="quitModal" hidden>
+    <div class="sheet pad" role="dialog" aria-modal="true" aria-labelledby="qmT">
+      <h2 id="qmT">Leave this lesson?</h2>
+      <p>You'll lose the XP from this attempt.</p>
+      <div class="btn-row">
+        <button class="btn" id="qmStay">Keep learning</button>
+        <button class="btn ghost" id="qmLeave">Leave</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="shareModal" hidden>
+    <div class="sheet pad" role="dialog" aria-modal="true" aria-labelledby="smT">
+      <h2 id="smT" style="margin-bottom:14px">Share your result</h2>
+      <div class="share-card" id="shareCard"></div>
+      <div class="btn-row">
+        <button class="btn" id="copyShare">Copy text</button>
+        <button class="btn ghost" id="closeShare">Done</button>
+      </div>
+      <div class="copy-msg" id="copyMsg" aria-live="polite"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+const $ = s => document.querySelector(s);
+const fmt = n => n.toLocaleString('en-US');
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- icons ---------- */
+const I = {
+  flame:'<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.5c.8 3 3.6 4.6 4.9 7.4 1.5 3.3.2 7.6-3.2 9.1-3.9 1.7-8.7-.8-9.2-5.2-.3-2.6.9-4.6 2.5-5.7-.1 1.6.5 2.9 1.6 3.4C8.4 8.5 10 5.3 12 2.5z"/></svg>',
+  heart:'<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 20.5s-7.5-4.6-9.2-9.3C1.6 7.8 3.8 4.5 7.1 4.5c2 0 3.6 1.1 4.9 2.8 1.3-1.7 2.9-2.8 4.9-2.8 3.3 0 5.5 3.3 4.3 6.7-1.7 4.7-9.2 9.3-9.2 9.3z"/></svg>',
+  bolt:'<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.5 2 4.5 13.5h6.5l-1 8.5 9-11.5h-6.5l1-8.5z"/></svg>',
+  shield:'<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2l8 3v6c0 5-3.4 9.3-8 11-4.6-1.7-8-6-8-11V5l8-3z"/><path fill="none" stroke="var(--surface)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M8.5 13.5l3.5-4 3.5 4"/></svg>',
+  book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5v-15z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v3H6.5"/></svg>',
+  candles:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M7 3v18M17 3v18"/><rect x="4.5" y="8" width="5" height="8" rx="1.2" fill="currentColor"/><rect x="14.5" y="6" width="5" height="9" rx="1.2"/></svg>',
+  trophy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0V4z"/><path d="M8 6H5a3 3 0 0 0 3.2 4M16 6h3a3 3 0 0 1-3.2 4M12 13v4M8 20.5h8M9.5 17h5"/></svg>',
+  user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
+  x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+  lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>',
+  up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>',
+  baskets:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="2.5" y="11" width="5" height="9" rx="1.2"/><rect x="9.5" y="6" width="5" height="14" rx="1.2"/><rect x="16.5" y="9" width="5" height="11" rx="1.2"/></svg>',
+  star:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z"/></svg>',
+  scale:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M7 21h10M4 7h16M7 7l-3 7a3 3 0 0 0 6 0L7 7zM17 7l-3 7a3 3 0 0 0 6 0l-3-7z"/></svg>',
+  flag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg>'
+};
+document.querySelectorAll('[data-ic]').forEach(el => el.innerHTML = I[el.dataset.ic]);
+$('#pClose').innerHTML = I.x;
+
+/* ---------- content ---------- */
+const PATH = ['What a stock is','Risk and return','Diversification','Index funds','Fees and compounding','Unit check'];
+const OFFSETS = [0, 58, 76, 34, -42, -12];
+
+const LESSON = {
+  cards:[
+    {k:'Lesson 3 · The idea', t:'Spread your money out', b:`
+      <p class="lead">Diversification means splitting your money across many different investments, so one bad result can't sink the whole portfolio.</p>
+      <div class="term"><span class="term-k">Key term</span><b>Portfolio:</b> everything you own as investments, taken together.</div>
+      <div class="intro-meta"><span>4 ideas</span><span>5 questions</span><span>About 4 min</span></div>`},
+    {k:'Do the maths', t:'One basket or ten?', b:`
+      <p>Two students each invest $1,000. Then one company has terrible news and its shares fall 40%.</p>
+      <div class="compare">
+        <div class="pf">
+          <div class="pf-h">Portfolio A</div>
+          <p>$1,000 in one company</p>
+          <div class="slots"><span class="slot drop"><i style="--h:60%"></i></span></div>
+          <div class="pf-r">That company falls 40%<b class="mono bad-t">$600</b></div>
+        </div>
+        <div class="pf">
+          <div class="pf-h">Portfolio B</div>
+          <p>$100 in each of 10 companies</p>
+          <div class="slots">${'<span class="slot"><i></i></span>'.repeat(4)}<span class="slot drop"><i style="--h:60%"></i></span>${'<span class="slot"><i></i></span>'.repeat(5)}</div>
+          <div class="pf-r">One falls 40%, the rest hold<b class="mono good-t">$960</b></div>
+        </div>
+      </div>
+      <p>Same bad news. Portfolio A loses $400. Portfolio B loses $40.</p>`},
+    {k:'The catch', t:'Different has to mean different', b:`
+      <p>Spreading out only helps if your investments don't all move together. Ten tech companies often rise and fall at the same time, so owning all ten is close to one big bet.</p>
+      <div class="mix">
+        <div class="mix-h"><span>Looks spread out</span><span class="tag bad">Moves together</span></div>
+        <div class="chips"><span>Tech</span><span>Tech</span><span>Tech</span><span>Tech</span><span>Tech</span><span>Tech</span></div>
+      </div>
+      <div class="mix">
+        <div class="mix-h"><span>Actually spread out</span><span class="tag good">Moves differently</span></div>
+        <div class="chips"><span>Tech</span><span>Healthcare</span><span>Energy</span><span>Bonds</span><span>Gold</span><span>Other countries</span></div>
+      </div>
+      <div class="term"><span class="term-k">Key term</span><b>Correlation:</b> how closely two investments move together.</div>`},
+    {k:'The limit', t:"What it can't protect you from", b:`
+      <p>Diversification cuts the risk that comes from any one company. It can't remove the risk that hits the whole market at once.</p>
+      <div class="split">
+        <div class="col good"><div class="col-h">Reduces</div><b>Company-specific risk</b><p>A scandal, a failed product, a bad CEO.</p></div>
+        <div class="col bad"><div class="col-h">Can't remove</div><b>Market risk</b><p>A recession or crash, when most prices fall together.</p></div>
+      </div>
+      <p>So a diversified portfolio can still lose money in a bad year. It usually loses less than a single bet would.</p>`}
+  ],
+  qs:[
+    {q:'Rana keeps all her savings in shares of one company. Which risk is she most exposed to?',
+     o:['Company-specific risk','Only market risk','None, one company is easier to watch','Exchange-rate risk'], a:0,
+     e:'With one company, a single piece of bad news hits everything she owns.'},
+    {q:'Which portfolio is the most diversified?',
+     o:['Five bank stocks from one country','Three tech stocks and two crypto coins','A global stock fund, a bond fund and some gold','One gold fund'], a:2,
+     e:'It mixes different asset types and countries, which tend not to move together.'},
+    {q:"You hold $100 in each of 10 companies. One falls 50%. The other nine don't move. What is the portfolio worth now?",
+     o:['$500','$900','$950','$1,000'], a:2,
+     e:'Only $100 was in the falling company, so you lose $50. $1,000 − $50 = $950.'},
+    {q:"True or false: a well-diversified portfolio can't lose money in a market crash.",
+     o:['True','False'], a:1,
+     e:'In a crash most prices fall together. Diversification limits company-specific risk, not market risk.'},
+    {q:'Why do 10 tech stocks give less protection than 10 stocks from different sectors?',
+     o:['They tend to rise and fall together','Tech companies never pay dividends','You can only own five at a time','They always cost more per share'], a:0,
+     e:'When investments are highly correlated, spreading across them barely reduces risk.'}
+  ]
+};
+
+/* sample players */
+const LEAGUE = [
+  ['nour.h','AUB',512],['karim99','LAU',470],['maya.s','AUB',431],['jad.t','USJ',398],['lea.f','AUB',352],
+  ['omar.k','NDU',296],['sara.b','AUB',268],['hadi.m','BAU',251],['rita.e','LAU',239],['tarek.z','AUB',226],
+  ['ziad.a','USJ',204],['lynn.c','AUB',196],['fadi.r','LAU',181],['dana.y','AUB',170],['sami.w','NDU',158],
+  ['joelle.m','USJ',144],['ali.h','AUB',131],['mira.d','BAU',120],['elie.n','AUB',107],['hala.g','LAU',96],
+  ['rayan.s','AUB',84],['yara.j','USJ',71],['nadim.f','AUB',60],['celine.b','NDU',48],['walid.k','AUB',39],
+  ['zeina.p','LAU',30],['bassel.o','AUB',22],['tala.v','USJ',14],['georges.i','AUB',6]
+];
+const AUB = [['nour.h',1720],['maya.s',1688],['karl.d',1650],['lea.f',1611],['sara.b',1590],['tarek.z',1552],['reem.a',1530],['lynn.c',1502],['dana.y',1479],['ali.h',1450],['jana.r',1414],['elie.n',1360],['rayan.s',1344],['nadim.f',1301]];
+const LEB = [['karim99','LAU',1902],['nour.h','AUB',1720],['christa.l','USJ',1712],['maya.s','AUB',1688],['ahmad.b','BAU',1671],['karl.d','AUB',1650]];
+const GLOBAL = [['finn.o','UK',2214],['layla.q','AE',2187],['omar.s','SA',2150],['karim99','LB',1902],['hana.m','JO',1880],['youssef.e','EG',1861]];
+
+/* ---------- state ---------- */
+const INITIAL = {streak:7, streakToday:false, hearts:5, xpTotal:1240, weekly:215, rating:1388, done:2, tab:'learn', view:'week', last:null, wait:false, newBadge:false};
+let S = JSON.parse(JSON.stringify(INITIAL));
+
+function avColor(name){ let h=0; for(const c of name) h=(h*31+c.charCodeAt(0))>>>0; return 'var(--av'+(h%5+1)+')'; }
+function weekRank(xp){ return LEAGUE.filter(p => p[2] > xp).length + 1; }
+function aubRank(r){ return AUB.filter(p => p[1] > r).length + 1; }
+function lebRank(){ return S.done > 2 ? 58 : 64; }
+function globalRank(){ return S.done > 2 ? 2377 : 2481; }
+
+/* ---------- learn ---------- */
+function candle(state, n){
+  const fill = state==='done' ? 'var(--bull)' : state==='current' ? 'var(--gold)' : 'var(--surface-2)';
+  const deep = state==='done' ? 'var(--bull-deep)' : state==='current' ? 'var(--gold-deep)' : 'var(--line)';
+  let inner = '';
+  if(state==='done') inner = '<path d="M27 49l6.5 6.5L46 42" fill="none" stroke="var(--on-bull)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>';
+  else if(state==='current') inner = `<text x="36" y="58" text-anchor="middle" font-family="Bricolage Grotesque, system-ui, sans-serif" font-weight="800" font-size="26" fill="var(--on-gold)">${n}</text>`;
+  else if(n===6) inner = '<g transform="translate(24 37)" fill="none" stroke="var(--ink-2)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0V4z"/><path d="M12 13v4M8 20.5h8"/></g>';
+  else inner = '<g transform="translate(24 37)" fill="none" stroke="var(--ink-2)" stroke-width="2.2" stroke-linecap="round"><rect x="5" y="10" width="14" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></g>';
+  return `<svg viewBox="0 0 72 104" width="72" height="104" aria-hidden="true">
+    <line x1="36" y1="4" x2="36" y2="100" stroke="${deep}" stroke-width="5" stroke-linecap="round"/>
+    <rect x="12" y="26" width="48" height="58" rx="13" fill="${deep}"/>
+    <rect x="12" y="20" width="48" height="58" rx="13" fill="${fill}" ${state==='locked'?'stroke="var(--line)" stroke-width="2"':''}/>
+    ${inner}</svg>`;
+}
+
+function statusBar(){
+  return `<div class="status pad">
+    <span class="stat league" title="League">${I.shield}<span class="n">Gold</span></span>
+    <span class="stat flame ${S.streakToday?'':'cold'}" title="Day streak">${I.flame}<span class="n">${S.streak}</span></span>
+    <span class="stat heart" title="Lives">${I.heart}<span class="n">${S.hearts}</span></span>
+    <span class="stat xp" title="Total XP">${I.bolt}<span class="n">${fmt(S.xpTotal)}</span></span>
+  </div>`;
+}
+
+function renderLearn(){
+  const cur = S.done; // index of current lesson
+  let path = '';
+  PATH.forEach((t,i) => {
+    const st = i < cur ? 'done' : i === cur ? 'current' : 'locked';
+    path += `<button class="node ${st}" style="--x:${OFFSETS[i]}px" data-i="${i}" aria-label="${t}, ${st==='done'?'completed':st==='current'?'next lesson':'locked'}">
+      ${st==='current'?'<span class="ring"></span>':''}${candle(st, i+1)}<span class="lbl">${t}</span></button>`;
+    if(st==='current'){
+      if(i === 2){
+        path += `<div class="callout"><span class="eyebrow">Lesson 3 of 6</span><h3>Diversification</h3>
+          <div class="meta">4 ideas · 5 questions · about 4 min</div>
+          <button class="btn" id="startBtn">Start · up to +65 XP</button></div>`;
+      } else {
+        path += `<div class="callout soon"><span class="eyebrow">Lesson ${i+1} of 6</span><h3>${t}</h3>
+          <div class="meta">This lesson comes in the next prototype. Today's lesson is done.</div></div>`;
+      }
+    }
+  });
+  $('#s-learn').innerHTML = statusBar() + `
+    <div class="pad">
+      <div class="unit"><div><div class="k">Unit 1</div><h2>How markets work</h2></div><div class="prog">${S.done} / 6 done</div></div>
+      <div class="path">${path}</div>
+      <div class="next-unit">${I.lock}<div><b>Unit 2 · Reading a price chart</b>Finish Unit 1 to unlock</div></div>
+    </div>`;
+  const sb = $('#startBtn'); if(sb) sb.onclick = startLesson;
+  $('#s-learn').querySelectorAll('.node').forEach(n => n.onclick = () => {
+    const i = +n.dataset.i;
+    if(i === 2 && S.done === 2) startLesson();
+  });
+}
+
+/* ---------- trade ---------- */
+function renderTrade(){
+  const pts = [10000,10040,9980,10110,10090,10180,10150,10260,10210,10330,10290,10380,10350,10440,10410,10482];
+  const min = 9940, max = 10520, w = 320, h = 80;
+  const xy = pts.map((v,i) => [ (i/(pts.length-1))*(w-8)+4, h-6-((v-min)/(max-min))*(h-12) ]);
+  const line = xy.map(p => p.map(n=>n.toFixed(1)).join(',')).join(' ');
+  const area = `M${xy[0][0]},${h} L` + xy.map(p=>p.join(',')).join(' L') + ` L${xy[xy.length-1][0]},${h} Z`;
+  const last = xy[xy.length-1];
+  $('#s-trade').innerHTML = `
+    <div class="pad">
+      <div class="screen-h"><h1>Trading game</h1><p>Fake money. Real prices. Ranked on skill.</p></div>
+      <div class="season">
+        <div class="tagrow"><span class="pill">Starts Feb 2027</span><span class="eyebrow" style="color:var(--on-banner-2)">Season 1</span></div>
+        <h2>AUB Investing Cup</h2>
+        <p>Everyone starts with $10,000 in fake money. Trade stocks, ETFs, crypto and gold for one season. Rankings use risk-adjusted return, so one lucky bet won't win it.</p>
+      </div>
+      <div class="pf-card">
+        <div class="pf-top"><div><span class="eyebrow">Sample portfolio</span><div class="pf-val">$10,482</div></div><span class="up-t">+4.8% season</span></div>
+        <svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-label="Sample portfolio value over the season, rising from $10,000 to $10,482">
+          <line x1="0" x2="${w}" y1="${(h-6-((10000-min)/(max-min))*(h-12)).toFixed(1)}" y2="${(h-6-((10000-min)/(max-min))*(h-12)).toFixed(1)}" stroke="var(--line)" stroke-dasharray="4 4"/>
+          <path d="${area}" fill="var(--bull-tint)"/>
+          <polyline points="${line}" fill="none" stroke="var(--bull)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+          <circle cx="${last[0]}" cy="${last[1]}" r="4" fill="var(--bull)"/>
+        </svg>
+        <ul class="hold">
+          <li><span>Global stock ETF</span><span>45%</span><span class="good-t">+3.9%</span></li>
+          <li><span>Bond ETF</span><span>15%</span><span class="good-t">+0.8%</span></li>
+          <li><span>Gold</span><span>20%</span><span class="good-t">+6.2%</span></li>
+          <li><span>Bitcoin</span><span>10%</span><span class="good-t">+11.4%</span></li>
+          <li><span>Cash</span><span>10%</span><span>0.0%</span></li>
+        </ul>
+        <div class="score">
+          <div><b>+4.8%</b><span>Return</span></div>
+          <div><b>6.1%</b><span>Swings</span></div>
+          <div class="hl"><b>0.79</b><span>Season score</span></div>
+        </div>
+      </div>
+      <ul class="rules">
+        <li>${I.check}<span>Season score is return divided by how much your portfolio swung, so steady skill beats a lucky gamble.</span></li>
+        <li>${I.check}<span>Orders fill at the next market price after you tap, never at an old price on screen.</span></li>
+        <li>${I.check}<span>One account per phone number. No resets mid-season.</span></li>
+      </ul>
+      <div style="margin-top:18px"><button class="btn gold" id="waitBtn">${S.wait?'Noted for the demo':'Get notified when it opens'}</button></div>
+      <div class="demo-note" ${S.wait?'':'hidden'} id="waitNote">Demo only. The real waitlist opens with the landing page.</div>
+      <div class="footnote">Sample portfolio for the prototype. Not real trades or advice.</div>
+    </div>`;
+  $('#waitBtn').onclick = () => { S.wait = true; renderTrade(); };
+}
+
+/* ---------- league ---------- */
+function row(rank, name, chip, val, unit, opts={}){
+  const medal = rank<=3 && !opts.noMedal ? `medal m${rank}` : '';
+  const zone = opts.zone || '';
+  return `<li class="row ${opts.me?'me':''} ${opts.flash?'flash':''}">
+    <span class="rk ${medal} ${zone}">${fmt(rank)}</span>
+    <span class="av" style="background:${opts.me?'var(--sky)':avColor(name)}">${opts.me?'Y':name[0].toUpperCase()}</span>
+    <span class="nm">${opts.me?'You':name}${opts.me?' <em>· new.player</em>':''}</span>
+    <span class="chip">${chip}</span>
+    <span class="pts">${fmt(val)}${unit?' '+unit:''}</span></li>`;
+}
+
+function renderLeague(){
+  const v = S.view;
+  let head = '', list = '';
+  const L = S.last;
+  if(v === 'week'){
+    const all = LEAGUE.map(p => ({n:p[0], s:p[1], x:p[2]})).concat([{n:'you', s:'AUB', x:S.weekly, me:true}]);
+    all.sort((a,b) => b.x - a.x || (a.me?-1:1));
+    const myRank = all.findIndex(p => p.me) + 1;
+    let moved = '';
+    if(L){
+      if(L.newWeek <= 7) moved = `<div class="moved">${I.up}<span>You climbed from #${L.prevWeek} to #${L.newWeek}. You're in the promotion zone.</span></div>`;
+      else {
+        const need = all[6].x - S.weekly + 1;
+        moved = `<div class="moved near">${I.up}<span>You climbed from #${L.prevWeek} to #${L.newWeek}. ${need} XP more reaches the promotion zone.</span></div>`;
+      }
+    }
+    head = `<div class="lg-card">${I.shield}<div><h2>Gold League</h2><p>Week 43 · ends in 3d 14h<br>Top 7 move up to Platinum. Bottom 5 drop to Silver.</p></div></div>${moved}`;
+    all.forEach((p,i) => {
+      const r = i+1;
+      if(r === 8) list += '<li class="zone up">Promotion zone</li>';
+      if(r === 26) list += '<li class="zone down">Demotion zone</li>';
+      list += row(r, p.n, p.s, p.x, 'XP', {me:p.me, flash:p.me && L, zone: r<=7?'up':r>=26?'down':''});
+    });
+  } else if(v === 'aub'){
+    const all = AUB.map(p => ({n:p[0], x:p[1]})).concat([{n:'you', x:S.rating, me:true}]).sort((a,b)=>b.x-a.x);
+    const r = all.findIndex(p => p.me) + 1;
+    head = `<div class="lg-card"><div class="big">#${r}</div><div><h2>at AUB</h2><p>of 186 players · Bullpen rating<br>Rating blends lesson scores with trading results across seasons.</p></div></div>`;
+    if(L) head += `<div class="moved">${I.up}<span>Up from #${L.prevAub} after today's lesson.</span></div>`;
+    all.forEach((p,i) => list += row(i+1, p.n, 'AUB', p.x, '', {me:p.me, flash:p.me && L}));
+  } else {
+    const lb = v === 'lb';
+    const data = lb ? LEB : GLOBAL;
+    const r = lb ? lebRank() : globalRank();
+    head = `<div class="lg-card"><div class="big" style="font-size:${r>999?34:44}px">#${fmt(r)}</div><div><h2>${lb?'in Lebanon':'Worldwide'}</h2><p>${lb?'of 1,920 players':'of 48,600 players'} · Bullpen rating<br>${lb?'All universities, one ranking.':'Every country, one ranking.'}</p></div></div>`;
+    data.forEach((p,i) => list += row(i+1, p[0], p[1], p[2], ''));
+    list += '<li class="gap-row" aria-hidden="true">· · ·</li>';
+    const nb = lb ? [['farah.k','LAU'],['joe.m','USJ']] : [['amira.t','EG'],['sami.r','AE']];
+    list += row(r-1, nb[0][0], nb[0][1], S.rating+6, '', {noMedal:true});
+    list += row(r, 'you', lb?'AUB':'LB', S.rating, '', {me:true, flash:!!L, noMedal:true});
+    list += row(r+1, nb[1][0], nb[1][1], S.rating-5, '', {noMedal:true});
+  }
+  const tabs = [['week','This week'],['aub','AUB'],['lb','Lebanon'],['global','Global']];
+  $('#s-league').innerHTML = `
+    <div class="pad">
+      <div class="screen-h"><h1>Leaderboards</h1></div>
+      <div class="seg" role="group" aria-label="Leaderboard">${tabs.map(t => `<button data-v="${t[0]}" aria-pressed="${S.view===t[0]}">${t[1]}</button>`).join('')}</div>
+      ${head}
+      <ol class="board">${list}</ol>
+      <div class="footnote">Sample players for the prototype.</div>
+    </div>`;
+  $('#s-league').querySelectorAll('.seg button').forEach(b => b.onclick = () => { S.view = b.dataset.v; renderLeague(); });
+  const me = $('#s-league .row.me');
+  if(me && S.view === 'week'){
+    const sc = $('#s-league');
+    requestAnimationFrame(() => { const top = me.offsetTop - sc.clientHeight/2 + 30; sc.scrollTo({top:Math.max(0, top), behavior: reduceMotion?'auto':'smooth'}); });
+  }
+}
+
+/* ---------- profile ---------- */
+function renderProfile(){
+  const badges = [
+    {t:'First lesson', s:'Finish a lesson', on:true, ic:I.book},
+    {t:'Week streak', s:'7 days in a row', on:true, ic:I.flame},
+    {t:'Many Baskets', s:'Diversification', on:S.done>2, ic:I.baskets, isNew:S.newBadge},
+    {t:'Podium', s:'Top 3 in a league', on:false, ic:I.trophy},
+    {t:'Steady hand', s:'Season score above 1', on:false, ic:I.scale},
+    {t:'Season finisher', s:'Trade a full season', on:false, ic:I.flag}
+  ];
+  $('#s-profile').innerHTML = `
+    <div class="pad">
+      <div class="me-head"><span class="av">Y</span><div><h1>new.player</h1><p>AUB · Joined October 2026</p></div></div>
+      <div class="stats">
+        <div><span style="color:var(--flame)">${I.flame}</span><span><b>${S.streak}</b><span>Day streak</span></span></div>
+        <div><span style="color:var(--gold)">${I.bolt}</span><span><b>${fmt(S.xpTotal)}</b><span>Total XP</span></span></div>
+        <div><span style="color:var(--gold)">${I.shield}</span><span><b>Gold</b><span>Current league</span></span></div>
+        <div><span style="color:var(--sky)">${I.star}</span><span><b>${fmt(S.rating)}</b><span>Bullpen rating</span></span></div>
+      </div>
+      <div class="sec-h">Badges</div>
+      <div class="badges">${badges.map(b => `<div class="badge ${b.on?'on':'off'} ${b.isNew?'new':''}"><div class="hex">${b.on?b.ic:I.lock}</div><b>${b.t}</b><span>${b.s}</span></div>`).join('')}</div>
+      <div style="margin-top:26px"><button class="btn ghost" id="resetBtn">Restart the demo</button></div>
+      <div class="footnote">Prototype · nothing here is saved</div>
+    </div>`;
+  $('#resetBtn').onclick = () => { S = JSON.parse(JSON.stringify(INITIAL)); renderAll(); showTab('learn'); };
+}
+
+/* ---------- navigation ---------- */
+function showTab(t){
+  S.tab = t;
+  ['learn','trade','league','profile'].forEach(k => $('#s-'+k).hidden = k !== t);
+  document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-current', b.dataset.tab===t ? 'page' : 'false'));
+  if(t !== 'league') $('#s-league').scrollTop = 0;
+  if(t === 'league') renderLeague();
+  if(t === 'profile') renderProfile();
+}
+document.querySelectorAll('.tab').forEach(b => b.onclick = () => showTab(b.dataset.tab));
+function renderAll(){ renderLearn(); renderTrade(); renderLeague(); renderProfile(); }
+
+/* ---------- lesson player ---------- */
+let P = null;
+const TOTAL = LESSON.cards.length + LESSON.qs.length;
+
+function startLesson(){
+  P = {phase:'cards', i:0, queue:LESSON.qs.map((_,i)=>i), sel:null, checked:false, lastOk:false, missed:new Set(), correct:0, xp:0, mistakes:0};
+  $('#player').hidden = false;
+  renderPlayer();
+}
+function setHearts(){ $('#pHearts').innerHTML = I.heart + `<span class="n">${S.hearts}</span>`; }
+function progress(){
+  const seen = P.phase==='cards' ? P.i : LESSON.cards.length;
+  $('#pBar').style.width = ((seen + P.correct) / TOTAL * 100) + '%';
+}
+function setFoot(mode){ $('#pFoot').className = 'p-foot' + (mode ? ' '+mode : ''); }
+
+function renderPlayer(){
+  setHearts(); progress(); setFoot(''); $('#fb').hidden = true;
+  const btn = $('#pBtn'); btn.className = 'btn';
+  const body = $('#pBody');
+  if(P.phase === 'cards'){
+    const c = LESSON.cards[P.i];
+    body.innerHTML = `<div class="enter"><span class="eyebrow">${c.k}</span><h2>${c.t}</h2>${c.b}</div>`;
+    btn.disabled = false; btn.textContent = P.i === LESSON.cards.length-1 ? 'Start the quiz' : 'Continue';
+  } else {
+    const qi = P.queue[0], q = LESSON.qs[qi];
+    const keys = 'ABCD';
+    body.innerHTML = `<div class="enter"><span class="eyebrow">Question ${P.correct+1} of ${LESSON.qs.length}${P.missed.has(qi)?'<span class="retry">· Try again</span>':''}</span>
+      <div class="q-text">${q.q}</div>
+      <div class="opts">${q.o.map((o,i)=>`<button class="opt" data-i="${i}" aria-pressed="false"><span class="key">${keys[i]}</span><span>${o}</span></button>`).join('')}</div></div>`;
+    body.querySelectorAll('.opt').forEach(b => b.onclick = () => {
+      if(P.checked) return;
+      P.sel = +b.dataset.i;
+      body.querySelectorAll('.opt').forEach(x => x.setAttribute('aria-pressed', x===b ? 'true':'false'));
+      btn.disabled = false;
+    });
+    btn.disabled = true; btn.textContent = 'Check';
+  }
+  body.scrollTop = 0;
+}
+
+function onPrimary(){
+  if(!P) return;
+  const btn = $('#pBtn');
+  if(P.phase === 'cards'){
+    P.i++;
+    if(P.i >= LESSON.cards.length){ P.phase = 'quiz'; }
+    renderPlayer(); return;
+  }
+  const qi = P.queue[0], q = LESSON.qs[qi];
+  if(!P.checked){
+    if(P.sel === null) return;
+    P.checked = true;
+    const ok = P.sel === q.a; P.lastOk = ok;
+    const opts = $('#pBody').querySelectorAll('.opt');
+    opts.forEach((o,i) => { o.disabled = true; if(i===q.a) o.classList.add('right'); else if(i===P.sel) o.classList.add('wrong'); });
+    if(ok){
+      P.correct++; P.xp += P.missed.has(qi) ? 5 : 10;
+      setFoot('ok'); $('#fbIc').innerHTML = I.check;
+      $('#fbTitle').textContent = ['Correct','Nice work','Exactly','Spot on','Right'][P.correct % 5];
+      $('#fbText').textContent = q.e;
+      btn.className = 'btn'; btn.textContent = 'Continue';
+    } else {
+      P.mistakes++; P.missed.add(qi); S.hearts = Math.max(0, S.hearts-1); setHearts();
+      setFoot('bad'); $('#fbIc').innerHTML = I.x;
+      $('#fbTitle').textContent = 'Not quite';
+      $('#fbText').textContent = 'Answer: ' + q.o[q.a] + '. ' + q.e;
+      btn.className = 'btn bad'; btn.textContent = 'Got it';
+    }
+    $('#fb').hidden = false; progress();
+    return;
+  }
+  // checked → advance
+  if(P.lastOk) P.queue.shift(); else P.queue.push(P.queue.shift());
+  P.sel = null; P.checked = false;
+  if(P.queue.length === 0){ finish(); return; }
+  if(S.hearts <= 0){ $('#heartsModal').hidden = false; return; }
+  renderPlayer();
+}
+$('#pBtn').onclick = onPrimary;
+
+$('#pClose').onclick = () => { $('#quitModal').hidden = false; };
+$('#qmStay').onclick = () => { $('#quitModal').hidden = true; };
+$('#qmLeave').onclick = () => { $('#quitModal').hidden = true; closePlayer(); };
+$('#refill').onclick = () => { S.hearts = 5; $('#heartsModal').hidden = true; renderPlayer(); };
+$('#hmQuit').onclick = () => { $('#heartsModal').hidden = true; S.hearts = 5; closePlayer(); };
+function closePlayer(){ P = null; $('#player').hidden = true; renderLearn(); }
+
+/* ---------- result ---------- */
+function finish(){
+  const bonus = 15;
+  P.xp += bonus;
+  const prevWeek = weekRank(S.weekly), prevAub = aubRank(S.rating);
+  S.xpTotal += P.xp; S.weekly += P.xp; S.rating += Math.round(P.xp * 0.52);
+  if(!S.streakToday){ S.streak++; S.streakToday = true; }
+  S.done = 3; S.newBadge = true;
+  const acc = Math.round(LESSON.qs.length / (LESSON.qs.length + P.mistakes) * 100);
+  S.last = {xp:P.xp, acc, prevWeek, newWeek:weekRank(S.weekly), prevAub, mistakes:P.mistakes};
+  $('#pBar').style.width = '100%';
+  $('#player').hidden = true;
+  renderAll();
+  $('#resBody').innerHTML = `
+    <svg class="res-art" viewBox="0 0 160 120" aria-hidden="true">
+      <line x1="34" y1="58" x2="34" y2="112" stroke="var(--bull-deep)" stroke-width="4" stroke-linecap="round"/>
+      <rect x="20" y="70" width="28" height="34" rx="8" fill="var(--bull)"/>
+      <line x1="80" y1="30" x2="80" y2="104" stroke="var(--bull-deep)" stroke-width="4" stroke-linecap="round"/>
+      <rect x="66" y="42" width="28" height="50" rx="8" fill="var(--bull)"/>
+      <line x1="126" y1="6" x2="126" y2="84" stroke="var(--gold-deep)" stroke-width="4" stroke-linecap="round"/>
+      <rect x="112" y="14" width="28" height="60" rx="8" fill="var(--gold)"/>
+      <path d="M120 44l5 5 9-10" fill="none" stroke="var(--on-gold)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <h1>Lesson complete</h1>
+    <div class="sub">Diversification · Unit 1</div>
+    <div class="tiles">
+      <div class="tile xp"><div class="t-h">Total XP</div><div class="t-v">${I.bolt}<span id="xpCount">0</span></div></div>
+      <div class="tile acc"><div class="t-h">Accuracy</div><div class="t-v">${acc}%</div></div>
+      <div class="tile str"><div class="t-h">Streak</div><div class="t-v">${I.flame}${S.streak}</div></div>
+    </div>
+    <div class="unlock"><div class="hex">${I.baskets}</div><div><b>Badge unlocked: Many Baskets</b><span>For finishing Diversification</span></div></div>`;
+  $('#result').hidden = false;
+  countUp($('#xpCount'), P.xp);
+}
+function countUp(el, to){
+  if(reduceMotion){ el.textContent = '+'+to; return; }
+  const t0 = performance.now(), dur = 900;
+  (function step(t){ const k = Math.min(1,(t-t0)/dur); el.textContent = '+' + Math.round(to * (1-Math.pow(1-k,3))); if(k<1) requestAnimationFrame(step); })(t0);
+}
+$('#resLeague').onclick = () => { $('#result').hidden = true; P = null; S.view = 'week'; showTab('league'); };
+$('#resShare').onclick = openShare;
+
+function shareText(){
+  const L = S.last;
+  const score = `${LESSON.qs.length}/${LESSON.qs.length + (L?L.mistakes:0)}`;
+  return `I just finished the Diversification lesson on Bullpen (${score} answers right, +${L?L.xp:0} XP). I'm #${L?L.newWeek:weekRank(S.weekly)} in my Gold League this week. Think you can beat me?`;
+}
+function openShare(){
+  const L = S.last;
+  $('#shareCard').innerHTML = `
+    <svg class="deco" viewBox="0 0 120 110" aria-hidden="true">
+      <line x1="24" y1="50" x2="24" y2="104" stroke="var(--bull)" stroke-width="3"/><rect x="14" y="60" width="20" height="32" rx="6" fill="var(--bull)"/>
+      <line x1="60" y1="26" x2="60" y2="96" stroke="var(--bull)" stroke-width="3"/><rect x="50" y="36" width="20" height="44" rx="6" fill="var(--bull)"/>
+      <line x1="96" y1="4" x2="96" y2="80" stroke="var(--gold)" stroke-width="3"/><rect x="86" y="12" width="20" height="54" rx="6" fill="var(--gold)"/>
+    </svg>
+    <div class="wm">Bullpen</div>
+    <div class="sc-big">#${L?L.newWeek:weekRank(S.weekly)}</div>
+    <div class="sc-sub">in Gold League this week</div>
+    <div class="sc-row"><span>Diversification ✓</span><span>+${L?L.xp:0} XP</span><span>${S.streak}-day streak</span><span>AUB</span></div>`;
+  $('#copyMsg').textContent = '';
+  $('#shareModal').hidden = false;
+}
+$('#closeShare').onclick = () => { $('#shareModal').hidden = true; };
+$('#copyShare').onclick = () => {
+  const txt = shareText();
+  const done = () => { $('#copyMsg').textContent = 'Copied. Paste it into WhatsApp or Instagram.'; };
+  const fallback = () => {
+    const ta = document.createElement('textarea'); ta.value = txt; ta.setAttribute('readonly',''); ta.style.position='absolute'; ta.style.left='-9999px';
+    document.body.appendChild(ta); ta.select();
+    let ok = false; try { ok = document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(ta);
+    $('#copyMsg').textContent = ok ? 'Copied. Paste it into WhatsApp or Instagram.' : txt;
+  };
+  try { navigator.clipboard.writeText(txt).then(done, fallback); } catch(e){ fallback(); }
+};
+
+/* ---------- boot ---------- */
+renderAll();
+showTab('learn');
+})();
+</script>
+
+</body></html>
