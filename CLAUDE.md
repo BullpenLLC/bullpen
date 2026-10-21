@@ -38,8 +38,21 @@ is saved, all players and numbers are fake.
 - Legal: a paper-trading game must not read as investment advice.
 
 ## Context from the earlier Bullpen session
-<!-- Paste the key decisions from the original Bullpen conversation here:
-     who it's for, what the student interviews found, pricing, roadmap, anything ruled out. -->
+Full brief: `docs/Bullpen_Project_Brief.pdf`. Settled decisions:
+- 50/50 partnership between the two founders. Pebble (one founder's broker-analytics site) is separate and not part of this project.
+- Fake money only. No entry fees or cash prizes (gambling-law risk); prizes come from sponsors.
+- Rankings reward skill: knowledge score from lessons plus a trading score on risk-adjusted return over a season.
+- Under-18 users (e.g. IC students) get the learning side only: no social links, ads or broker referrals.
+- Recommended stack for the real app: Expo (React Native) for iOS, Android and web; Supabase; Next.js marketing site on Vercel; RevenueCat for subscriptions.
+- Pilot: AUB (finance clubs, OSB professors) and IC. Season 1 targeted for spring semester, Feb 2027.
+
+## Investopedia references
+- Each lesson card can carry `ref: {title, url}`; the player shows it as a "Go deeper on Investopedia" link. `PATH_REFS` holds one reference per lesson on the unit path for when those lessons are written.
+- We link to Investopedia for depth. We never copy its text, definitions or images into lessons: all lesson wording is our own.
+- Link to stable term pages (`https://www.investopedia.com/terms/<letter>/<slug>.asp`).
+
+## Working together (two founders, one repo)
+See `docs/how-we-work.md`. In short: never commit straight to `main`; one branch per task; pull `main` before starting; open a pull request and let the other founder review before merging.
 
 ## Rules for working on this
 - Keep the prototype working as a single file until we decide on a real stack.

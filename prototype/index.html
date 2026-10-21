@@ -240,6 +240,11 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
 @keyframes enter{from{transform:translateX(18px); opacity:0}to{transform:none; opacity:1}}
 .term{margin-top:18px; border-radius:16px; padding:14px; background:var(--sky-tint)}
 .term .term-k{display:block; font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--sky); margin-bottom:4px}
+.ref{display:flex; align-items:center; gap:8px; margin-top:18px; padding:11px 13px; border-radius:14px; border:1px solid var(--line); color:var(--ink); text-decoration:none; font-size:14px}
+.ref:hover{background:var(--surface-2)}
+.ref .ref-k{font-family:var(--font-mono); font-size:11px; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-2)}
+.ref b{flex:1}
+.ref .ref-go{color:var(--sky); font-weight:600}
 .intro-meta{display:flex; flex-wrap:wrap; gap:8px; margin-top:18px}
 .intro-meta span{font-family:var(--font-mono); font-size:12px; padding:5px 9px; border-radius:8px; background:var(--surface-2); color:var(--ink-2)}
 
@@ -463,6 +468,16 @@ $('#pClose').innerHTML = I.x;
 
 /* ---------- content ---------- */
 const PATH = ['What a stock is','Risk and return','Diversification','Index funds','Fees and compounding','Unit check'];
+/* Further reading. We link to Investopedia for depth; lesson text is always our own words. */
+const IVP = 'https://www.investopedia.com/terms/';
+const PATH_REFS = [
+  {title:'Stock', url:IVP+'s/stock.asp'},
+  {title:'Risk-return tradeoff', url:IVP+'r/riskreturntradeoff.asp'},
+  {title:'Diversification', url:IVP+'d/diversification.asp'},
+  {title:'Index fund', url:IVP+'i/indexfund.asp'},
+  {title:'Compounding', url:IVP+'c/compounding.asp'},
+  null
+];
 const OFFSETS = [0, 58, 76, 34, -42, -12];
 
 const LESSON = {
@@ -470,7 +485,8 @@ const LESSON = {
     {k:'Lesson 3 · The idea', t:'Spread your money out', b:`
       <p class="lead">Diversification means splitting your money across many different investments, so one bad result can't sink the whole portfolio.</p>
       <div class="term"><span class="term-k">Key term</span><b>Portfolio:</b> everything you own as investments, taken together.</div>
-      <div class="intro-meta"><span>4 ideas</span><span>5 questions</span><span>About 4 min</span></div>`},
+      <div class="intro-meta"><span>4 ideas</span><span>5 questions</span><span>About 4 min</span></div>`,
+     ref:{title:'Portfolio', url:IVP+'p/portfolio.asp'}},
     {k:'Do the maths', t:'One basket or ten?', b:`
       <p>Two students each invest $1,000. Then one company has terrible news and its shares fall 40%.</p>
       <div class="compare">
@@ -487,7 +503,8 @@ const LESSON = {
           <div class="pf-r">One falls 40%, the rest hold<b class="mono good-t">$960</b></div>
         </div>
       </div>
-      <p>Same bad news. Portfolio A loses $400. Portfolio B loses $40.</p>`},
+      <p>Same bad news. Portfolio A loses $400. Portfolio B loses $40.</p>`,
+     ref:{title:'Diversification', url:IVP+'d/diversification.asp'}},
     {k:'The catch', t:'Different has to mean different', b:`
       <p>Spreading out only helps if your investments don't all move together. Ten tech companies often rise and fall at the same time, so owning all ten is close to one big bet.</p>
       <div class="mix">
@@ -498,14 +515,16 @@ const LESSON = {
         <div class="mix-h"><span>Actually spread out</span><span class="tag good">Moves differently</span></div>
         <div class="chips"><span>Tech</span><span>Healthcare</span><span>Energy</span><span>Bonds</span><span>Gold</span><span>Other countries</span></div>
       </div>
-      <div class="term"><span class="term-k">Key term</span><b>Correlation:</b> how closely two investments move together.</div>`},
+      <div class="term"><span class="term-k">Key term</span><b>Correlation:</b> how closely two investments move together.</div>`,
+     ref:{title:'Correlation', url:IVP+'c/correlation.asp'}},
     {k:'The limit', t:"What it can't protect you from", b:`
       <p>Diversification cuts the risk that comes from any one company. It can't remove the risk that hits the whole market at once.</p>
       <div class="split">
         <div class="col good"><div class="col-h">Reduces</div><b>Company-specific risk</b><p>A scandal, a failed product, a bad CEO.</p></div>
         <div class="col bad"><div class="col-h">Can't remove</div><b>Market risk</b><p>A recession or crash, when most prices fall together.</p></div>
       </div>
-      <p>So a diversified portfolio can still lose money in a bad year. It usually loses less than a single bet would.</p>`}
+      <p>So a diversified portfolio can still lose money in a bad year. It usually loses less than a single bet would.</p>`,
+     ref:{title:'Unsystematic risk', url:IVP+'u/unsystematicrisk.asp'}}
   ],
   qs:[
     {q:'Rana keeps all her savings in shares of one company. Which risk is she most exposed to?',
@@ -779,13 +798,17 @@ function progress(){
 }
 function setFoot(mode){ $('#pFoot').className = 'p-foot' + (mode ? ' '+mode : ''); }
 
+function refLink(r){
+  if(!r) return '';
+  return `<a class="ref" href="${r.url}" target="_blank" rel="noopener"><span class="ref-k">Go deeper</span><b>${r.title}</b><span class="ref-go">Investopedia ↗</span></a>`;
+}
 function renderPlayer(){
   setHearts(); progress(); setFoot(''); $('#fb').hidden = true;
   const btn = $('#pBtn'); btn.className = 'btn';
   const body = $('#pBody');
   if(P.phase === 'cards'){
     const c = LESSON.cards[P.i];
-    body.innerHTML = `<div class="enter"><span class="eyebrow">${c.k}</span><h2>${c.t}</h2>${c.b}</div>`;
+    body.innerHTML = `<div class="enter"><span class="eyebrow">${c.k}</span><h2>${c.t}</h2>${c.b}${refLink(c.ref)}</div>`;
     btn.disabled = false; btn.textContent = P.i === LESSON.cards.length-1 ? 'Start the quiz' : 'Continue';
   } else {
     const qi = P.queue[0], q = LESSON.qs[qi];
