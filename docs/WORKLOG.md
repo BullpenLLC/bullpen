@@ -48,3 +48,8 @@ See the checklists in `docs/CURRICULUM.md` (content) and `docs/DEVELOPMENT_PLAN.
   economy, Sectors (completes Stages 1-2); then Stage 3 (Measuring risk, Reading price trends, Short
   selling and margin, Market psychology, Crypto and other assets) and the Vault (Statements in depth,
   Health-check ratios, Returns ratios, Valuing a company, Futures basics, Greeks in depth).
+- (~16:45) Usage limit reached. Done this session: Bonds and ETFs in depth reviewed, registered, tested and
+  committed (Stage 1 complete: 5 units). Written and IN REVIEW (files present, not registered): styles.js
+  (Growth, value and dividends), events.js (Company events). BEING WRITTEN (may be partial): macro.js,
+  sectors.js, risk.js, trends.js. Resume those agents or re-run them, then review, register, test.
+  Still blocked: GitHub login. ~11 commits local on dev/curriculum-v2, not on GitHub, live site not updated.
