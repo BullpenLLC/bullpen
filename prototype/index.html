@@ -1340,6 +1340,7 @@ function shuffled(a){ for(let i = a.length - 1; i > 0; i--){ const j = Math.floo
 function setHearts(){ $('#pHearts').innerHTML = I.wallet + `<span class="n">$${S.hearts}k</span>`; $('#pHearts').className = 'stat heart' + (S.hearts <= 1 ? ' low' : ''); }
 function progress(){
   const L = LSN();
+  requestAnimationFrame(() => { const w = parseFloat($('#pBar').style.width) || 0; const bar = $('#pBar').parentElement; bar.setAttribute('aria-valuemin', '0'); bar.setAttribute('aria-valuemax', '100'); bar.setAttribute('aria-valuenow', String(Math.round(w))); });
   if(P.mode === 'test'){ $('#pBar').style.width = (P.answered / L.qs.length * 100) + '%'; return; }
   const seen = P.phase==='cards' ? P.i : L.cards.length;
   $('#pBar').style.width = ((seen + P.correct) / (L.cards.length + L.qs.length) * 100) + '%';
