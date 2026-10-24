@@ -5,8 +5,9 @@ works, in short lessons with quizzes, then lets them compete in a paper-trading 
 
 The only thing built so far is a clickable prototype, live at
 https://bullpenllc.github.io/bullpen/prototype/ (GitHub Pages, published from `main`):
-`prototype/index.html` (the app) plus `prototype/content/*.js` (one file per unit). Nothing is
-saved; all players and numbers are fake.
+`prototype/index.html` (the app) plus `prototype/content/*.js` (one file per unit). Progress is
+saved in the browser on that device only (localStorage, never sent anywhere); "Restart the demo"
+wipes it. All other players and numbers are fake.
 
 ## Key docs (read these first)
 - `docs/CURRICULUM.md`: every stage, unit and lesson, with status. The source of truth for content.
