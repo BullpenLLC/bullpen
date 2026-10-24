@@ -339,7 +339,7 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
 .kv{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:14px}
 .kv.kv3{grid-template-columns:repeat(3,1fr)}
 .kv div{background:var(--surface-2); border-radius:14px; padding:10px 6px; text-align:center; min-width:0}
-.kv b{display:block; font-family:var(--font-mono); font-size:16px}
+.kv b{display:block; font-family:var(--font-mono); font-size:clamp(13px, 3.9vw, 16px); letter-spacing:-.01em}
 .kv span{font-size:11.5px; color:var(--ink-2)}
 
 /* learn: placement link, test-out */
@@ -606,10 +606,13 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
 
 <script src="content/markets.js"></script>
 <script src="content/reading-market.js"></script>
+<script src="content/portfolio.js"></script>
+<script src="content/valuation.js"></script>
 <script src="content/options-basics.js"></script>
 <script src="content/pricing-options.js"></script>
 <script src="content/option-strategies.js"></script>
 <script src="content/accounts.js"></script>
+<script src="content/tvm.js"></script>
 <script src="content/registry.js"></script>
 <script>
 (function(){

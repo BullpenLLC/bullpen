@@ -20,4 +20,14 @@ See the checklists in `docs/CURRICULUM.md` (content) and `docs/DEVELOPMENT_PLAN.
 
 ### 24 Oct 2026, session 1
 - Created this log, `docs/CONTENT_SPEC.md` and the `dev/curriculum-v2` branch. Set the 45-minute relaunch.
-- Next: curriculum, batch 1 of writers, content files split, UI redesign, stages, exams, Vault.
+- Split content into prototype/content/*.js + registry; added tools/check-content.js and a GitHub Action.
+- Redesign (course list, flat UI, practice capital, market-cap leagues, investor levels) and new features:
+  stage exams + certificates, stage-by-stage placement, daily review, the Vault, Guide, level-ups.
+- Research: Investopedia blocks automated access; topic map built from its published sections plus CFA,
+  SEC, FINRA, OIC etc. (docs/research). Curriculum reordered: Options last, risk in Stage 3.
+- Wrote docs/CURRICULUM.md and docs/DEVELOPMENT_PLAN.md.
+- Batch 1 written + reviewed: Building a portfolio, Valuation ratios, Time value of money (live).
+  Advanced option strategies written, in review. Batch 2 started: ETFs in depth, Bonds and interest rates.
+- Session limit hit once (agents resumed). The founder set a /loop every 20 minutes to continue.
+- Next: review/register Advanced options, ETFs, Bonds; then Stage 2 (Growth value dividends, Company
+  events, Money rates economy, Sectors), Stage 3 (5 units), Vault (6 units).
