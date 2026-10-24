@@ -9,6 +9,8 @@ const STAGES = [
    units:[withPlacement(UNIT_MARKETS, PLACEMENT_MARKETS), withPlacement(UNIT_READING_MARKET, PLACEMENT_READING_MARKET), withPlacement(UNIT_PORTFOLIO, PLACEMENT_PORTFOLIO), withPlacement(UNIT_ETFS, PLACEMENT_ETFS), withPlacement(UNIT_BONDS, PLACEMENT_BONDS)]},
   {id:'analysing', title:'Analysing stocks', level:'Intermediate', blurb:'Valuing a company, what moves its price, and the economy around it.',
    units:[withPlacement(UNIT_VALUATION, PLACEMENT_VALUATION), withPlacement(UNIT_STYLES, PLACEMENT_STYLES), withPlacement(UNIT_EVENTS, PLACEMENT_EVENTS)]},
+  {id:'trading', title:'Trading and risk', level:'Intermediate', blurb:'Measuring risk, reading price trends, and the traps traders fall into.',
+   units:[withPlacement(UNIT_TRENDS, PLACEMENT_TRENDS)]},
   {id:'options', title:'Options', level:'Advanced', blurb:'Calls, puts, pricing and strategies.',
    units:[withPlacement(UNIT_OPTIONS_BASICS, PLACEMENT_OPTIONS_BASICS), withPlacement(UNIT_PRICING_OPTIONS, PLACEMENT_PRICING_OPTIONS), withPlacement(UNIT_OPTION_STRATEGIES, PLACEMENT_OPTION_STRATEGIES), withPlacement(UNIT_ADV_OPTIONS, PLACEMENT_ADV_OPTIONS)]}
 ];
