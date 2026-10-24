@@ -10,7 +10,7 @@ const STAGES = [
   {id:'analysing', title:'Analysing stocks', level:'Intermediate', blurb:'Valuing a company, what moves its price, and the economy around it.',
    units:[withPlacement(UNIT_VALUATION, PLACEMENT_VALUATION)]},
   {id:'options', title:'Options', level:'Advanced', blurb:'Calls, puts, pricing and strategies.',
-   units:[withPlacement(UNIT_OPTIONS_BASICS, PLACEMENT_OPTIONS_BASICS), withPlacement(UNIT_PRICING_OPTIONS, PLACEMENT_PRICING_OPTIONS), withPlacement(UNIT_OPTION_STRATEGIES, PLACEMENT_OPTION_STRATEGIES)]}
+   units:[withPlacement(UNIT_OPTIONS_BASICS, PLACEMENT_OPTIONS_BASICS), withPlacement(UNIT_PRICING_OPTIONS, PLACEMENT_PRICING_OPTIONS), withPlacement(UNIT_OPTION_STRATEGIES, PLACEMENT_OPTION_STRATEGIES), withPlacement(UNIT_ADV_OPTIONS, PLACEMENT_ADV_OPTIONS)]}
 ];
 
 /* The Vault: optional deep dives into finance fundamentals. Bonus points, own badges, not in the placement test. */
