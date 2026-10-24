@@ -5,8 +5,8 @@
 function withPlacement(U, P){ U.placement = P; return U; }
 
 const STAGES = [
-  {id:'foundations', title:'Foundations', level:'Beginner', blurb:'How markets work, reading prices, and building a portfolio.',
-   units:[withPlacement(UNIT_MARKETS, PLACEMENT_MARKETS), withPlacement(UNIT_READING_MARKET, PLACEMENT_READING_MARKET), withPlacement(UNIT_PORTFOLIO, PLACEMENT_PORTFOLIO)]},
+  {id:'foundations', title:'Foundations', level:'Beginner', blurb:'How markets work, reading prices, building a portfolio, and bonds.',
+   units:[withPlacement(UNIT_MARKETS, PLACEMENT_MARKETS), withPlacement(UNIT_READING_MARKET, PLACEMENT_READING_MARKET), withPlacement(UNIT_PORTFOLIO, PLACEMENT_PORTFOLIO), withPlacement(UNIT_BONDS, PLACEMENT_BONDS)]},
   {id:'analysing', title:'Analysing stocks', level:'Intermediate', blurb:'Valuing a company, what moves its price, and the economy around it.',
    units:[withPlacement(UNIT_VALUATION, PLACEMENT_VALUATION)]},
   {id:'options', title:'Options', level:'Advanced', blurb:'Calls, puts, pricing and strategies.',

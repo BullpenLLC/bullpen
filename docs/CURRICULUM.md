@@ -20,7 +20,7 @@ How markets work, reading prices, building a portfolio, and the two building blo
 | Reading the market | Price charts · Market cap · Earnings and P/E · Placing orders · Bulls, bears and recoveries | ✅ |
 | Building a portfolio | Goals and time horizon · Asset allocation · ETFs and mutual funds · Dollar-cost averaging · Rebalancing | ✅ |
 | ETFs in depth | How an ETF works · Reading an ETF · Kinds of ETF · Bond and commodity ETFs · Leveraged and inverse ETFs | ✍️ |
-| Bonds and interest rates | What a bond is · Present value and bond prices · Yield to maturity · Duration · Credit ratings and default | ✍️ |
+| Bonds and interest rates | What a bond is · Present value and prices · Yield to maturity · Duration and rate risk · Credit ratings and default | ✍️ |
 
 ## Stage 2 · Analysing stocks (Intermediate)
 Valuing a company, what drives its price, and the economy around it.
