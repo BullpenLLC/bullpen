@@ -31,3 +31,10 @@ See the checklists in `docs/CURRICULUM.md` (content) and `docs/DEVELOPMENT_PLAN.
 - Session limit hit once (agents resumed). The founder set a /loop every 20 minutes to continue.
 - Next: review/register Advanced options, ETFs, Bonds; then Stage 2 (Growth value dividends, Company
   events, Money rates economy, Sectors), Stage 3 (5 units), Vault (6 units).
+- BLOCKER (24 Oct, ~08:30): GitHub rejects the saved login ("Bad credentials"); git push waits for a sign-in
+  only the founder can do. Commits pile up locally on dev/curriculum-v2 until the founder runs `git push`
+  in the bullpen folder and signs in. Then: push, open PR dev/curriculum-v2 → main, merge, check live link.
+- Also done: Advanced option strategies reviewed + registered; progress now saved in the browser;
+  invite links skip onboarding for returning players. In progress: ETFs in depth (writing), Bonds (review),
+  Growth value dividends + Company events (writing).
+

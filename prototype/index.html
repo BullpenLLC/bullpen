@@ -575,6 +575,7 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
       <p>You've run out of practice capital. In the app it refills over a few hours, or Pro gives you unlimited capital. For this demo you can refill now.</p>
       <div class="btn-row">
         <button class="btn" id="refill">Refill capital (demo)</button>
+        <button class="btn gold" id="hmPro">See Bullpen Pro</button>
         <button class="btn ghost" id="hmQuit">Leave lesson</button>
       </div>
     </div>
@@ -1275,13 +1276,37 @@ function renderProfile(){
       <div class="sec-h">Badges</div>
       <div class="badges">${badges.map(b => `<div class="badge ${b.on?'on':'off'} ${S.newBadge===b.t?'new':''}"><div class="hex">${b.on?b.ic:I.lock}</div><b>${b.t}</b><span>${esc(b.s)}</span></div>`).join('')}</div>
       <div class="btn-row" style="margin-top:26px">
+        <button class="btn gold" id="proBtn">Bullpen Pro</button>
         <button class="btn ghost" id="replaceBtn">${S.placed ? 'Retake the placement test' : 'Take the placement test'}</button>
         <button class="btn ghost" id="resetBtn">Restart the demo</button>
       </div>
       <div class="footnote">Prototype · progress is saved on this device only</div>
     </div>`;
   $('#replaceBtn').onclick = () => showOnboard('intro');
+  $('#proBtn').onclick = openPro;
   $('#resetBtn').onclick = () => { clearState(); S = JSON.parse(JSON.stringify(INITIAL)); closeSheet(); renderAll(); showTab('learn'); showOnboard('welcome'); };
+}
+
+/* ---------- Bullpen Pro (preview for interviews; nothing can be bought in the prototype) ---------- */
+function openPro(){
+  const perks = [
+    ['Unlimited practice capital', 'No margin calls. Keep going after mistakes.'],
+    ['The whole Vault', 'Every deep dive into accounts, valuation and the maths of money. The first Vault unit stays free.'],
+    ['Trade analytics', 'Your returns, swings, drawdowns and season score, explained.'],
+    ['1 tournament credit a month', 'Host a big or semester-long competition for your class or club.'],
+    ['Streak repair', 'Missed a day? Get your streak back once a month.'],
+    ['No ads', 'Ever.']
+  ];
+  openSheet(`<div class="sh-head"><div><span class="eyebrow">Preview</span><h2>Bullpen Pro</h2></div><button class="icon-btn" id="tmClose" aria-label="Close">${I.x}</button></div>
+    <p class="sh-sub">Everything in the course stays free. Pro is for people who want to go further, faster.</p>
+    <ul class="rules">${perks.map(([t, d]) => `<li>${I.check}<span><b style="color:var(--ink)">${t}.</b> ${d}</span></li>`).join('')}</ul>
+    <div class="score" style="margin-top:16px"><div><b>$3.99</b><span>per month</span></div><div class="hl"><b>$29.99</b><span>per year</span></div><div><b>Free</b><span>with a school licence</span></div></div>
+    <div class="demo-note">Example prices for testing. Nothing can be bought in the prototype.</div>
+    <div class="btn-row" style="margin-top:16px"><button class="btn gold" id="proYes">I'd pay for this</button><button class="btn ghost" id="proNo">Not for me</button></div>
+    <div class="copy-msg" id="proMsg" aria-live="polite"></div>`);
+  $('#tmClose').onclick = closeSheet;
+  $('#proYes').onclick = () => { S.proInterest = 'yes'; saveState(); $('#proMsg').textContent = 'Noted for the interview. Thanks!'; };
+  $('#proNo').onclick = () => { S.proInterest = 'no'; saveState(); $('#proMsg').textContent = 'Noted. What would make it worth it?'; };
 }
 
 /* ---------- navigation ---------- */
@@ -1418,6 +1443,7 @@ $('#pClose').onclick = () => {
 $('#qmStay').onclick = () => { $('#quitModal').hidden = true; };
 $('#qmLeave').onclick = () => { $('#quitModal').hidden = true; closePlayer(); };
 $('#refill').onclick = () => { S.hearts = 5; $('#heartsModal').hidden = true; renderPlayer(); };
+$('#hmPro').onclick = () => { $('#heartsModal').hidden = true; S.hearts = 5; closePlayer(); openPro(); };
 $('#hmQuit').onclick = () => { $('#heartsModal').hidden = true; S.hearts = 5; closePlayer(); };
 function closePlayer(){
   const kind = P && P.kind;
