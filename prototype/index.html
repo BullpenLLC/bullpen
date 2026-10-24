@@ -509,7 +509,7 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
     <li>Play a lesson: wrong answers cost practice capital, right ones earn points</li>
     <li>In Trade, join a competition with code FINA-310, or create your own</li>
   </ol>
-  <p>Players and numbers are samples. Nothing you do here is saved or sent.</p>
+  <p>Players and numbers are samples. Progress is kept in this browser only and never sent anywhere. "Restart the demo" on the Profile tab wipes it.</p>
 </aside>
 
 <div class="device" id="app">
@@ -695,7 +695,22 @@ const INITIAL = {streak:7, streakToday:false, hearts:5, xpTotal:1240, weekly:215
   lview:'course', vault:{}, bonus:0, certs:{}, missed:[], openUnit:null,
   tview:'comps', joined:['AUB-CUP'], created:{}, credits:1, clan:null, requested:[], createdClans:[], clanQ:'', draft:null,
   trophies:[{name:'Global Weekly Sprint', when:'Week 41, 2026', place:2, of:3880}]};
-let S = JSON.parse(JSON.stringify(INITIAL));
+/* Progress is kept in this browser only (a per-device convenience for demos), never sent anywhere.
+   Storage can be blocked (private windows, previews), so every access is wrapped. */
+const SAVE_KEY = 'bullpen-demo-v2';
+function loadState(){
+  const fresh = JSON.parse(JSON.stringify(INITIAL));
+  try {
+    const saved = JSON.parse(localStorage.getItem(SAVE_KEY) || 'null');
+    if(!saved || typeof saved !== 'object') return fresh;
+    const st = Object.assign(fresh, saved);
+    st.done = Math.min(Math.max(0, st.done | 0), 999); st.pick = null; st.last = null; st.draft = null; st.scrollCur = true;
+    return st;
+  } catch(e){ return fresh; }
+}
+function saveState(){ try { localStorage.setItem(SAVE_KEY, JSON.stringify(S)); } catch(e){} }
+function clearState(){ try { localStorage.removeItem(SAVE_KEY); } catch(e){} }
+let S = loadState();
 
 function avColor(name){ let h=0; for(const c of name) h=(h*31+c.charCodeAt(0))>>>0; return 'var(--av'+(h%5+1)+')'; }
 function weekRank(xp){ return LEAGUE.filter(p => p[2] > xp).length + 1; }
@@ -732,7 +747,7 @@ function renderLearn(){
   $('#s-learn').innerHTML = statusBar() + `<div class="pad">
     <div class="seg lv" role="group" aria-label="Learn">${tabs.map(t => `<button data-v="${t[0]}" aria-pressed="${S.lview===t[0]}">${t[1]}</button>`).join('')}</div>
     ${body}
-    <div class="footnote">Prototype · nothing here is saved</div></div>`;
+    <div class="footnote">Prototype · progress is saved on this device only</div></div>`;
   $('#s-learn').querySelectorAll('.seg.lv button').forEach(b => b.onclick = () => { S.lview = b.dataset.v; renderLearn(); $('#s-learn').scrollTop = 0; });
   bindLearn();
   if(S.scrollCur && S.lview === 'course'){
@@ -1263,10 +1278,10 @@ function renderProfile(){
         <button class="btn ghost" id="replaceBtn">${S.placed ? 'Retake the placement test' : 'Take the placement test'}</button>
         <button class="btn ghost" id="resetBtn">Restart the demo</button>
       </div>
-      <div class="footnote">Prototype · nothing here is saved</div>
+      <div class="footnote">Prototype · progress is saved on this device only</div>
     </div>`;
   $('#replaceBtn').onclick = () => showOnboard('intro');
-  $('#resetBtn').onclick = () => { S = JSON.parse(JSON.stringify(INITIAL)); closeSheet(); renderAll(); showTab('learn'); showOnboard('welcome'); };
+  $('#resetBtn').onclick = () => { clearState(); S = JSON.parse(JSON.stringify(INITIAL)); closeSheet(); renderAll(); showTab('learn'); showOnboard('welcome'); };
 }
 
 /* ---------- navigation ---------- */
@@ -1279,7 +1294,7 @@ function showTab(t){
   if(t === 'profile') renderProfile();
 }
 document.querySelectorAll('.tab').forEach(b => b.onclick = () => showTab(b.dataset.tab));
-function renderAll(){ renderLearn(); renderTrade(); renderLeague(); renderProfile(); }
+function renderAll(){ S.done = Math.min(S.done, LESSONS.length); renderLearn(); renderTrade(); renderLeague(); renderProfile(); saveState(); }
 
 /* ---------- lesson player ---------- */
 /* Plays a lesson (cards, then a quiz where misses cost a life and come back) or a test
@@ -1539,7 +1554,11 @@ function showOnboard(step, data = {}){
         <h2>${esc(C.name)}</h2>
         <p>${esc(C.starts)} · ${esc(C.len)} · $${fmt(C.cash)} in fake money · ${fmt(C.players)} players so far</p></div>`;
     foot.innerHTML = `<button class="btn" id="obJoin">Join ${esc(C.name)}</button><button class="text-btn" id="obNo">Not now</button>`;
-    $('#obJoin').onclick = () => { if(!S.joined.includes(data.code)) S.joined.unshift(data.code); renderTrade(); showOnboard('welcome', {joined:C.name}); };
+    $('#obJoin').onclick = () => {
+      if(!S.joined.includes(data.code)) S.joined.unshift(data.code);
+      if(S.onboarded){ closeOnboard(); S.tview = 'comps'; renderTrade(); showTab('trade'); openComp(data.code, "You're in!"); }
+      else { renderTrade(); showOnboard('welcome', {joined:C.name}); }
+    };
     $('#obNo').onclick = () => showOnboard('welcome');
   }
 }
@@ -1627,7 +1646,8 @@ $('#copyShare').onclick = () => copyText(shareText(), $('#copyMsg'), 'Copied. Pa
 renderAll();
 showTab('learn');
 const invite = (new URLSearchParams(location.search).get('join') || '').trim().toUpperCase();
-if(comp(invite)) showOnboard('invite', {code:invite}); else showOnboard('welcome');
+if(comp(invite) && !S.joined.includes(invite)) showOnboard('invite', {code:invite});
+else if(!S.onboarded) showOnboard('welcome');
 })();
 </script>
 
