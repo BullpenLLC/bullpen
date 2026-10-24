@@ -53,3 +53,12 @@ See the checklists in `docs/CURRICULUM.md` (content) and `docs/DEVELOPMENT_PLAN.
   (Growth, value and dividends), events.js (Company events). BEING WRITTEN (may be partial): macro.js,
   sectors.js, risk.js, trends.js. Resume those agents or re-run them, then review, register, test.
   Still blocked: GitHub login. ~11 commits local on dev/curriculum-v2, not on GitHub, live site not updated.
+
+### 24 Oct 2026, session 3 (evening)
+- Founder: keep building locally, resume agents (GitHub login still pending).
+- Growth, value and dividends reviewed, registered, tested, committed.
+- In review: Company events, Money rates economy, Sectors, Measuring risk, Reading price trends.
+- Being written: Short selling and margin, Market psychology, Crypto and other assets.
+- When Measuring risk + Reading price trends pass: add a "Trading and risk" stage in registry.js between
+  Analysing stocks and Options. Then the Vault batch: Statements in depth, Health-check ratios,
+  Returns ratios, Valuing a company (DCF), Futures basics, Greeks in depth.
