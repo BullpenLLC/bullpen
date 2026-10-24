@@ -38,3 +38,13 @@ See the checklists in `docs/CURRICULUM.md` (content) and `docs/DEVELOPMENT_PLAN.
   invite links skip onboarding for returning players. In progress: ETFs in depth (writing), Bonds (review),
   Growth value dividends + Company events (writing).
 
+
+### 24 Oct 2026, session 2 (after the usage-limit reset, ~16:10)
+- The 20-minute /loop survived the restart. GitHub login still blocked (see above); commits stay local.
+- Added host tools for created tournaments (start, CSV standings, end + trophies) and a Pro preview sheet.
+- Resumed: Bonds review, Growth value dividends writer, Company events writer. Started: ETFs in depth review,
+  Money rates economy writer, Sectors and the economy writer.
+- Next after these: register + test Bonds, ETFs, Growth value dividends, Company events, Money rates
+  economy, Sectors (completes Stages 1-2); then Stage 3 (Measuring risk, Reading price trends, Short
+  selling and margin, Market psychology, Crypto and other assets) and the Vault (Statements in depth,
+  Health-check ratios, Returns ratios, Valuing a company, Futures basics, Greeks in depth).
