@@ -19,8 +19,8 @@ How markets work, reading prices, building a portfolio, and the two building blo
 | How markets work | What a stock is · Risk and return · Diversification · Index funds · Fees and compounding | ✅ |
 | Reading the market | Price charts · Market cap · Earnings and P/E · Placing orders · Bulls, bears and recoveries | ✅ |
 | Building a portfolio | Goals and time horizon · Asset allocation · ETFs and mutual funds · Dollar-cost averaging · Rebalancing | ✅ |
-| ETFs in depth | How an ETF works · Reading an ETF · Kinds of ETF · Bond and commodity ETFs · Leveraged and inverse ETFs | ✍️ |
-| Bonds and interest rates | What a bond is · Present value and prices · Yield to maturity · Duration and rate risk · Credit ratings and default | ✍️ |
+| ETFs in depth | How an ETF works · Reading an ETF · Kinds of ETF · Bond and commodity ETFs · Leveraged and inverse ETFs | ✅ |
+| Bonds and interest rates | What a bond is · Present value and prices · Yield to maturity · Duration and rate risk · Credit ratings and default | ✅ |
 
 ## Stage 2 · Analysing stocks (Intermediate)
 Valuing a company, what drives its price, and the economy around it.
@@ -28,18 +28,18 @@ Valuing a company, what drives its price, and the economy around it.
 | Unit | Lessons | Status |
 |---|---|---|
 | Valuation ratios | P/E in depth · The PEG ratio · Book and sales ratios · Enterprise value and EBITDA · Dividend yield and payout | ✅ |
-| Growth, value and dividends | Growth vs value · Dividend investing · Buybacks vs dividends · Factor investing · Quality and ESG | ⏳ |
-| Company events | Earnings season · Dividend dates · Buybacks and dilution · IPOs · Mergers and takeovers | ⏳ |
-| Money, rates and the economy | Inflation and real returns · Central banks and interest rates · The yield curve · Economic data · Currencies | ⏳ |
-| Sectors and the economy | Sectors · Cyclical vs defensive · The business cycle · Sector rotation · Commodity-linked sectors | ⏳ |
+| Growth, value and dividends | Growth vs value · Dividend investing · Buybacks vs dividends · Factor investing · Quality and ESG | ✍️ |
+| Company events | Earnings season · Dividend dates · Buybacks and dilution · IPOs · Mergers and takeovers | ✍️ |
+| Money, rates and the economy | Inflation and real returns · Central banks and interest rates · The yield curve · Economic data · Currencies | ✍️ |
+| Sectors and the economy | Sectors · Cyclical vs defensive · The business cycle · Sector rotation · Commodity-linked sectors | ✍️ |
 
 ## Stage 3 · Trading and risk (Intermediate)
 Measuring risk (which the season score is built on), reading price trends, and the traps.
 
 | Unit | Lessons | Status |
 |---|---|---|
-| Measuring risk | Volatility and standard deviation · Drawdowns · Beta and correlation · The Sharpe ratio · Position sizing and stop-losses | ⏳ |
-| Reading price trends | Trends and trendlines · Support and resistance · Moving averages · RSI and MACD · Volume and the limits of charts | ⏳ |
+| Measuring risk | Volatility and standard deviation · Drawdowns · Beta and correlation · The Sharpe ratio · Position sizing and stop-losses | ✍️ |
+| Reading price trends | Trends and trendlines · Support and resistance · Moving averages · RSI and MACD · Volume and the limits of charts | ✍️ |
 | Short selling and margin | Buying on margin · Margin calls · How short selling works · Short squeezes · Liquidity and slippage | ⏳ |
 | Market psychology | Loss aversion · Overconfidence · Herding, FOMO and bubbles · Anchoring and confirmation · Recency and mental accounting | ⏳ |
 | Crypto and other assets | Bitcoin and blockchains · Stablecoins and custody · Gold and commodities · Real estate and REITs · Scams and red flags | ⏳ |
@@ -52,7 +52,7 @@ From what an option is to multi-leg strategies.
 | Options basics | What an option is · Call options · Put options · In the money? · Expiry and exercise | ✅ |
 | Pricing options | Intrinsic and time value · Time decay · Volatility · Delta · Reading an option chain | ✅ |
 | Option strategies | Buying vs selling · Covered calls · Protective puts · Option spreads · Leverage and risk | ✅ |
-| Advanced option strategies | Straddles · Strangles · Iron condors · Calendar spreads · Earnings and rolling | 🔍 |
+| Advanced option strategies | Straddles · Strangles · Iron condors · Calendar spreads · Earnings and rolling | ✅ |
 
 ## The Vault (optional deep dives)
 
