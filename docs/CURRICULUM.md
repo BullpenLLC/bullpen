@@ -30,15 +30,15 @@ Valuing a company, what drives its price, and the economy around it.
 | Valuation ratios | P/E in depth · The PEG ratio · Book and sales ratios · Enterprise value and EBITDA · Dividend yield and payout | ✅ |
 | Growth, value and dividends | Growth vs value · Dividend investing · Buybacks vs dividends · Factor investing · Quality and ESG | ✅ |
 | Company events | Earnings season · Dividend dates · Buybacks and dilution · Going public · Mergers and takeovers | ✅ |
-| Money, rates and the economy | Inflation and real returns · Central banks and rates · The yield curve · Data that moves markets · Currencies and exchange rates | 🔍 |
-| Sectors and the economy | Sectors · Cyclical vs defensive · The business cycle · Sector rotation · Commodity-linked sectors | 🔍 |
+| Money, rates and the economy | Inflation and real returns · Central banks and rates · The yield curve · Data that moves markets · Currencies and exchange rates | ✅ |
+| Sectors and the economy | Sectors · Cyclical vs defensive · The business cycle · Sector rotation · Commodity-linked sectors | ✅ |
 
 ## Stage 3 · Trading and risk (Intermediate)
 Measuring risk (which the season score is built on), reading price trends, and the traps.
 
 | Unit | Lessons | Status |
 |---|---|---|
-| Measuring risk | Volatility and standard deviation · Drawdowns · Beta and correlation · The Sharpe ratio · Position sizing and stop-losses | 🔍 |
+| Measuring risk | Volatility and standard deviation · Drawdowns · Beta and correlation · The Sharpe ratio · Position sizing and stop-losses | ✅ |
 | Reading price trends | Trends and trendlines · Support and resistance · Moving averages · Momentum: RSI and MACD · Volume and chart limits | ✅ |
 | Short selling and margin | Buying on margin · Margin calls · How short selling works · Short squeezes · Liquidity and slippage | ✍️ |
 | Market psychology | Loss aversion · Overconfidence · Herding, FOMO and bubbles · Anchoring and confirmation · Recency and mental accounting | ✍️ |
