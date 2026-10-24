@@ -62,3 +62,10 @@ See the checklists in `docs/CURRICULUM.md` (content) and `docs/DEVELOPMENT_PLAN.
 - When Measuring risk + Reading price trends pass: add a "Trading and risk" stage in registry.js between
   Analysing stocks and Options. Then the Vault batch: Statements in depth, Health-check ratios,
   Returns ratios, Valuing a company (DCF), Futures basics, Greeks in depth.
+- PAUSED by the founder (all agents and the server stopped; the 20-minute loop removed).
+  Live in the local build: 16 main units (Stages 1-2 complete; Trading and risk has Measuring risk and
+  Reading price trends; Options complete) + 2 Vault units. Stopped mid-write, NOT registered:
+  Short selling and margin, Market psychology, Crypto and other assets, Statements in depth,
+  Health-check ratios, Returns ratios (any partial files in prototype/content/ are unreviewed drafts).
+  Not started: Valuing a company (DCF), Futures basics, Greeks in depth.
+  GitHub login still needed before anything is published.
