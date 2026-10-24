@@ -29,7 +29,7 @@ Valuing a company, what drives its price, and the economy around it.
 |---|---|---|
 | Valuation ratios | P/E in depth · The PEG ratio · Book and sales ratios · Enterprise value and EBITDA · Dividend yield and payout | ✅ |
 | Growth, value and dividends | Growth vs value · Dividend investing · Buybacks vs dividends · Factor investing · Quality and ESG | ✅ |
-| Company events | Earnings season · Dividend dates · Buybacks and dilution · IPOs · Mergers and takeovers | 🔍 |
+| Company events | Earnings season · Dividend dates · Buybacks and dilution · Going public · Mergers and takeovers | ✅ |
 | Money, rates and the economy | Inflation and real returns · Central banks and rates · The yield curve · Data that moves markets · Currencies and exchange rates | 🔍 |
 | Sectors and the economy | Sectors · Cyclical vs defensive · The business cycle · Sector rotation · Commodity-linked sectors | 🔍 |
 
