@@ -36,7 +36,10 @@ saved; all players and numbers are fake.
 6. **Trade** tab: competitions (join by code: AUB-CUP, FINA-310, IC-2027, or invite link; create a
    tournament: free up to 30 players and a month, bigger or semester-long uses a credit), clans
    (search, join/request, create) and a sample portfolio. Options become a tournament asset after the
-   Options basics unit. Prizes are trophies and badges, never cash.
+   Options basics unit. Hosts of a created tournament get host tools: start it (demo classmates),
+   download standings as CSV, end it and award trophies to the top 3. Prizes are trophies and badges,
+   never cash. A Bullpen Pro preview (example prices, "would you pay?") opens from the margin call
+   and Profile.
 7. **Profile:** investor level and progress, stats, certificates, trophies, badges (one per unit,
    main and Vault), retake placement, restart demo.
 

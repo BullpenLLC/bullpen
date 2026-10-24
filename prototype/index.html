@@ -980,8 +980,12 @@ $('#tradeModal').onclick = e => { if(e.target.id === 'tradeModal') closeSheet();
 
 function openComp(code, note){
   const C = comp(code), joined = S.joined.includes(code);
+  const host = !!S.created[code];
   let board = '<div class="demo-note">Rankings appear once it starts.</div>';
-  if(C.live){
+  if(C.board){ // a tournament you host: full standings including you
+    const sorted = C.board.slice().sort((a, b) => b[2] - a[2]);
+    board = `<div class="sec-h" style="margin-top:18px">Standings · season score${C.ended ? ' · final' : ''}</div><ol class="mini-board">${sorted.map((p, i) => `<li class="${p[0] === 'You' ? 'me' : ''}"><span class="rk ${i<3?'medal m'+(i+1):''}">${i+1}</span><span class="nm">${esc(p[0])} <em>· ${esc(p[1])}</em></span><span class="pts">${p[2].toFixed(2)}</span></li>`).join('')}</ol>`;
+  } else if(C.live){
     const rows = TOP5.map((p, i) => `<li><span class="rk ${i<3?'medal m'+(i+1):''}">${i+1}</span><span class="nm">${p[0]} <em>· ${p[1]}</em></span><span class="pts">${p[2].toFixed(2)}</span></li>`).join('');
     const me = joined ? `<li class="me"><span class="rk">${C.me[0]}</span><span class="nm">You</span><span class="pts">${C.me[1].toFixed(2)}</span></li>` : '';
     board = `<div class="sec-h" style="margin-top:18px">Standings · season score</div><ol class="mini-board">${rows}${me ? '<li class="gap-row" aria-hidden="true">· · ·</li>' + me : ''}</ol>`;
@@ -998,6 +1002,11 @@ function openComp(code, note){
     </ul>
     ${board}
     ${joined ? `<div class="invite"><span class="eyebrow">Invite code</span><div class="code">${esc(code)}</div><div class="link">${esc(inviteLink(code))}</div></div>` : ''}
+    ${host ? `<div class="sec-h" style="margin-top:18px">Host tools</div><div class="btn-row" style="margin-top:10px">
+      ${!C.board ? '<button class="btn gold" id="hostStart">Start the competition (demo)</button>' : ''}
+      ${C.board ? '<button class="btn ghost" id="hostCsv">Download standings (CSV)</button>' : ''}
+      ${C.board && !C.ended ? '<button class="btn gold" id="hostEnd">End it and award trophies</button>' : ''}
+    </div><div class="demo-note">In the demo, starting fills the competition with sample classmates.</div>` : ''}
     <div class="btn-row" style="margin-top:16px">
       ${joined ? '<button class="btn" id="tmCopy">Copy invite link</button>' : '<button class="btn" id="tmJoin">Join competition</button>'}
       <button class="btn ghost" id="tmDone">Done</button>
@@ -1006,6 +1015,33 @@ function openComp(code, note){
   $('#tmClose').onclick = $('#tmDone').onclick = closeSheet;
   if(joined) $('#tmCopy').onclick = () => copyText(`Join my Bullpen trading competition "${C.name}". Code ${code}, or tap: ${inviteLink(code)}`, $('#tmMsg'), 'Link copied. Paste it into WhatsApp or your class group.');
   else $('#tmJoin').onclick = () => { S.joined.unshift(code); renderTrade(); openComp(code, "You're in!"); };
+  if(host) bindHostTools(code);
+}
+
+/* host tools for tournaments you created: start (demo players), export standings, end and award trophies */
+const CLASSMATES = [['maya.s','AUB'],['karl.d','AUB'],['lea.f','AUB'],['tarek.z','AUB'],['nour.h','AUB'],['reem.a','AUB'],['jad.t','AUB']];
+function bindHostTools(code){
+  const C = S.created[code];
+  const st = $('#hostStart'); if(st) st.onclick = () => {
+    C.board = CLASSMATES.map(([n, s]) => [n, s, Math.round((0.2 + Math.random() * 1.6) * 100) / 100]).concat([['You', 'AUB', Math.round((0.2 + Math.random() * 1.6) * 100) / 100]]);
+    C.players = C.board.length; C.starts = 'Live · week 1'; saveState(); renderTrade(); openComp(code, 'Started. Standings update as people trade.');
+  };
+  const cv = $('#hostCsv'); if(cv) cv.onclick = () => {
+    const rows = C.board.slice().sort((a, b) => b[2] - a[2]).map((p, i) => [i+1, p[0], p[1], p[2].toFixed(2)]);
+    const csv = [['rank','player','school','season score']].concat(rows).map(r => r.map(x => `"${String(x).replace(/"/g, '""')}"`).join(',')).join(String.fromCharCode(10));
+    try {
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
+      a.download = `${code.toLowerCase()}-standings.csv`; document.body.appendChild(a); a.click(); a.remove();
+      $('#tmMsg').textContent = 'Standings downloaded.';
+    } catch(e){ $('#tmMsg').textContent = csv; }
+  };
+  const en = $('#hostEnd'); if(en) en.onclick = () => {
+    const sorted = C.board.slice().sort((a, b) => b[2] - a[2]), rank = sorted.findIndex(p => p[0] === 'You') + 1;
+    C.ended = true; C.starts = 'Finished';
+    if(rank <= 3) S.trophies.unshift({name:C.name, when:'October 2026', place:rank, of:C.players});
+    saveState(); renderAll();
+    openComp(code, rank <= 3 ? `Finished. You placed ${PLACE_NAMES[rank-1]} and won a trophy: it's on your profile.` : `Finished. You placed #${rank}. The top 3 got trophies.`);
+  };
 }
 
 /* create a tournament. Free: up to 30 players for up to a month. Bigger or semester-long uses 1 credit. */
