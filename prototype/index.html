@@ -8,7 +8,7 @@
 /* Layout: one phone-shaped app frame centred on desktop, full-bleed on phones. Lessons sit on a path of candlesticks: green = done, gold = next, grey = locked. */
 :root{
   --bg:#E8ECF4; --surface:#FFFFFF; --surface-2:#F1F4F9; --ink:#111833; --ink-2:#56607E; --line:#DBE0EB;
-  --bull:#14A44D; --bull-deep:#0C7A37; --bull-ink:#0C7A37; --bull-tint:#E2F5E9; --on-bull:#FFFFFF;
+  --bull:#0E9F6E; --bull-deep:#0A7A54; --bull-ink:#0A7A54; --bull-tint:#E0F4EC; --on-bull:#FFFFFF;
   --bear:#E0424B; --bear-deep:#A92A31; --bear-ink:#B8323A; --bear-tint:#FDE7E8;
   --gold:#F2AB00; --gold-deep:#B47C00; --gold-ink:#8F6200; --gold-tint:#FFF3D3; --on-gold:#3A2800;
   --sky:#2D6BFF; --sky-tint:#E7EEFF; --flame:#FF6B1A;
@@ -23,7 +23,7 @@
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --bg:#060A14; --surface:#0E1427; --surface-2:#161F37; --ink:#E9EDF8; --ink-2:#98A2C0; --line:#263050;
-    --bull:#2BC266; --bull-deep:#178A45; --bull-ink:#3FD27A; --bull-tint:#0E2C1B; --on-bull:#04200E;
+    --bull:#27C489; --bull-deep:#178A62; --bull-ink:#3ED69C; --bull-tint:#0C2C21; --on-bull:#03211A;
     --bear:#F26169; --bear-deep:#B13C43; --bear-ink:#FF7D84; --bear-tint:#381418;
     --gold:#FFC53D; --gold-deep:#C48F10; --gold-ink:#FFCF5C; --gold-tint:#33280C; --on-gold:#2A1E00;
     --sky:#6E9BFF; --sky-tint:#16264A; --flame:#FF8A3D;
@@ -36,7 +36,7 @@
 }
 :root[data-theme="dark"]{
   --bg:#060A14; --surface:#0E1427; --surface-2:#161F37; --ink:#E9EDF8; --ink-2:#98A2C0; --line:#263050;
-  --bull:#2BC266; --bull-deep:#178A45; --bull-ink:#3FD27A; --bull-tint:#0E2C1B; --on-bull:#04200E;
+  --bull:#27C489; --bull-deep:#178A62; --bull-ink:#3ED69C; --bull-tint:#0C2C21; --on-bull:#03211A;
   --bear:#F26169; --bear-deep:#B13C43; --bear-ink:#FF7D84; --bear-tint:#381418;
   --gold:#FFC53D; --gold-deep:#C48F10; --gold-ink:#FFCF5C; --gold-tint:#33280C; --on-gold:#2A1E00;
   --sky:#6E9BFF; --sky-tint:#16264A; --flame:#FF8A3D;
@@ -90,7 +90,7 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
 .stat{display:flex; align-items:center; gap:5px; font-family:var(--font-mono); font-weight:700; font-size:15px}
 .stat svg{width:22px; height:22px}
 .stat.flame{color:var(--flame)} .stat.flame.cold{color:var(--ink-2)}
-.stat.heart{color:var(--bear)} .stat.xp{color:var(--gold-ink)} .stat.xp svg{color:var(--gold)}
+.stat.heart{color:var(--bull-ink)} .stat.heart.low{color:var(--bear-ink)} .stat.xp{color:var(--sky)}
 .stat.league{color:var(--gold-ink)} .stat.league svg{color:var(--gold)}
 .stat .n{color:inherit}
 
@@ -109,7 +109,7 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
 .node.current .lbl{color:var(--ink)}
 .node.current .ring{position:absolute; left:50%; top:52px; width:96px; height:96px; margin:-48px 0 0 -48px; border-radius:50%; border:3px solid var(--gold); opacity:.0; animation:ring 2s ease-out infinite; pointer-events:none}
 @keyframes ring{0%{transform:scale(.6); opacity:.7}100%{transform:scale(1.25); opacity:0}}
-.callout{width:100%; max-width:320px; background:var(--surface); border:2px solid var(--line); border-radius:20px; padding:16px; margin:4px 0 10px; box-shadow:0 4px 0 var(--line)}
+.callout{width:100%; max-width:320px; background:var(--surface); border:1.5px solid var(--line); border-radius:16px; padding:16px; margin:4px 0 10px}
 .callout h3{font-size:20px}
 .callout .meta{color:var(--ink-2); font-size:13px; margin:4px 0 14px}
 .callout.soon{border-style:dashed; box-shadow:none}
@@ -118,13 +118,13 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
 .next-unit b{color:var(--ink); display:block}
 
 /* buttons */
-.btn{display:block; width:100%; border:0; border-radius:16px; padding:14px 18px; font-family:var(--font-display); font-weight:800; font-size:17px; letter-spacing:.01em;
-  background:var(--bull); color:var(--on-bull); box-shadow:0 4px 0 var(--bull-deep); transition:transform .08s, box-shadow .08s}
-.btn:active:not(:disabled){transform:translateY(4px); box-shadow:0 0 0 var(--bull-deep)}
-.btn:disabled{background:var(--surface-2); color:var(--ink-2); box-shadow:0 4px 0 var(--line); cursor:not-allowed}
-.btn.bad{background:var(--bear); box-shadow:0 4px 0 var(--bear-deep); color:#fff}
-.btn.ghost{background:var(--surface); color:var(--ink); border:2px solid var(--line); box-shadow:0 4px 0 var(--line)}
-.btn.gold{background:var(--gold); color:var(--on-gold); box-shadow:0 4px 0 var(--gold-deep)}
+.btn{display:block; width:100%; border:0; border-radius:12px; padding:14px 18px; font-family:var(--font-display); font-weight:700; font-size:16.5px; letter-spacing:.01em;
+  background:var(--bull); color:var(--on-bull); transition:transform .08s, filter .15s}
+.btn:active:not(:disabled){transform:scale(.98); filter:brightness(.95)}
+.btn:disabled{background:var(--surface-2); color:var(--ink-2); cursor:not-allowed}
+.btn.bad{background:var(--bear); color:#fff}
+.btn.ghost{background:var(--surface); color:var(--ink); border:1.5px solid var(--line)}
+.btn.gold{background:var(--gold); color:var(--on-gold)}
 .btn-row{display:grid; gap:12px}
 
 /* tab bar */
@@ -273,14 +273,14 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
 
 .q-text{font-family:var(--font-display); font-weight:600; font-size:21px; line-height:1.25; margin-top:6px}
 .opts{display:grid; gap:10px; margin-top:20px}
-.opt{display:flex; align-items:center; gap:12px; text-align:left; width:100%; background:var(--surface); border:2px solid var(--line); box-shadow:0 3px 0 var(--line); border-radius:16px; padding:13px 14px; font-weight:600; font-size:15.5px; transition:transform .08s}
-.opt:active{transform:translateY(2px)}
+.opt{display:flex; align-items:center; gap:12px; text-align:left; width:100%; background:var(--surface); border:1.5px solid var(--line); border-radius:12px; padding:13px 14px; font-weight:600; font-size:15.5px; transition:transform .08s, border-color .15s}
+.opt:active{transform:scale(.99)}
 .opt .key{flex:none; width:28px; height:28px; border-radius:9px; border:2px solid var(--line); display:grid; place-items:center; font-family:var(--font-mono); font-size:12px; color:var(--ink-2)}
-.opt[aria-pressed="true"]{border-color:var(--sky); box-shadow:0 3px 0 var(--sky); background:var(--sky-tint)}
+.opt[aria-pressed="true"]{border-color:var(--sky); background:var(--sky-tint)}
 .opt[aria-pressed="true"] .key{border-color:var(--sky); color:var(--sky)}
-.opt.right{border-color:var(--bull); box-shadow:0 3px 0 var(--bull-deep); background:var(--bull-tint)}
+.opt.right{border-color:var(--bull); background:var(--bull-tint)}
 .opt.right .key{border-color:var(--bull); color:var(--bull-ink)}
-.opt.wrong{border-color:var(--bear); box-shadow:0 3px 0 var(--bear-deep); background:var(--bear-tint)}
+.opt.wrong{border-color:var(--bear); background:var(--bear-tint)}
 .opt.wrong .key{border-color:var(--bear); color:var(--bear-ink)}
 .opt:disabled{cursor:default}
 .retry{display:inline-block; margin-left:8px; color:var(--bear-ink)}
@@ -358,8 +358,8 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
 .ob h1{font-size:29px; margin-top:20px; letter-spacing:-.01em}
 .ob .sub{color:var(--ink-2); margin:8px 0 0}
 .choices{display:grid; gap:12px; margin-top:22px}
-.choice{display:flex; gap:14px; align-items:center; text-align:left; width:100%; background:var(--surface); border:2px solid var(--line); box-shadow:0 4px 0 var(--line); border-radius:18px; padding:14px}
-.choice:active{transform:translateY(3px); box-shadow:0 1px 0 var(--line)}
+.choice{display:flex; gap:14px; align-items:center; text-align:left; width:100%; background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:14px}
+.choice:active{transform:scale(.99)}
 .choice .lv-ic{flex:none; width:46px; height:46px; display:grid; place-items:center; border-radius:14px}
 .choice .lv-ic svg{width:26px; height:26px}
 .choice b{display:block; font-family:var(--font-display); font-size:17px}
@@ -382,7 +382,7 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
 .msg{min-height:18px; font-size:13px; margin-top:8px}
 .msg.bad{color:var(--bear-ink)} .msg.good{color:var(--bull-ink)}
 .card-list{display:grid; gap:10px; margin-top:12px}
-.comp{display:block; width:100%; text-align:left; background:var(--surface); border:2px solid var(--line); border-radius:18px; padding:14px; box-shadow:0 3px 0 var(--line)}
+.comp{display:block; width:100%; text-align:left; background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:14px}
 .comp-top{display:flex; justify-content:space-between; gap:8px; align-items:flex-start}
 .comp h3{font-size:17px}
 .comp .host{font-size:13px; color:var(--ink-2); margin-top:2px}
@@ -423,6 +423,78 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
 .trophies .rk.medal{flex:none; margin:0}
 .trophies b{display:block; font-size:14.5px} .trophies span{font-size:12.5px; color:var(--ink-2)}
 
+/* learn: course / Vault / guide */
+.seg.lv{grid-template-columns:repeat(3,1fr); margin-top:14px}
+.stage-h{margin-top:26px}
+.stage-h h2{font-size:24px; margin-top:4px; letter-spacing:-.01em}
+.stage-h p{margin:4px 0 0; color:var(--ink-2); font-size:14px}
+.pbar{height:6px; background:var(--surface-2); border-radius:6px; overflow:hidden; margin-top:10px}
+.pbar i{display:block; height:100%; background:var(--bull); border-radius:6px}
+.ucard{margin-top:12px; border:1.5px solid var(--line); border-radius:16px; overflow:hidden; background:var(--surface)}
+.ucard.locked{background:var(--surface-2)}
+.u-head{display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px 14px 0}
+.u-head .k{font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-2)}
+.u-head h3{font-size:18px; margin-top:2px}
+.u-head .u-prog{font-family:var(--font-mono); font-size:13px; color:var(--ink-2); white-space:nowrap}
+.ucard .pbar{margin:10px 14px 4px}
+.lrows{list-style:none; margin:6px 0 0; padding:0 0 6px}
+.lrow{display:grid; grid-template-columns:28px minmax(0,1fr) auto; gap:12px; align-items:center; width:100%; text-align:left; background:none; border:0; border-top:1px solid var(--line); padding:11px 14px}
+.lrow:disabled{cursor:default}
+.lrow .lt b{display:block; font-size:15px; font-weight:600}
+.lrow .lt span{font-size:12.5px; color:var(--ink-2)}
+.lrow .lr{font-family:var(--font-mono); font-size:12.5px; color:var(--ink-2); white-space:nowrap}
+.lrow.done .lr{color:var(--bull-ink)}
+.lrow.current{background:var(--gold-tint)}
+.lrow.current .lr{color:var(--gold-ink); font-weight:700}
+.lrow.locked .lt b{color:var(--ink-2)}
+.lglyph{display:block; width:28px; height:34px}
+.lnow{padding:0 14px 12px; background:var(--gold-tint)}
+.u-more{display:block; width:100%; background:none; border:0; border-top:1px solid var(--line); padding:11px 14px; text-align:left; color:var(--sky); font-weight:700; font-size:14px}
+.u-locked{padding:8px 14px 14px; font-size:13.5px; color:var(--ink-2)}
+.u-locked .btn{margin-top:10px}
+.exam{margin-top:12px; border:1.5px dashed var(--gold); border-radius:16px; padding:14px; background:var(--gold-tint)}
+.exam.locked{border-color:var(--line); background:none}
+.exam .k{font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--gold-ink)}
+.exam.locked .k{color:var(--ink-2)}
+.exam h3{font-size:17px; margin-top:2px}
+.exam p{margin:4px 0 0; font-size:13.5px; color:var(--ink-2)}
+.exam .btn{margin-top:12px}
+.review{margin-top:16px; display:flex; gap:12px; align-items:center; width:100%; text-align:left; border:1.5px solid var(--sky); background:var(--sky-tint); border-radius:16px; padding:12px 14px}
+.review svg{width:26px; height:26px; color:var(--sky); flex:none}
+.review b{display:block; font-size:15px} .review span span{display:block; font-size:12.5px; color:var(--ink-2)}
+.vault-h{margin-top:16px; background:var(--banner); color:var(--on-banner); border-radius:18px; padding:16px}
+.vault-h h2{font-size:22px; margin-top:4px}
+.vault-h p{margin:6px 0 0; color:var(--on-banner-2); font-size:14px}
+.vault-h .vs{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px}
+.vault-h .vs span{font-family:var(--font-mono); font-size:12px; font-weight:700; padding:5px 9px; border-radius:8px; background:rgba(255,255,255,.1)}
+.guide h3{font-size:17px; margin-top:22px}
+.guide p, .guide li{font-size:14px; color:var(--ink-2)}
+.guide ul{padding-left:18px; margin:8px 0 0; display:grid; gap:4px}
+.guide .g-stage{margin-top:12px; border:1.5px solid var(--line); border-radius:14px; padding:12px 14px}
+.guide .g-stage b{font-size:15px}
+.guide .g-unit{margin-top:8px; font-size:13.5px}
+.guide .g-unit em{font-style:normal; color:var(--ink-2)}
+.ladder{list-style:none; padding:0; margin:10px 0 0; display:grid; gap:6px}
+.ladder li{display:flex; justify-content:space-between; gap:10px; padding:8px 12px; border-radius:10px; background:var(--surface-2); font-size:14px}
+.ladder li.on{background:var(--bull-tint); color:var(--bull-ink); font-weight:700}
+.ladder li span:last-child{font-family:var(--font-mono); color:var(--ink-2)}
+.lvl-card{margin-top:16px; border:1.5px solid var(--line); border-radius:16px; padding:14px}
+.lvl-card .k{font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-2)}
+.lvl-card h3{font-size:20px; margin-top:2px}
+.lvl-card p{margin:6px 0 0; font-size:13px; color:var(--ink-2)}
+.cert{display:flex; gap:12px; align-items:center; padding:12px 14px; border-radius:14px; background:var(--gold-tint)}
+.cert + .cert{margin-top:8px}
+.cert svg{width:30px; height:30px; color:var(--gold-ink); flex:none}
+.cert b{display:block} .cert span{font-size:12.5px; color:var(--ink-2)}
+.cert-big{margin-top:20px; border:2px solid var(--gold); border-radius:18px; padding:20px; text-align:center; background:var(--gold-tint)}
+.cert-big svg{width:44px; height:44px; color:var(--gold-ink)}
+.cert-big .k{font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--gold-ink); margin-top:6px}
+.cert-big h2{font-size:24px; margin-top:6px}
+.cert-big p{margin:6px 0 0; color:var(--ink-2); font-size:14px}
+.promo{margin-top:12px; display:flex; gap:12px; align-items:center; padding:12px 14px; border-radius:16px; background:var(--sky-tint); color:var(--sky); font-weight:700}
+.promo svg{width:22px; height:22px; flex:none}
+.stats.six{grid-template-columns:1fr 1fr}
+
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important; transition:none!important}
 }
@@ -430,11 +502,11 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
 
 <aside class="about">
   <div class="wm">Bullpen</div>
-  <div class="ver">Prototype v0.1 · working name</div>
+  <div class="ver">Prototype v0.2 · working name</div>
   <p>A clickable demo of the core loop for AUB student interviews.</p>
   <ol>
     <li>Pick your level, or take the placement test</li>
-    <li>Play a lesson and see where the XP puts you in the league</li>
+    <li>Play a lesson: wrong answers cost practice capital, right ones earn points</li>
     <li>In Trade, join a competition with code FINA-310, or create your own</li>
   </ol>
   <p>Players and numbers are samples. Nothing you do here is saved or sent.</p>
@@ -499,10 +571,10 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
   <div class="overlay" id="heartsModal" hidden>
     <div class="sheet pad" role="dialog" aria-modal="true" aria-labelledby="hmT">
       <svg class="big-ic" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 20.5s-7.5-4.6-9.2-9.3C1.6 7.8 3.8 4.5 7.1 4.5c2 0 3.6 1.1 4.9 2.8 1.3-1.7 2.9-2.8 4.9-2.8 3.3 0 5.5 3.3 4.3 6.7-1.7 4.7-9.2 9.3-9.2 9.3z" opacity=".35"/></svg>
-      <h2 id="hmT">You're out of lives</h2>
-      <p>In the app, lives refill over a few hours, or Pro gives you unlimited lives. For this demo you can refill now.</p>
+      <h2 id="hmT">Margin call</h2>
+      <p>You've run out of practice capital. In the app it refills over a few hours, or Pro gives you unlimited capital. For this demo you can refill now.</p>
       <div class="btn-row">
-        <button class="btn" id="refill">Refill lives (demo)</button>
+        <button class="btn" id="refill">Refill capital (demo)</button>
         <button class="btn ghost" id="hmQuit">Leave lesson</button>
       </div>
     </div>
@@ -511,7 +583,7 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
   <div class="overlay" id="quitModal" hidden>
     <div class="sheet pad" role="dialog" aria-modal="true" aria-labelledby="qmT">
       <h2 id="qmT">Leave this lesson?</h2>
-      <p>You'll lose the XP from this attempt.</p>
+      <p>You'll lose the points from this attempt.</p>
       <div class="btn-row">
         <button class="btn" id="qmStay">Keep learning</button>
         <button class="btn ghost" id="qmLeave">Leave</button>
@@ -563,6 +635,9 @@ const I = {
   baskets:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="2.5" y="11" width="5" height="9" rx="1.2"/><rect x="9.5" y="6" width="5" height="14" rx="1.2"/><rect x="16.5" y="9" width="5" height="11" rx="1.2"/></svg>',
   star:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z"/></svg>',
   scale:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M7 21h10M4 7h16M7 7l-3 7a3 3 0 0 0 6 0L7 7zM17 7l-3 7a3 3 0 0 0 6 0l-3-7z"/></svg>',
+  wallet:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18v4"/><rect x="4" y="7.5" width="16" height="12" rx="2.5"/><circle cx="16" cy="13.5" r="1.3" fill="currentColor"/></svg>',
+  cert:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4" width="17" height="12" rx="2"/><path d="M7.5 8.5h9M7.5 11.5h5"/><circle cx="16.5" cy="17" r="2.6"/><path d="M15 19l-.8 3 2.3-1.2 2.3 1.2-.8-3"/></svg>',
+  review:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v4.5h-4.5"/><path d="M12 8v4l2.5 2"/></svg>',
   flag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg>'
 };
 document.querySelectorAll('[data-ic]').forEach(el => el.innerHTML = I[el.dataset.ic]);
@@ -576,7 +651,21 @@ const OFFSETS = [0, 58, 76, 34, -42, -12];
    UNITS is the main path in order; LESSONS is its flat list of lessons; UNIT_START[u] is where unit u begins. */
 const UNITS = STAGES.flatMap((st, si) => st.units.map(U => (U.stage = si, U)));
 const PLACEMENT_BLOCKS = UNITS.map(U => U.placement);
-const PLACE_PASS = 4; // right answers out of 5 needed to skip a unit
+const PLACE_MISS_OK = 1; // placement: a stage is skipped if you miss at most this many of its questions
+const PLACE_PER_UNIT = 2; // placement questions asked per unit
+const EXAM_SIZE = 15, EXAM_PASS = 12; // stage exam: questions asked, right answers needed for the certificate
+const STAGE_START = STAGES.map((st, si) => UNITS.findIndex(U => U.stage === si)); // first unit of each stage
+const stageEnd = si => { const units = UNITS.filter(U => U.stage === si); const last = UNITS.indexOf(units[units.length-1]); return UNIT_START[last] + last_len(last); };
+function last_len(u){ return UNITS[u].lessons.length; }
+VAULT.forEach((U, v) => U.lessons.forEach((L, j) => { L.vault = v; L.n = j + 1; }));
+/* every question by its text, for the daily review */
+const QMAP = new Map();
+UNITS.concat(VAULT).forEach(U => U.lessons.forEach(L => L.qs.forEach(q => QMAP.set(q.q, q))));
+/* investor titles earned with points, and the weekly league ladder */
+const LEVELS = [[0,'Intern'],[500,'Analyst'],[1500,'Associate'],[3500,'Vice President'],[7000,'Director'],[12000,'Portfolio Manager'],[20000,'Partner']];
+function levelOf(pts){ let i = 0; while(i + 1 < LEVELS.length && pts >= LEVELS[i+1][0]) i++; return {i, title:LEVELS[i][1], min:LEVELS[i][0], next:LEVELS[i+1] || null}; }
+const TIERS = ['Penny','Small-cap','Mid-cap','Large-cap','Blue-chip'];
+const MY_TIER = 2;
 const LESSONS = [], UNIT_START = [];
 UNITS.forEach((U, u) => {
   UNIT_START.push(LESSONS.length);
@@ -599,6 +688,7 @@ const GLOBAL = [['finn.o','UK',2214],['layla.q','AE',2187],['omar.s','SA',2150],
 /* ---------- state ---------- */
 const INITIAL = {streak:7, streakToday:false, hearts:5, xpTotal:1240, weekly:215, rating:1388, done:0, tab:'learn', view:'week', last:null, wait:false, newBadge:null, pick:null,
   onboarded:false, level:null, placed:false, testedOut:[], scrollCur:false,
+  lview:'course', vault:{}, bonus:0, certs:{}, missed:[], openUnit:null,
   tview:'comps', joined:['AUB-CUP'], created:{}, credits:1, clan:null, requested:[], createdClans:[], clanQ:'', draft:null,
   trophies:[{name:'Global Weekly Sprint', when:'Week 41, 2026', place:2, of:3880}]};
 let S = JSON.parse(JSON.stringify(INITIAL));
@@ -607,92 +697,185 @@ function avColor(name){ let h=0; for(const c of name) h=(h*31+c.charCodeAt(0))>>
 function weekRank(xp){ return LEAGUE.filter(p => p[2] > xp).length + 1; }
 function aubRank(r){ return AUB.filter(p => p[1] > r).length + 1; }
 function lebRank(){ return S.done > 2 ? 58 : 64; }
+const unitDone = u => Math.max(0, Math.min(S.done - UNIT_START[u], UNITS[u].lessons.length));
 function globalRank(){ return S.done > 2 ? 2377 : 2481; }
 
 /* ---------- learn ---------- */
-function candle(state, n){
-  const fill = state==='done' ? 'var(--bull)' : state==='current' ? 'var(--gold)' : 'var(--surface-2)';
-  const deep = state==='done' ? 'var(--bull-deep)' : state==='current' ? 'var(--gold-deep)' : 'var(--line)';
-  let inner = '';
-  if(state==='done') inner = '<path d="M27 49l6.5 6.5L46 42" fill="none" stroke="var(--on-bull)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>';
-  else if(state==='current') inner = `<text x="36" y="58" text-anchor="middle" font-family="Bricolage Grotesque, system-ui, sans-serif" font-weight="800" font-size="26" fill="var(--on-gold)">${n}</text>`;
-  else if(n===6) inner = '<g transform="translate(24 37)" fill="none" stroke="var(--ink-2)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0V4z"/><path d="M12 13v4M8 20.5h8"/></g>';
-  else inner = '<g transform="translate(24 37)" fill="none" stroke="var(--ink-2)" stroke-width="2.2" stroke-linecap="round"><rect x="5" y="10" width="14" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></g>';
-  return `<svg viewBox="0 0 72 104" width="72" height="104" aria-hidden="true">
-    <line x1="36" y1="4" x2="36" y2="100" stroke="${deep}" stroke-width="5" stroke-linecap="round"/>
-    <rect x="12" y="26" width="48" height="58" rx="13" fill="${deep}"/>
-    <rect x="12" y="20" width="48" height="58" rx="13" fill="${fill}" ${state==='locked'?'stroke="var(--line)" stroke-width="2"':''}/>
-    ${inner}</svg>`;
+function glyph(state){
+  const fill = state==='done' ? 'var(--bull)' : state==='current' ? 'var(--gold)' : 'none';
+  const line = state==='done' ? 'var(--bull-deep)' : state==='current' ? 'var(--gold-deep)' : 'var(--line)';
+  const mark = state==='done' ? '<path d="M9 17.5l3 3 5-6" fill="none" stroke="var(--on-bull)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>' : '';
+  return `<svg class="lglyph" viewBox="0 0 28 34" aria-hidden="true"><line x1="14" y1="1" x2="14" y2="33" stroke="${line}" stroke-width="2.5" stroke-linecap="round"/><rect x="6" y="7" width="16" height="20" rx="4" fill="${fill}" stroke="${line}" stroke-width="2"/>${mark}</svg>`;
 }
 
 function statusBar(){
   return `<div class="status pad">
-    <span class="stat league" title="League">${I.shield}<span class="n">Gold</span></span>
+    <span class="stat league" title="Weekly league">${I.shield}<span class="n">${TIERS[MY_TIER]}</span></span>
     <span class="stat flame ${S.streakToday?'':'cold'}" title="Day streak">${I.flame}<span class="n">${S.streak}</span></span>
-    <span class="stat heart" title="Lives">${I.heart}<span class="n">${S.hearts}</span></span>
-    <span class="stat xp" title="Total XP">${I.bolt}<span class="n">${fmt(S.xpTotal)}</span></span>
+    <span class="stat heart ${S.hearts <= 1 ? 'low' : ''}" title="Practice capital">${I.wallet}<span class="n">$${S.hearts}k</span></span>
+    <span class="stat xp" title="Points">${I.up}<span class="n">${fmt(S.xpTotal)}</span></span>
   </div>`;
 }
 
 function lessonMeta(L){
-  return L.cards.length ? `${L.cards.length} ideas · ${L.qs.length} questions · about ${L.min} min`
-                        : `Mixed review · ${L.qs.length} questions · about ${L.min} min`;
+  return L.cards.length ? `${L.min} min · ${L.qs.length} questions` : `Unit check · ${L.qs.length} questions`;
 }
 function maxXp(L){ return L.qs.length * 10 + 15; }
 
 function renderLearn(){
-  const cur = S.done; // global index of the next lesson
-  const pick = S.pick ?? cur; // lesson whose card is open on the path
-  const firstLocked = UNITS.findIndex((U, u) => UNIT_START[u] > cur);
-  let html = '';
-  UNITS.forEach((U, u) => {
-    const start = UNIT_START[u], len = U.lessons.length;
-    const doneHere = Math.max(0, Math.min(cur - start, len));
-    html += `<div class="unit${start > cur ? ' locked' : ''}"><div><div class="k">Unit ${u+1} · ${U.level}</div><h2>${U.title}</h2></div><div class="prog">${doneHere} / ${len} done</div></div>`;
-    if(u === firstLocked && u > 0){
-      html += `<div class="callout soon testout"><span class="eyebrow">Skip ahead</span><h3>Know Unit ${u} already?</h3>
-        <div class="meta">Get 6 of 8 right on the Unit ${u} check and jump straight to Unit ${u+1}. No lives lost.</div>
-        <button class="btn ghost" id="testOutBtn">Test out of Unit ${u}</button></div>`;
-    }
-    let path = '';
-    U.lessons.forEach((L, j) => {
-      const i = start + j;
-      const st = i < cur ? 'done' : i === cur ? 'current' : 'locked';
-      path += `<button class="node ${st}" style="--x:${OFFSETS[j]}px" data-i="${i}" aria-label="${L.title}, ${st==='done'?'completed':st==='current'?'next lesson':'locked'}">
-        ${st==='current'?'<span class="ring"></span>':''}${candle(st, j+1)}<span class="lbl">${L.title}</span></button>`;
-      if(i === pick && i <= cur){
-        const again = i < cur, tested = S.testedOut.includes(i);
-        path += `<div class="callout"><span class="eyebrow">Unit ${u+1} · Lesson ${j+1} of ${len}${again ? (tested ? ' · Tested out' : ' · Completed') : ''}</span><h3>${L.title}</h3>
-          <div class="meta">${lessonMeta(L)}</div>
-          <button class="btn${again?' ghost':''}" id="startBtn">${again?'Practice':'Start'} · up to +${maxXp(L)} XP</button></div>`;
-      }
-    });
-    html += `<div class="path">${path}</div>`;
-  });
-  const allDone = cur >= LESSONS.length;
-  html += `<div class="next-unit">${I.lock}<div><b>Unit ${UNITS.length+1} · ${NEXT_UNIT}</b>${allDone ? "You've finished everything built so far. This unit comes next." : 'Coming in a later prototype'}</div></div>`;
-  const placeLink = S.placed ? '' : `<button class="place-link" id="placeBtn"><span><b>Already know some of this?</b><span>Take the placement test and skip ahead.</span></span><span class="go">Test →</span></button>`;
-  $('#s-learn').innerHTML = statusBar() + `<div class="pad">${placeLink}${html}</div>`;
-
-  const sb = $('#startBtn'); if(sb) sb.onclick = () => startLesson(pick);
-  const pb = $('#placeBtn'); if(pb) pb.onclick = () => showOnboard('intro');
-  const tb = $('#testOutBtn'); if(tb) tb.onclick = () => {
-    const u = firstLocked - 1;
-    startTest('testout', `Unit ${u+1} test-out`, UNITS[u].lessons[UNITS[u].lessons.length-1].qs, {unit:u});
-  };
-  $('#s-learn').querySelectorAll('.node').forEach(n => n.onclick = () => {
-    const i = +n.dataset.i;
-    if(i > cur) return;
-    if(i === pick) startLesson(i);          // second tap (or tap on the current lesson) starts it
-    else { S.pick = i; renderLearn(); }     // first tap on a finished lesson opens its card
-  });
-  if(S.scrollCur){
+  const tabs = [['course','Course'],['vault','Vault'],['guide','Guide']];
+  const body = S.lview === 'vault' ? renderVault() : S.lview === 'guide' ? renderGuide() : renderCourse();
+  $('#s-learn').innerHTML = statusBar() + `<div class="pad">
+    <div class="seg lv" role="group" aria-label="Learn">${tabs.map(t => `<button data-v="${t[0]}" aria-pressed="${S.lview===t[0]}">${t[1]}</button>`).join('')}</div>
+    ${body}
+    <div class="footnote">Prototype · nothing here is saved</div></div>`;
+  $('#s-learn').querySelectorAll('.seg.lv button').forEach(b => b.onclick = () => { S.lview = b.dataset.v; renderLearn(); $('#s-learn').scrollTop = 0; });
+  bindLearn();
+  if(S.scrollCur && S.lview === 'course'){
     S.scrollCur = false;
     requestAnimationFrame(() => {
-      const n = $('#s-learn .node.current'), sc = $('#s-learn'); if(!n) return;
+      const n = $('#s-learn .lrow.current'), sc = $('#s-learn'); if(!n) return;
       sc.scrollTop += n.getBoundingClientRect().top - sc.getBoundingClientRect().top - sc.clientHeight / 2 + 60;
     });
   }
+}
+
+function lessonRows(lessons, stateOf, idOf){
+  return `<ul class="lrows">${lessons.map((L, j) => {
+    const st = stateOf(j), id = idOf(j);
+    const right = st === 'done' ? (S.testedOut.includes(id) && typeof id === 'number' ? 'Tested out' : '✓ done') : st === 'current' ? `+${maxXp(L)} pts` : '';
+    return `<li><button class="lrow ${st}" data-lesson="${id}" ${st === 'locked' ? 'disabled' : ''} aria-label="${esc(L.title)}, ${st}">
+      ${glyph(st)}<span class="lt"><b>${esc(L.title)}</b><span>${lessonMeta(L)}</span></span><span class="lr">${st === 'locked' ? I.lock.replace('<svg', '<svg width="16" height="16"') : right}</span></button>
+      ${st === 'current' ? `<div class="lnow"><button class="btn" data-start="${id}">${S.done === 0 && typeof id === 'number' ? 'Start' : 'Continue'} · +${maxXp(L)} pts</button></div>` : ''}</li>`;
+  }).join('')}</ul>`;
+}
+
+function renderCourse(){
+  const cur = S.done, firstLocked = UNITS.findIndex((U, u) => UNIT_START[u] > cur);
+  let html = S.placed ? '' : `<button class="place-link" id="placeBtn"><span><b>Already know some of this?</b><span>Take the placement test and skip ahead.</span></span><span class="go">Test →</span></button>`;
+  const pool = reviewPool();
+  if(pool.done >= 3) html += `<button class="review" id="reviewBtn">${I.review}<span><b>Daily review</b><span>${Math.min(8, pool.qs.length)} questions${S.missed.length ? `, including ${Math.min(8, S.missed.length)} you missed before` : ' from lessons you finished'} · no capital at risk</span></span></button>`;
+  STAGES.forEach((st, si) => {
+    const units = UNITS.map((U, u) => u).filter(u => UNITS[u].stage === si);
+    const total = units.reduce((n, u) => n + UNITS[u].lessons.length, 0), doneN = units.reduce((n, u) => n + unitDone(u), 0);
+    html += `<div class="stage-h"><span class="eyebrow">Stage ${si+1} · ${st.level}</span><h2>${st.title}</h2><p>${st.blurb}</p>
+      <div class="pbar" aria-label="${doneN} of ${total} done"><i style="width:${total ? doneN/total*100 : 0}%"></i></div></div>`;
+    units.forEach(u => {
+      const U = UNITS[u], start = UNIT_START[u], len = U.lessons.length, d = unitDone(u);
+      const locked = start > cur, complete = d === len, open = !complete || S.openUnit === u;
+      html += `<section class="ucard${locked ? ' locked' : ''}"><div class="u-head"><div><div class="k">Unit ${u+1}${complete ? ' · complete' : ''}</div><h3>${esc(U.title)}</h3></div><div class="u-prog">${d}/${len}</div></div>
+        <div class="pbar"><i style="width:${d/len*100}%"></i></div>`;
+      if(locked){
+        html += u === firstLocked && u > 0
+          ? `<div class="u-locked">Locked until you finish ${esc(UNITS[u-1].title)}. Already know it? Get 6 of 8 on its unit check to skip ahead.<button class="btn ghost" id="testOutBtn" data-unit="${u-1}">Test out of ${esc(UNITS[u-1].title)}</button></div>`
+          : `<div class="u-locked">Locked</div>`;
+      } else if(open){
+        html += lessonRows(U.lessons, j => start + j < cur ? 'done' : start + j === cur ? 'current' : 'locked', j => start + j);
+        if(complete) html += `<button class="u-more" data-close="${u}">Hide lessons</button>`;
+      } else html += `<button class="u-more" data-open="${u}">Review the ${len} lessons</button>`;
+      html += `</section>`;
+    });
+    const ready = cur >= stageEnd(si), cert = S.certs[st.id];
+    html += ready
+      ? `<div class="exam"><div class="k">${cert ? 'Certificate earned' : 'Stage exam'}</div><h3>${st.title} exam</h3>
+          <p>${cert ? `You scored ${cert.score} of ${cert.of}. Retake it any time to beat your score.` : `${EXAM_SIZE} questions from the whole stage, no capital at risk. Get ${EXAM_PASS} right to earn the ${st.title} certificate.`}</p>
+          <button class="btn ${cert ? 'ghost' : 'gold'}" data-exam="${si}">${cert ? 'Retake the exam' : 'Take the exam'}</button></div>`
+      : `<div class="exam locked"><div class="k">Stage exam</div><h3>${st.title} exam</h3><p>Finish every unit in this stage to unlock a ${EXAM_SIZE}-question exam and the ${st.title} certificate.</p></div>`;
+  });
+  const allDone = cur >= LESSONS.length;
+  html += `<div class="next-unit" style="margin-top:20px">${I.lock}<div><b>Next: ${NEXT_UNIT}</b>${allDone ? "You've finished everything built so far." : 'Coming in a later prototype'}</div></div>`;
+  return html;
+}
+
+function renderVault(){
+  const cleared = VAULT.filter(U => (S.vault[U.id] || 0) >= U.lessons.length).length;
+  let html = `<div class="vault-h"><span class="eyebrow" style="color:var(--on-banner-2)">Optional deep dives</span><h2>The Vault</h2>
+    <p>Finance fundamentals for when you want to go deeper: company accounts, valuation, and the maths behind money. Everything here earns bonus Vault points and its own badges. Open any unit, in any order.</p>
+    <div class="vs"><span>${fmt(S.bonus)} Vault points</span><span>${cleared} of ${VAULT.length} units cleared</span></div></div>`;
+  VAULT.forEach((U, v) => {
+    const d = S.vault[U.id] || 0, len = U.lessons.length, complete = d >= len, open = !complete || S.openUnit === 'v' + v;
+    html += `<section class="ucard"><div class="u-head"><div><div class="k">Vault ${v+1}${complete ? ' · cleared' : ''}</div><h3>${esc(U.title)}</h3></div><div class="u-prog">${d}/${len}</div></div>
+      <div class="pbar"><i style="width:${d/len*100}%"></i></div>`;
+    html += open ? lessonRows(U.lessons, j => j < d ? 'done' : j === d ? 'current' : 'locked', j => `v${v}.${j}`) + (complete ? `<button class="u-more" data-close="v${v}">Hide lessons</button>` : '')
+                 : `<button class="u-more" data-open="v${v}">Review the ${len} lessons</button>`;
+    html += `</section>`;
+  });
+  return html;
+}
+
+function renderGuide(){
+  const lv = levelOf(S.xpTotal);
+  const stages = STAGES.map((st, si) => `<div class="g-stage"><span class="eyebrow">Stage ${si+1} · ${st.level}</span><br><b>${st.title}</b>${
+    UNITS.map((U, u) => [U, u]).filter(([U]) => U.stage === si).map(([U, u]) => `<div class="g-unit"><b>Unit ${u+1} · ${esc(U.title)}</b> ${unitDone(u) === U.lessons.length ? '✓' : ''}<br><em>${U.lessons.slice(0, -1).map(L => esc(L.title)).join(' · ')} · Unit check</em></div>`).join('')
+  }<div class="g-unit"><b>${st.title} exam</b> ${S.certs[st.id] ? '✓ certificate' : ''}<br><em>${EXAM_SIZE} questions, ${EXAM_PASS} to pass</em></div></div>`).join('');
+  const vault = VAULT.map((U, v) => `<div class="g-unit"><b>Vault ${v+1} · ${esc(U.title)}</b><br><em>${U.lessons.slice(0, -1).map(L => esc(L.title)).join(' · ')}</em></div>`).join('');
+  return `<div class="guide">
+    <h3>How Bullpen works</h3>
+    <p>Short lessons teach one idea at a time with real numbers. Quizzes check you got it. Your points, streak and league keep you coming back, and the trading game lets you use it with fake money.</p>
+    <h3>Your path</h3>${stages}
+    <div class="g-stage"><span class="eyebrow">Optional</span><br><b>The Vault</b>${vault}</div>
+    <h3>Assessments</h3>
+    <ul>
+      <li><b>Lesson quiz:</b> 5 questions after 4 short cards. A miss costs $1k of practice capital and the question comes back.</li>
+      <li><b>Unit check:</b> 8 mixed questions at the end of every unit. Clearing it earns the unit's badge.</li>
+      <li><b>Stage exam:</b> ${EXAM_SIZE} questions drawn from the whole stage. ${EXAM_PASS} right earns a certificate you can share.</li>
+      <li><b>Placement test:</b> goes stage by stage (${PLACE_PER_UNIT} questions per unit) and starts you at the first lesson you miss.</li>
+      <li><b>Test out:</b> skip a unit by getting 6 of 8 on its unit check.</li>
+      <li><b>Daily review:</b> brings back questions you missed, so they stick.</li>
+    </ul>
+    <h3>Investor levels</h3>
+    <p>Points from lessons, reviews and the Vault move you up the ladder. You're a ${lv.title}.</p>
+    <ul class="ladder">${LEVELS.map(([min, t], i) => `<li class="${i === lv.i ? 'on' : ''}"><span>${i+1}. ${t}</span><span>${fmt(min)} pts</span></li>`).join('')}</ul>
+    <h3>Weekly leagues</h3>
+    <p>Every week you're ranked against 30 players by points earned that week. The top 7 move up a league and the bottom 5 move down.</p>
+    <ul class="ladder">${TIERS.map((t, i) => `<li class="${i === MY_TIER ? 'on' : ''}"><span>${t} league</span><span>${i === MY_TIER ? 'you' : ''}</span></li>`).join('')}</ul>
+    <h3>Practice capital</h3>
+    <p>You start each session with $5k of practice capital. Every wrong answer in a lesson costs $1k. Run out and you get a margin call: wait for it to refill, or go Pro for unlimited capital. Tests, exams and reviews never cost capital.</p>
+  </div>`;
+}
+
+function reviewPool(){
+  const done = LESSONS.slice(0, S.done).concat(VAULT.flatMap(U => U.lessons.slice(0, S.vault[U.id] || 0)));
+  return {done:done.length, qs:done.flatMap(L => L.qs)};
+}
+function startReview(){
+  const pool = reviewPool().qs;
+  const missed = S.missed.map(t => QMAP.get(t)).filter(Boolean);
+  const rest = shuffled(pool.filter(q => !S.missed.includes(q.q)));
+  const qs = shuffled(missed.slice(0, 8).concat(rest).slice(0, 8));
+  startTest('review', 'Daily review', qs);
+}
+
+function bindLearn(){
+  const sl = $('#s-learn');
+  const pb = $('#placeBtn'); if(pb) pb.onclick = () => showOnboard('intro');
+  const rb = $('#reviewBtn'); if(rb) rb.onclick = startReview;
+  const tb = $('#testOutBtn'); if(tb) tb.onclick = () => { const u = +tb.dataset.unit; startTest('testout', `${UNITS[u].title} test-out`, UNITS[u].lessons[UNITS[u].lessons.length-1].qs, {unit:u}); };
+  sl.querySelectorAll('[data-start]').forEach(b => b.onclick = () => openLesson(b.dataset.start));
+  sl.querySelectorAll('.lrow:not(.locked)').forEach(b => b.onclick = () => { if(b.classList.contains('current')) openLesson(b.dataset.lesson); else lessonSheet(b.dataset.lesson); });
+  sl.querySelectorAll('[data-open]').forEach(b => b.onclick = () => { const v = b.dataset.open; S.openUnit = v[0] === 'v' ? v : +v; renderLearn(); });
+  sl.querySelectorAll('[data-close]').forEach(b => b.onclick = () => { S.openUnit = null; renderLearn(); });
+  sl.querySelectorAll('[data-exam]').forEach(b => b.onclick = () => startExam(+b.dataset.exam));
+}
+/* lesson ids: a number for the main path, "v<unit>.<lesson>" for the Vault */
+function lessonById(id){ if(String(id)[0] === 'v'){ const [v, j] = id.slice(1).split('.').map(Number); return VAULT[v].lessons[j]; } return LESSONS[+id]; }
+function openLesson(id){
+  if(String(id)[0] === 'v'){ const [v, j] = id.slice(1).split('.').map(Number); beginPlayer({L:VAULT[v].lessons[j], lesson:null, vault:{v, j}, mode:'lesson'}); }
+  else startLesson(+id);
+}
+function lessonSheet(id){
+  const L = lessonById(id), vault = String(id)[0] === 'v';
+  const where = vault ? `Vault · ${VAULT[L.vault].title}` : `Unit ${L.unit+1} · ${UNITS[L.unit].title}`;
+  openSheet(`<div class="sh-head"><div><span class="eyebrow">${esc(where)} · Lesson ${L.n}</span><h2>${esc(L.title)}</h2></div><button class="icon-btn" id="tmClose" aria-label="Close">${I.x}</button></div>
+    <p class="sh-sub">${lessonMeta(L)}${!vault && S.testedOut.includes(+id) ? ' · tested out in the placement test' : ' · completed'}</p>
+    <div class="btn-row" style="margin-top:16px"><button class="btn" id="lsGo">Practise · +${maxXp(L)} pts</button></div>`);
+  $('#tmClose').onclick = closeSheet;
+  $('#lsGo').onclick = () => { closeSheet(); openLesson(id); };
+}
+function startExam(si){
+  const st = STAGES[si];
+  const qs = shuffled(UNITS.filter(U => U.stage === si).flatMap(U => U.lessons.flatMap(L => L.qs))).slice(0, EXAM_SIZE);
+  startTest('exam', `${st.title} exam`, qs, {stage:si});
 }
 
 /* ---------- trade: competitions, clans, portfolio ---------- */
@@ -988,15 +1171,15 @@ function renderLeague(){
       if(L.newWeek <= 7) moved = `<div class="moved">${I.up}<span>You climbed from #${L.prevWeek} to #${L.newWeek}. You're in the promotion zone.</span></div>`;
       else {
         const need = all[6].x - S.weekly + 1;
-        moved = `<div class="moved near">${I.up}<span>You climbed from #${L.prevWeek} to #${L.newWeek}. ${need} XP more reaches the promotion zone.</span></div>`;
+        moved = `<div class="moved near">${I.up}<span>You climbed from #${L.prevWeek} to #${L.newWeek}. ${need} more points reach the promotion zone.</span></div>`;
       }
     }
-    head = `<div class="lg-card">${I.shield}<div><h2>Gold League</h2><p>Week 43 · ends in 3d 14h<br>Top 7 move up to Platinum. Bottom 5 drop to Silver.</p></div></div>${moved}`;
+    head = `<div class="lg-card">${I.shield}<div><h2>${TIERS[MY_TIER]} League</h2><p>Week 43 · ends in 3d 14h<br>Top 7 move up to ${TIERS[MY_TIER+1]}. Bottom 5 drop to ${TIERS[MY_TIER-1]}.</p></div></div>${moved}`;
     all.forEach((p,i) => {
       const r = i+1;
       if(r === 8) list += '<li class="zone up">Promotion zone</li>';
       if(r === 26) list += '<li class="zone down">Demotion zone</li>';
-      list += row(r, p.n, p.s, p.x, 'XP', {me:p.me, flash:p.me && L, zone: r<=7?'up':r>=26?'down':''});
+      list += row(r, p.n, p.s, p.x, 'pts', {me:p.me, flash:p.me && L, zone: r<=7?'up':r>=26?'down':''});
     });
   } else if(v === 'aub'){
     const all = AUB.map(p => ({n:p[0], x:p[1]})).concat([{n:'you', x:S.rating, me:true}]).sort((a,b)=>b.x-a.x);
@@ -1037,30 +1220,41 @@ function renderLeague(){
 const LEVEL_NAMES = {beginner:'Beginner', intermediate:'Knows the basics', advanced:'Experienced investor'};
 const PLACE_NAMES = ['1st', '2nd', '3rd'];
 function renderProfile(){
+  const unitBadge = (U, on, s) => { const b = U.lessons[U.lessons.length-1].badge; return {t:b.name, s, on, ic:I[b.icon]}; };
   const badges = [
     {t:'First lesson', s:'Finish a lesson', on:S.done > 0, ic:I.book},
     {t:'Week streak', s:'7 days in a row', on:S.streak >= 7, ic:I.flame},
     {t:'Many Baskets', s:'Diversification', on:S.done > 2, ic:I.baskets},
-    ...UNITS.map((U, u) => { const b = U.lessons[U.lessons.length-1].badge; return {t:b.name, s:`Clear Unit ${u+1}`, on:S.done >= UNIT_START[u] + U.lessons.length, ic:I[b.icon]}; }),
+    ...UNITS.map((U, u) => unitBadge(U, S.done >= UNIT_START[u] + U.lessons.length, `Clear ${U.title}`)),
+    ...VAULT.map(U => unitBadge(U, (S.vault[U.id] || 0) >= U.lessons.length, `Vault: ${U.title}`)),
     {t:'Podium', s:'Top 3 in a competition', on:S.trophies.length > 0, ic:I.up},
     {t:'Tournament winner', s:'Win a competition', on:S.trophies.some(t => t.place === 1), ic:I.trophy},
     {t:'Steady hand', s:'Season score above 1', on:false, ic:I.scale},
     {t:'Season finisher', s:'Trade a full season', on:false, ic:I.flag}
   ];
+  const lv = levelOf(S.xpTotal);
   const sub = ['AUB', S.level && LEVEL_NAMES[S.level], S.clan].filter(Boolean).map(esc).join(' · ');
+  const certs = STAGES.filter(st => S.certs[st.id]);
   $('#s-profile').innerHTML = `
     <div class="pad">
       <div class="me-head"><span class="av">Y</span><div><h1>new.player</h1><p>${sub}</p></div></div>
-      <div class="stats">
+      <div class="lvl-card"><div class="k">Level ${lv.i+1}</div><h3>${lv.title}</h3>
+        <div class="pbar"><i style="width:${lv.next ? Math.min(100, (S.xpTotal - lv.min) / (lv.next[0] - lv.min) * 100) : 100}%"></i></div>
+        <p>${lv.next ? `${fmt(S.xpTotal)} of ${fmt(lv.next[0])} points to ${lv.next[1]}` : 'Top of the ladder'}</p></div>
+      <div class="stats six">
         <div><span style="color:var(--flame)">${I.flame}</span><span><b>${S.streak}</b><span>Day streak</span></span></div>
-        <div><span style="color:var(--gold)">${I.bolt}</span><span><b>${fmt(S.xpTotal)}</b><span>Total XP</span></span></div>
-        <div><span style="color:var(--gold)">${I.shield}</span><span><b>Gold</b><span>Current league</span></span></div>
+        <div><span style="color:var(--sky)">${I.up}</span><span><b>${fmt(S.xpTotal)}</b><span>Total points</span></span></div>
+        <div><span style="color:var(--gold)">${I.shield}</span><span><b>${TIERS[MY_TIER]}</b><span>Weekly league</span></span></div>
         <div><span style="color:var(--sky)">${I.star}</span><span><b>${fmt(S.rating)}</b><span>Bullpen rating</span></span></div>
+        <div><span style="color:var(--bull-ink)">${I.book}</span><span><b>${S.done} / ${LESSONS.length}</b><span>Lessons done</span></span></div>
+        <div><span style="color:var(--gold)">${I.lock}</span><span><b>${fmt(S.bonus)}</b><span>Vault points</span></span></div>
       </div>
+      <div class="sec-h">Certificates</div>
+      <div style="margin-top:12px">${certs.length ? certs.map(st => `<div class="cert">${I.cert}<span><b>${st.title}</b><span>${S.certs[st.id].score}/${S.certs[st.id].of} · ${S.certs[st.id].when}</span></span></div>`).join('') : '<div class="empty">Pass a stage exam to earn a certificate.</div>'}</div>
       <div class="sec-h">Trophies</div>
       <ul class="trophies">${S.trophies.map(t => `<li><span class="rk medal m${t.place}">${t.place}</span><span><b>${esc(t.name)}</b><span>${PLACE_NAMES[t.place-1]} of ${fmt(t.of)} players · ${esc(t.when)}</span></span></li>`).join('') || '<li><span>Win or place top 3 in a competition to earn one.</span></li>'}</ul>
       <div class="sec-h">Badges</div>
-      <div class="badges">${badges.map(b => `<div class="badge ${b.on?'on':'off'} ${S.newBadge===b.t?'new':''}"><div class="hex">${b.on?b.ic:I.lock}</div><b>${b.t}</b><span>${b.s}</span></div>`).join('')}</div>
+      <div class="badges">${badges.map(b => `<div class="badge ${b.on?'on':'off'} ${S.newBadge===b.t?'new':''}"><div class="hex">${b.on?b.ic:I.lock}</div><b>${b.t}</b><span>${esc(b.s)}</span></div>`).join('')}</div>
       <div class="btn-row" style="margin-top:26px">
         <button class="btn ghost" id="replaceBtn">${S.placed ? 'Retake the placement test' : 'Take the placement test'}</button>
         <button class="btn ghost" id="resetBtn">Restart the demo</button>
@@ -1085,7 +1279,7 @@ function renderAll(){ renderLearn(); renderTrade(); renderLeague(); renderProfil
 
 /* ---------- lesson player ---------- */
 /* Plays a lesson (cards, then a quiz where misses cost a life and come back) or a test
-   (placement or unit test-out: each question once, no lives lost). */
+   (placement, test-out, exam, review: each question once, no capital at risk). */
 let P = null;
 const LSN = () => P.L;
 
@@ -1099,7 +1293,7 @@ function beginPlayer(o){
   renderPlayer();
 }
 function shuffled(a){ for(let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
-function setHearts(){ $('#pHearts').innerHTML = I.heart + `<span class="n">${S.hearts}</span>`; }
+function setHearts(){ $('#pHearts').innerHTML = I.wallet + `<span class="n">$${S.hearts}k</span>`; $('#pHearts').className = 'stat heart' + (S.hearts <= 1 ? ' low' : ''); }
 function progress(){
   const L = LSN();
   if(P.mode === 'test'){ $('#pBar').style.width = (P.answered / L.qs.length * 100) + '%'; return; }
@@ -1108,7 +1302,7 @@ function progress(){
 }
 function setFoot(mode){ $('#pFoot').className = 'p-foot' + (mode ? ' '+mode : ''); }
 
-function lessonLabel(L){ return `Unit ${L.unit+1} · Lesson ${L.n}`; }
+function lessonLabel(L){ return L.vault !== undefined ? `Vault · ${VAULT[L.vault].title} · Lesson ${L.n}` : `Unit ${L.unit+1} · Lesson ${L.n}`; }
 function renderPlayer(){
   setHearts(); progress(); setFoot(''); $('#fb').hidden = true;
   const btn = $('#pBtn'); btn.className = 'btn';
@@ -1121,9 +1315,9 @@ function renderPlayer(){
   } else {
     const qi = P.queue[0], q = LSN().qs[qi], n = LSN().qs.length;
     const keys = 'ABCD';
-    const block = P.kind === 'placement' ? LSN().qs.filter(x => x.u === q.u) : null;
+    const block = P.kind === 'placement' ? LSN().qs.filter(x => x.s === q.s) : null;
     const eyebrow = block
-      ? `Placement test · Unit ${q.u+1} · Question ${block.indexOf(q)+1} of ${block.length}`
+      ? `Placement · ${STAGES[q.s].title} · Question ${block.indexOf(q)+1} of ${block.length}`
       : P.mode === 'test'
       ? `${esc(LSN().title)} · Question ${P.answered+1} of ${n}`
       : `Question ${P.correct+1} of ${n}${P.missed.has(qi)?'<span class="retry">· Try again</span>':''}`;
@@ -1160,6 +1354,8 @@ function onPrimary(){
     const opts = $('#pBody').querySelectorAll('.opt');
     opts.forEach(o => { const oi = +o.dataset.i; o.disabled = true; if(oi===q.a) o.classList.add('right'); else if(oi===P.sel) o.classList.add('wrong'); });
     if(test){ P.right[qi] = ok; P.answered++; }
+    if(!ok && P.kind !== 'placement' && !S.missed.includes(q.q)) S.missed.unshift(q.q); // saved for the daily review
+    if(ok && P.kind === 'review') S.missed = S.missed.filter(t => t !== q.q);
     if(ok){
       P.correct++; if(!test) P.xp += P.missed.has(qi) ? 5 : 10;
       setFoot('ok'); $('#fbIc').innerHTML = I.check;
@@ -1170,7 +1366,7 @@ function onPrimary(){
       P.mistakes++; P.missed.add(qi);
       if(!test){ S.hearts = Math.max(0, S.hearts-1); setHearts(); }
       setFoot('bad'); $('#fbIc').innerHTML = I.x;
-      $('#fbTitle').textContent = 'Not quite';
+      $('#fbTitle').textContent = test ? 'Not quite' : 'Not quite · −$1k capital';
       $('#fbText').textContent = 'Answer: ' + q.o[q.a] + '. ' + q.e;
       btn.className = 'btn bad'; btn.textContent = test ? 'Continue' : 'Got it';
     }
@@ -1183,9 +1379,9 @@ function onPrimary(){
   // Placement goes unit by unit and stops at the first unit you don't pass.
   if(P.kind === 'placement'){
     const L = LSN(), next = P.queue[0];
-    if(next === undefined || L.qs[next].u !== q.u){
-      const right = L.qs.filter((x, i) => x.u === q.u && P.right[i]).length;
-      if(right < PLACE_PASS){ finishTest(); return; }
+    if(next === undefined || L.qs[next].s !== q.s){
+      const asked = L.qs.filter(x => x.s === q.s).length, right = L.qs.filter((x, i) => x.s === q.s && P.right[i]).length;
+      if(right < asked - PLACE_MISS_OK){ finishTest(); return; }
     }
   }
   if(P.queue.length === 0){ test ? finishTest() : finish(); return; }
@@ -1211,29 +1407,44 @@ function closePlayer(){
   renderLearn();
 }
 
-/* ---------- tests: placement and unit test-out ---------- */
+/* ---------- tests: placement, unit test-out, stage exam, daily review ---------- */
 function markTestedOut(from, to){ for(let i = from; i < to; i++) if(!S.testedOut.includes(i)) S.testedOut.push(i); }
+function placementQuestions(){
+  // PLACE_PER_UNIT random questions per unit, kept in lesson order, grouped by stage
+  return UNITS.flatMap((U, u) => shuffled(U.placement.slice()).slice(0, PLACE_PER_UNIT).sort((a, b) => a.n - b.n).map(x => Object.assign({u, s:U.stage}, x)));
+}
+function addPoints(n){ S.xpTotal += n; S.weekly += n; S.rating += Math.round(n * 0.52); if(!S.streakToday){ S.streak++; S.streakToday = true; } }
 function finishTest(){
-  const r = P.right, kind = P.kind, unit = P.unit, qs = P.L.qs;
+  const r = P.right, kind = P.kind, unit = P.unit, qs = P.L.qs, stage = P.stage;
   P = null; $('#player').hidden = true; $('#pHearts').hidden = false;
   if(kind === 'placement'){
-    // Skip each unit with PLACE_PASS+ of its 5 right; at the first unit you don't pass, start at the first lesson you missed.
+    // Skip each stage where you miss at most PLACE_MISS_OK questions; in the first stage you don't pass, start at the first lesson you missed.
     let start = LESSONS.length; const scores = [];
-    for(let u = 0; u < UNITS.length; u++){
-      const asked = qs.map((x, i) => i).filter(i => qs[i].u === u && r[i] !== undefined);
+    for(let si = 0; si < STAGES.length; si++){
+      const asked = qs.map((x, i) => i).filter(i => qs[i].s === si && r[i] !== undefined);
       if(!asked.length) break;
-      const right = asked.filter(i => r[i]).length;
-      scores.push({u, right, of:asked.length, pass:right >= PLACE_PASS});
-      if(right < PLACE_PASS){ start = UNIT_START[u] + qs[asked.find(i => !r[i])].n - 1; break; }
+      const right = asked.filter(i => r[i]).length, pass = right >= asked.length - PLACE_MISS_OK;
+      scores.push({si, right, of:asked.length, pass});
+      if(!pass){ const m = qs[asked.find(i => !r[i])]; start = UNIT_START[m.u] + m.n - 1; break; }
     }
     const from = S.onboarded ? S.done : 0, moved = !S.onboarded || start > S.done;
     if(moved){ markTestedOut(from, start); S.done = start; }
     S.placed = true; S.pick = null;
     showOnboard('placed', {scores, start, skipped: moved ? start - from : 0, moved});
-  } else {
+  } else if(kind === 'testout'){
     const score = r.filter(Boolean).length, pass = score >= 6;
     if(pass){ const target = UNIT_START[unit+1]; markTestedOut(S.done, target); S.done = Math.max(S.done, target); S.pick = null; }
     showOnboard('testout', {score, pass, unit});
+  } else if(kind === 'exam'){
+    const score = r.filter(Boolean).length, of = qs.length, pass = score >= EXAM_PASS, st = STAGES[stage];
+    const prev = S.certs[st.id];
+    if(pass && (!prev || score > prev.score)) S.certs[st.id] = {score, of, when:'October 2026'};
+    if(pass) addPoints(100);
+    showOnboard('exam', {score, of, pass, stage, first: pass && !prev});
+  } else if(kind === 'review'){
+    const score = r.filter(Boolean).length, pts = score * 5;
+    addPoints(pts);
+    showOnboard('review', {score, of:qs.length, pts});
   }
   renderAll();
 }
@@ -1269,23 +1480,23 @@ function showOnboard(step, data = {}){
   } else if(step === 'intro'){
     body.innerHTML = `<div class="wm">Bullpen</div>
       <h1>Placement test</h1>
-      <p class="sub">5 questions per unit, about 1 minute each. You won't lose any lives.</p>
+      <p class="sub">${PLACE_PER_UNIT} questions per unit, stage by stage. No capital at risk.</p>
       <div class="ob-card"><span class="eyebrow" style="color:var(--on-banner-2)">How it works</span>
         <h2>Start where you need to</h2>
-        <p>The test goes unit by unit, from the basics up to options. Get ${PLACE_PASS} of a unit's 5 right and you move on to the next. The first unit you don't pass is where you start, at the first lesson you missed.</p></div>`;
+        <p>The test works through the stages in order: ${STAGES.map(st => st.title).join(', ')}. Miss no more than ${PLACE_MISS_OK} in a stage and you skip it. In the first stage you don't pass, you start at the first lesson you missed.</p></div>`;
     foot.innerHTML = `<button class="btn" id="obStart">Start the test</button><button class="text-btn" id="obSkip">${S.onboarded ? 'Not now' : 'Skip it and start from the beginning'}</button>`;
     $('#obStart').onclick = () => {
       $('#onboard').hidden = true;
-      startTest('placement', 'Placement test', PLACEMENT_BLOCKS.flatMap((b, u) => b.map(x => Object.assign({u}, x))));
+      startTest('placement', 'Placement test', placementQuestions());
     };
     $('#obSkip').onclick = () => { if(!S.onboarded){ S.done = 0; S.testedOut = []; } closeOnboard(); };
   } else if(step === 'placed'){
     const at = data.start < LESSONS.length ? LESSONS[data.start] : null;
     const title = !data.moved ? "You're already past that point" : at ? `You start at Unit ${at.unit+1}` : "You've tested out of everything";
-    const sub = !data.moved ? 'Keep going from where you are.' : at ? `Lesson ${at.n}: ${at.title}` : `${NEXT_UNIT} (Unit ${UNITS.length+1}) comes next. Until then, try a trading competition.`;
+    const sub = !data.moved ? 'Keep going from where you are.' : at ? `${UNITS[at.unit].title} · Lesson ${at.n}: ${at.title}` : `${NEXT_UNIT} comes next. Until then, try the Vault or a trading competition.`;
     body.innerHTML = `<div class="wm">Bullpen</div>
       <h1>${title}</h1><p class="sub">${sub}</p>
-      <ul class="trophies">${data.scores.map(x => `<li><span class="rk medal ${x.pass ? 'm1' : 'm2'}">${x.pass ? '✓' : x.u+1}</span><span><b>Unit ${x.u+1} · ${UNITS[x.u].title}</b><span>${x.right} of ${x.of} right · ${x.pass ? 'skipped' : 'start here'}</span></span></li>`).join('')}</ul>
+      <ul class="trophies">${data.scores.map(x => `<li><span class="rk medal ${x.pass ? 'm1' : 'm2'}">${x.pass ? '✓' : x.si+1}</span><span><b>Stage ${x.si+1} · ${STAGES[x.si].title}</b><span>${x.right} of ${x.of} right · ${x.pass ? 'skipped' : 'start here'}</span></span></li>`).join('')}</ul>
       <div class="tiles"><div class="tile str"><div class="t-h">Lessons skipped</div><div class="t-v">${data.skipped}</div></div></div>
       ${data.skipped ? '<div class="ob-note">Lessons you skipped stay open. Tap any of them to practise.</div>' : ''}`;
     foot.innerHTML = at || !data.moved ? '<button class="btn" id="obGo">Start learning</button>'
@@ -1295,9 +1506,24 @@ function showOnboard(step, data = {}){
   } else if(step === 'testout'){
     const u = data.unit;
     body.innerHTML = `<div class="wm">Bullpen</div>
-      <h1>${data.pass ? `Unit ${u+1} skipped` : 'Not yet'}</h1>
-      <p class="sub">${data.pass ? `${data.score} of 8 right. You're on to Unit ${u+2}: ${UNITS[u+1].title}.` : `${data.score} of 8 right. You need 6 to skip. Keep going with Unit ${u+1} and try again any time.`}</p>
-      ${data.pass ? '<div class="ob-note">Unit ' + (u+1) + ' lessons stay open if you want to practise.</div>' : ''}`;
+      <h1>${data.pass ? `${UNITS[u].title} skipped` : 'Not yet'}</h1>
+      <p class="sub">${data.pass ? `${data.score} of 8 right. You're on to ${UNITS[u+1].title}.` : `${data.score} of 8 right. You need 6 to skip. Keep going with ${UNITS[u].title} and try again any time.`}</p>
+      ${data.pass ? `<div class="ob-note">${UNITS[u].title} lessons stay open if you want to practise.</div>` : ''}`;
+    foot.innerHTML = '<button class="btn" id="obGo">Back to lessons</button>';
+    $('#obGo').onclick = closeOnboard;
+  } else if(step === 'exam'){
+    const st = STAGES[data.stage];
+    body.innerHTML = `<div class="wm">Bullpen</div>
+      <h1>${data.pass ? 'You passed' : 'Not this time'}</h1>
+      <p class="sub">${data.score} of ${data.of} right on the ${st.title} exam. ${data.pass ? '+100 points.' : `You need ${EXAM_PASS}. Review the stage and try again any time.`}</p>
+      ${data.pass ? `<div class="cert-big">${I.cert}<div class="k">Bullpen certificate</div><h2>${st.title}</h2><p>new.player · ${data.score}/${data.of} · October 2026</p></div>` : ''}`;
+    foot.innerHTML = (data.pass ? '<button class="btn" id="obShareCert">Copy a share message</button>' : '') + '<button class="btn ghost" id="obGo">Back to lessons</button><div class="copy-msg" id="obMsg"></div>';
+    $('#obGo').onclick = closeOnboard;
+    const sc = $('#obShareCert'); if(sc) sc.onclick = () => copyText(`I just earned the Bullpen ${st.title} certificate (${data.score}/${data.of}). Think you can beat it?`, $('#obMsg'), 'Copied. Paste it into WhatsApp, Instagram or LinkedIn.');
+  } else if(step === 'review'){
+    body.innerHTML = `<div class="wm">Bullpen</div>
+      <h1>Review done</h1>
+      <p class="sub">${data.score} of ${data.of} right · +${data.pts} points. ${S.missed.length ? `${S.missed.length} question${S.missed.length === 1 ? '' : 's'} still saved for next time.` : 'No saved mistakes left.'}</p>`;
     foot.innerHTML = '<button class="btn" id="obGo">Back to lessons</button>';
     $('#obGo').onclick = closeOnboard;
   } else if(step === 'invite'){
@@ -1318,36 +1544,35 @@ function showOnboard(step, data = {}){
 function finish(){
   const bonus = 15;
   P.xp += bonus;
-  const prevWeek = weekRank(S.weekly), prevAub = aubRank(S.rating);
-  S.xpTotal += P.xp; S.weekly += P.xp; S.rating += Math.round(P.xp * 0.52);
-  if(!S.streakToday){ S.streak++; S.streakToday = true; }
-  const L = LSN(), first = P.lesson === S.done, badge = first ? L.badge : null;
-  if(first) S.done = P.lesson + 1;
+  const prevWeek = weekRank(S.weekly), prevAub = aubRank(S.rating), prevLevel = levelOf(S.xpTotal);
+  const L = LSN(), vault = P.vault;
+  let first;
+  if(vault){ const id = VAULT[vault.v].id; first = (S.vault[id] || 0) === vault.j; if(first) S.vault[id] = vault.j + 1; S.bonus += P.xp; }
+  else { first = P.lesson === S.done; if(first) S.done = P.lesson + 1; }
+  addPoints(P.xp);
+  const badge = first ? L.badge : null;
   if(badge) S.newBadge = badge.name;
   S.pick = null;
-  const acc = Math.round(L.qs.length / (L.qs.length + P.mistakes) * 100);
-  S.last = {lesson:P.lesson, xp:P.xp, acc, prevWeek, newWeek:weekRank(S.weekly), prevAub, mistakes:P.mistakes};
+  const acc = Math.round(L.qs.length / (L.qs.length + P.mistakes) * 100), level = levelOf(S.xpTotal);
+  S.last = {lesson:P.lesson, title:L.title, xp:P.xp, acc, prevWeek, newWeek:weekRank(S.weekly), prevAub, mistakes:P.mistakes, n:L.qs.length};
   $('#pBar').style.width = '100%';
   $('#player').hidden = true;
   renderAll();
   $('#resBody').innerHTML = `
     <svg class="res-art" viewBox="0 0 160 120" aria-hidden="true">
-      <line x1="34" y1="58" x2="34" y2="112" stroke="var(--bull-deep)" stroke-width="4" stroke-linecap="round"/>
-      <rect x="20" y="70" width="28" height="34" rx="8" fill="var(--bull)"/>
-      <line x1="80" y1="30" x2="80" y2="104" stroke="var(--bull-deep)" stroke-width="4" stroke-linecap="round"/>
-      <rect x="66" y="42" width="28" height="50" rx="8" fill="var(--bull)"/>
-      <line x1="126" y1="6" x2="126" y2="84" stroke="var(--gold-deep)" stroke-width="4" stroke-linecap="round"/>
-      <rect x="112" y="14" width="28" height="60" rx="8" fill="var(--gold)"/>
-      <path d="M120 44l5 5 9-10" fill="none" stroke="var(--on-gold)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M8 108 L48 84 L80 92 L116 52 L152 18" fill="none" stroke="var(--bull)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="152" cy="18" r="9" fill="var(--gold)"/>
+      <path d="M147.5 18l3 3 5-6" fill="none" stroke="var(--on-gold)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
     <h1>Lesson complete</h1>
-    <div class="sub">${L.title} · Unit ${L.unit+1}</div>
+    <div class="sub">${L.title} · ${vault ? 'Vault' : 'Unit ' + (L.unit+1)}</div>
     <div class="tiles">
-      <div class="tile xp"><div class="t-h">Total XP</div><div class="t-v">${I.bolt}<span id="xpCount">0</span></div></div>
-      <div class="tile acc"><div class="t-h">Accuracy</div><div class="t-v">${acc}%</div></div>
+      <div class="tile xp"><div class="t-h">Points</div><div class="t-v">${I.up}<span id="xpCount">0</span></div></div>
+      <div class="tile acc"><div class="t-h">Hit rate</div><div class="t-v">${acc}%</div></div>
       <div class="tile str"><div class="t-h">Streak</div><div class="t-v">${I.flame}${S.streak}</div></div>
     </div>
-    ${badge ? `<div class="unlock"><div class="hex">${I[badge.icon]}</div><div><b>Badge unlocked: ${badge.name}</b><span>For finishing ${L.cards.length ? L.title : 'Unit ' + (L.unit+1)}</span></div></div>` : ''}`;
+    ${level.i > prevLevel.i ? `<div class="promo">${I.up}<span>Promoted: you're now a ${level.title}</span></div>` : ''}
+    ${badge ? `<div class="unlock"><div class="hex">${I[badge.icon]}</div><div><b>Badge unlocked: ${badge.name}</b><span>For clearing ${vault ? VAULT[vault.v].title : UNITS[L.unit].title}</span></div></div>` : ''}`;
   $('#result').hidden = false;
   countUp($('#xpCount'), P.xp);
 }
@@ -1361,9 +1586,9 @@ $('#resShare').onclick = openShare;
 
 function shareText(){
   const L = S.last;
-  const n = LESSONS[L ? L.lesson : 2].qs.length, title = LESSONS[L ? L.lesson : 2].title;
+  const n = L ? L.n : 5, title = L ? L.title : 'Diversification';
   const score = `${n}/${n + (L?L.mistakes:0)}`;
-  return `I just finished the ${title} lesson on Bullpen (${score} answers right, +${L?L.xp:0} XP). I'm #${L?L.newWeek:weekRank(S.weekly)} in my Gold League this week. Think you can beat me?`;
+  return `I just finished the ${title} lesson on Bullpen (${score} answers right, +${L?L.xp:0} points). I'm #${L?L.newWeek:weekRank(S.weekly)} in my ${TIERS[MY_TIER]} league this week. Think you can beat me?`;
 }
 function openShare(){
   const L = S.last;
@@ -1375,8 +1600,8 @@ function openShare(){
     </svg>
     <div class="wm">Bullpen</div>
     <div class="sc-big">#${L?L.newWeek:weekRank(S.weekly)}</div>
-    <div class="sc-sub">in Gold League this week</div>
-    <div class="sc-row"><span>${LESSONS[L ? L.lesson : 2].title} ✓</span><span>+${L?L.xp:0} XP</span><span>${S.streak}-day streak</span><span>AUB</span></div>`;
+    <div class="sc-sub">in the ${TIERS[MY_TIER]} league this week</div>
+    <div class="sc-row"><span>${L ? esc(L.title) : 'Diversification'} ✓</span><span>+${L?L.xp:0} pts</span><span>${S.streak}-day streak</span><span>${levelOf(S.xpTotal).title}</span></div>`;
   $('#copyMsg').textContent = '';
   $('#shareModal').hidden = false;
 }
