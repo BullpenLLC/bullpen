@@ -76,3 +76,4 @@ See the checklists in `docs/CURRICULUM.md` (content) and `docs/DEVELOPMENT_PLAN.
 - In progress: Crypto and other assets (writing). Then the Vault: Statements in depth, Health-check ratios,
   Returns ratios, Valuing a company, Futures basics, Greeks in depth.
 - Crypto and other assets reviewed, registered, tested, committed. Stage 3 complete (5 units). Next: Vault batch.
+- Statements in depth (Vault) reviewed, registered, tested, committed. Health-check ratios being written.
