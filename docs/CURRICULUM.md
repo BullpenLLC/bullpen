@@ -64,7 +64,7 @@ From what an option is to multi-leg strategies.
 | Health-check ratios | Liquidity · Leverage and interest cover · Turnover and efficiency · Working capital and the cash cycle · Quality of earnings | ✅ |
 | Returns ratios | ROE · ROA · ROIC · The DuPont breakdown · Comparing returns across industries | ✅ |
 | Valuing a company | Intrinsic vs market value · Forecasting free cash flow · Discount rates: WACC and CAPM · Terminal value and sensitivity · Comparables and margin of safety | ✅ |
-| Futures basics | What a futures contract is · Margin and marking to market · Hedgers and speculators · Contango and backwardation · Crypto perpetuals and liquidation | ⏳ |
+| Futures basics | What a futures contract is · Margin and marking to market · Hedgers and speculators · Contango and backwardation · Crypto perpetuals and liquidation | ✅ |
 | Greeks in depth | Gamma · Vega and implied volatility · Rho and early exercise · Put-call parity · Skew and the VIX | ⏳ |
 
 ## Levels, leagues and rewards
