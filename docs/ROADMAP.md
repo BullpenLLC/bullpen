@@ -2,9 +2,9 @@
 
 Where we are and what's next. Tick a box in the same pull request that finishes the work, so this page is always current.
 
-**Last updated:** 21 October 2026
-**Now:** Phase 1, the clickable prototype, v0.2: redesigned (course list, practice capital, market-cap leagues, investor levels), stages with exams and certificates, the Vault, a Guide and a daily review. 7 main units and 2 Vault units live; the rest are being written (see docs/CURRICULUM.md).
-**Next:** Finish the remaining units in docs/CURRICULUM.md, then student interviews at AUB and IC and a finance professor's review.
+**Last updated:** 26 October 2026
+**Now:** Phase 1, the clickable prototype, v0.2: every unit in docs/CURRICULUM.md is written, reviewed and in the local build (19 main units, 8 Vault units). Not yet on the live link: GitHub push is waiting for the founder sign-in.
+**Next:** Push and merge to publish, finance professor review, then student interviews at AUB and IC.
 **Live prototype:** https://bullpenllc.github.io/bullpen/prototype/
 
 ## How the pieces fit
@@ -53,7 +53,7 @@ The prototype's code will not become the real app. It is a sketch for testing. W
 - [x] Stage exams and certificates; stage-by-stage placement; daily review; the Vault; in-app Guide
 - [x] Content in one file per unit; tools/check-content.js; GitHub Action on every PR
 - [x] docs/CURRICULUM.md and docs/DEVELOPMENT_PLAN.md
-- [ ] All remaining units in docs/CURRICULUM.md (18 main, 8 Vault)
+- [x] All units in docs/CURRICULUM.md (19 main, 8 Vault)
 - [x] Put the prototype online so anyone can open it with a link (phones included): https://bullpenllc.github.io/bullpen/prototype/
 - [ ] Finance professor reviews all six units
 

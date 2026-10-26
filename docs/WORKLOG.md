@@ -81,3 +81,4 @@ See the checklists in `docs/CURRICULUM.md` (content) and `docs/DEVELOPMENT_PLAN.
 - Returns ratios (Vault) reviewed, registered, tested, committed. Valuing a company being written; then Futures basics, Greeks in depth.
 - Valuing a company (Vault) reviewed, registered, tested, committed. Futures basics in review; Greeks in depth being written.
 - Futures basics (Vault) reviewed, registered, tested, committed. Greeks in depth being written (last unit).
+- Greeks in depth reviewed, registered, tested. ALL curriculum units are done (19 main, 8 Vault). Nothing left to write. Only blocker: GitHub sign-in (git push), then PR dev/curriculum-v2 -> main and merge.

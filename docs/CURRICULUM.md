@@ -65,7 +65,7 @@ From what an option is to multi-leg strategies.
 | Returns ratios | ROE · ROA · ROIC · The DuPont breakdown · Comparing returns across industries | ✅ |
 | Valuing a company | Intrinsic vs market value · Forecasting free cash flow · Discount rates: WACC and CAPM · Terminal value and sensitivity · Comparables and margin of safety | ✅ |
 | Futures basics | What a futures contract is · Margin and marking to market · Hedgers and speculators · Contango and backwardation · Crypto perpetuals and liquidation | ✅ |
-| Greeks in depth | Gamma · Vega and implied volatility · Rho and early exercise · Put-call parity · Skew and the VIX | ⏳ |
+| Greeks in depth | Gamma · Vega and implied volatility · Rho and early exercise · Put-call parity · Skew and the VIX | ✅ |
 
 ## Levels, leagues and rewards
 - **Points:** 10 per first-try right answer, 5 on a retry, +15 for finishing a lesson, 5 per right answer in a review, +100 for passing a stage exam.
