@@ -40,8 +40,8 @@ Measuring risk (which the season score is built on), reading price trends, and t
 |---|---|---|
 | Measuring risk | Volatility and standard deviation · Drawdowns · Beta and correlation · The Sharpe ratio · Position sizing and stop-losses | ✅ |
 | Reading price trends | Trends and trendlines · Support and resistance · Moving averages · Momentum: RSI and MACD · Volume and chart limits | ✅ |
-| Short selling and margin | Buying on margin · Margin calls · How short selling works · Short squeezes · Liquidity and slippage | ✍️ |
-| Market psychology | Loss aversion · Overconfidence · Herding, FOMO and bubbles · Anchoring and confirmation · Recency and mental accounting | ✍️ |
+| Short selling and margin | Buying on margin · Margin calls · How short selling works · Short squeezes · Liquidity and slippage | ✅ |
+| Market psychology | Loss aversion · Overconfidence · Herding, FOMO and bubbles · Anchoring and confirmation · Recency and mental accounting | ✅ |
 | Crypto and other assets | Bitcoin and blockchains · Stablecoins and custody · Gold and commodities · Real estate and REITs · Scams and red flags | ✍️ |
 
 ## Stage 4 · Options (Advanced)

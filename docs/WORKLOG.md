@@ -69,3 +69,9 @@ See the checklists in `docs/CURRICULUM.md` (content) and `docs/DEVELOPMENT_PLAN.
   Health-check ratios, Returns ratios (any partial files in prototype/content/ are unreviewed drafts).
   Not started: Valuing a company (DCF), Futures basics, Greeks in depth.
   GitHub login still needed before anything is published.
+
+### 26 Oct 2026, session 4
+- Resumed by the founder, max 2 agents at a time. Short selling and margin and Market psychology written,
+  reviewed, registered, browser-tested, committed (Stage 3 now has 4 of 5 units; 18 main units total when Crypto lands).
+- In progress: Crypto and other assets (writing). Then the Vault: Statements in depth, Health-check ratios,
+  Returns ratios, Valuing a company, Futures basics, Greeks in depth.
