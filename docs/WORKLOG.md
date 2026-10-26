@@ -79,3 +79,4 @@ See the checklists in `docs/CURRICULUM.md` (content) and `docs/DEVELOPMENT_PLAN.
 - Statements in depth (Vault) reviewed, registered, tested, committed. Health-check ratios being written.
 - Health-check ratios (Vault) reviewed, registered, tested, committed. Returns ratios being written.
 - Returns ratios (Vault) reviewed, registered, tested, committed. Valuing a company being written; then Futures basics, Greeks in depth.
+- Valuing a company (Vault) reviewed, registered, tested, committed. Futures basics in review; Greeks in depth being written.

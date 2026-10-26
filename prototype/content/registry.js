@@ -16,7 +16,7 @@ const STAGES = [
 ];
 
 /* The Vault: optional deep dives into finance fundamentals. Bonus points, own badges, not in the placement test. */
-const VAULT = [UNIT_ACCOUNTS, UNIT_TVM, UNIT_STATEMENTS, UNIT_HEALTH, UNIT_RETURNS];
+const VAULT = [UNIT_ACCOUNTS, UNIT_TVM, UNIT_STATEMENTS, UNIT_HEALTH, UNIT_RETURNS, UNIT_DCF];
 
 /* Teaser shown after the last unit of the main path. */
 const NEXT_UNIT = 'ETFs in depth, Bonds, Trading and risk, and more';
