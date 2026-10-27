@@ -89,3 +89,5 @@ See the checklists in `docs/CURRICULUM.md` (content) and `docs/DEVELOPMENT_PLAN.
 - Class mode preview built in the prototype (teacher space, assign + due dates, class progress, CSV grades, class tournament, student join with school-paid Pro). Next: institutional plan + mock admin screen, then the trading section.
 - Institution plan (docs/INSTITUTIONS.md) and mock admin screen added. Next: the trading section.
 - Trading section built: working practice account in the Trade tab (sample prices, market + limit orders, positions, season score; competitions rank it). Not yet: short selling, margin, options, live prices.
+
+- Class mode, institution preview and trading section pushed straight to main (fast-forward, founder-authorised, no PR) and live. The saved GitHub token is rejected by the REST API even when git push works, so PRs need the web page until the login is refreshed.
