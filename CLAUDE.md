@@ -6,8 +6,9 @@ works, in short lessons with quizzes, then lets them compete in a paper-trading 
 The only thing built so far is a clickable prototype, live at
 https://bullpenllc.github.io/bullpen/prototype/ (GitHub Pages, published from `main`):
 `prototype/index.html` (the app) plus `prototype/content/*.js` (one file per unit). Progress is
-saved in the browser on that device only (localStorage, never sent anywhere); "Restart the demo"
-wipes it. All other players and numbers are fake.
+saved in the browser on that device only (localStorage, never sent anywhere), by lesson name so
+reordering units doesn't shift it; "Restart the demo" wipes it. A new player starts from zero (no streak,
+points, trophies; rating 1,000). All other players and numbers are fake.
 
 ## Key docs (read these first)
 - `docs/CURRICULUM.md`: every stage, unit and lesson, with status. The source of truth for content.
@@ -28,12 +29,13 @@ wipes it. All other players and numbers are fake.
      (missed questions first, no capital at risk).
    - **Vault:** optional deep dives with Vault points and badges, open in any order.
    - **Guide:** the whole path, assessments, investor levels, leagues and practice-capital rules.
-3. **Lessons:** 4 cards then 5 questions, options shuffled. A miss costs $1k of practice capital
+3. **Lessons:** 4 cards then 5 questions, options shuffled. A flag button reports a problem with the exact
+   card or question (saved on the device, listed on Profile, copied as text to send on WhatsApp). A miss costs $1k of practice capital
    ($5k to start) and the question comes back; out of capital = "margin call". Points: 10 first try,
    5 on retry, +15 to finish. The first card's "Unit N · Lesson M" label is computed by the app.
 4. **Result:** points, hit rate, streak, promotions (investor titles Intern → Partner), badges.
-5. **League** tab: weekly Mid-cap league of 30 (Penny / Small-cap / Mid-cap / Large-cap / Blue-chip),
-   plus AUB, Lebanon and Global boards by Bullpen rating.
+5. **League** tab: weekly league of 30 (Penny / Small-cap / Mid-cap / Large-cap / Blue-chip). New players
+   start in Penny, which has no demotion zone. Plus AUB, Lebanon and Global boards by Bullpen rating.
 6. **Trade** tab: competitions (join by code: AUB-CUP, FINA-310, IC-2027, or invite link; create a
    tournament: free up to 30 players and a month, bigger or semester-long uses a credit), clans
    (search, join/request, create) and a sample portfolio. Options become a tournament asset after the

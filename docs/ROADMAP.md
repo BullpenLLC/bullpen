@@ -22,7 +22,7 @@ The prototype's code will not become the real app. It is a sketch for testing. W
 - [x] GitHub repo (`BullpenLLC/bullpen`) with `main` and pull requests
 - [x] Project brief and teamwork guide (`docs/`)
 - [ ] Make the GitHub repo private
-- [ ] Add Alex's GitHub account as a collaborator (repo Settings → Collaborators)
+- [x] Add Alex's GitHub account as a collaborator (repo Settings → Collaborators)
 - [ ] LLC and operating agreement
 - [ ] Shared business bank account
 - [ ] D-U-N-S number (needed for the Apple developer account)
@@ -55,6 +55,7 @@ The prototype's code will not become the real app. It is a sketch for testing. W
 - [x] docs/CURRICULUM.md and docs/DEVELOPMENT_PLAN.md
 - [x] All units in docs/CURRICULUM.md (19 main, 8 Vault)
 - [x] Put the prototype online so anyone can open it with a link (phones included): https://bullpenllc.github.io/bullpen/prototype/
+- [x] Ready for interviews: new players start from zero, saved progress survives reordering, "Report a problem" on every card and question
 - [ ] Finance professor reviews all six units
 
 ## Phase 2: Test demand (weeks 1-3)
