@@ -2,9 +2,9 @@
 
 Where we are and what's next. Tick a box in the same pull request that finishes the work, so this page is always current.
 
-**Last updated:** 21 October 2026
-**Now:** Phase 1, the clickable prototype. Units 1-6 are complete (36 lessons, including three options units), with an adaptive placement test, competitions and clans.
-**Next:** Student interviews at AUB and IC, a finance professor's review of all six units, and Unit 7 (Building a portfolio).
+**Last updated:** 26 October 2026
+**Now:** Phase 1, the clickable prototype, v0.2: every unit in docs/CURRICULUM.md is written, reviewed and in the local build (19 main units, 8 Vault units). Not yet on the live link: GitHub push is waiting for the founder sign-in.
+**Next:** Push and merge to publish, finance professor review, then student interviews at AUB and IC.
 **Live prototype:** https://bullpenllc.github.io/bullpen/prototype/
 
 ## How the pieces fit
@@ -48,7 +48,12 @@ The prototype's code will not become the real app. It is a sketch for testing. W
 - [x] Unit 6: Reading company accounts
 - [x] Adaptive placement test across all units; answer options shuffled
 - [x] Options unlock as a tournament asset after Unit 3
-- [ ] Unit 7: Building a portfolio
+- [x] Building a portfolio, Valuation ratios (incl. PEG), Time value of money (Vault)
+- [x] Redesign away from Duolingo: course list, flat UI, practice capital, market-cap leagues, investor levels
+- [x] Stage exams and certificates; stage-by-stage placement; daily review; the Vault; in-app Guide
+- [x] Content in one file per unit; tools/check-content.js; GitHub Action on every PR
+- [x] docs/CURRICULUM.md and docs/DEVELOPMENT_PLAN.md
+- [x] All units in docs/CURRICULUM.md (19 main, 8 Vault)
 - [x] Put the prototype online so anyone can open it with a link (phones included): https://bullpenllc.github.io/bullpen/prototype/
 - [ ] Finance professor reviews all six units
 
