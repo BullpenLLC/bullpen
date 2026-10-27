@@ -227,6 +227,15 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
 .player{position:absolute; inset:0; background:var(--surface); display:flex; flex-direction:column; z-index:20}
 .p-head{display:flex; align-items:center; gap:12px; padding-block:16px 8px}
 .icon-btn{background:none; border:0; padding:6px; border-radius:10px; color:var(--ink-2); display:grid; place-items:center}
+/* Report a problem */
+.rp-where{margin-top:6px; padding:10px 12px; border-radius:12px; background:var(--surface-2); color:var(--ink-2); font-size:13px; overflow-wrap:anywhere}
+.rp-reasons{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px}
+.rp-reasons button{border:2px solid var(--line); background:var(--surface); border-radius:12px; padding:8px 12px; font-weight:600; font-size:14px}
+.rp-reasons button[aria-pressed="true"]{border-color:var(--sky); background:var(--sky-tint); color:var(--sky)}
+textarea.field{min-height:84px; resize:vertical; line-height:1.4}
+.rp-list{list-style:none; margin:12px 0 0; padding:0; display:grid; gap:8px}
+.rp-list li{padding:10px 12px; border-radius:14px; background:var(--surface-2); font-size:13px; color:var(--ink-2); overflow-wrap:anywhere}
+.rp-list b{display:block; color:var(--ink); font-size:14px}
 .icon-btn svg{width:24px; height:24px}
 .bar{flex:1; height:16px; background:var(--surface-2); border-radius:99px; overflow:hidden}
 .bar i{display:block; height:100%; width:0; background:var(--bull); border-radius:99px; transition:width .35s ease; position:relative}
@@ -534,6 +543,7 @@ h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; line-heig
     <header class="p-head pad">
       <button class="icon-btn" id="pClose" aria-label="Leave lesson"></button>
       <div class="bar" role="progressbar" aria-label="Lesson progress"><i id="pBar"></i></div>
+      <button class="icon-btn" id="pReport" aria-label="Report a problem with this screen" title="Report a problem"></button>
       <div class="stat heart" id="pHearts"></div>
     </header>
     <div class="p-body pad" id="pBody"></div>
@@ -683,11 +693,15 @@ VAULT.forEach((U, v) => U.lessons.forEach((L, j) => { L.vault = v; L.n = j + 1; 
 /* every question by its text, for the daily review */
 const QMAP = new Map();
 UNITS.concat(VAULT).forEach(U => U.lessons.forEach(L => L.qs.forEach(q => QMAP.set(q.q, q))));
+/* where every question comes from, so a problem report from a test or review names the exact lesson */
+const QSRC = new Map();
+UNITS.concat(VAULT).forEach(U => U.lessons.forEach(L => L.qs.forEach((q, i) => QSRC.set(q.q, `${U.title} · ${L.title} · question ${i+1}`))));
+UNITS.forEach(U => (U.placement || []).forEach((q, i) => QSRC.set(q.q, `${U.title} · placement question ${i+1}`)));
 /* investor titles earned with points, and the weekly league ladder */
 const LEVELS = [[0,'Intern'],[500,'Analyst'],[1500,'Associate'],[3500,'Vice President'],[7000,'Director'],[12000,'Portfolio Manager'],[20000,'Partner']];
 function levelOf(pts){ let i = 0; while(i + 1 < LEVELS.length && pts >= LEVELS[i+1][0]) i++; return {i, title:LEVELS[i][1], min:LEVELS[i][0], next:LEVELS[i+1] || null}; }
 const TIERS = ['Penny','Small-cap','Mid-cap','Large-cap','Blue-chip'];
-const MY_TIER = 2;
+const MY_TIER = 0; // new players start in the bottom league
 const LESSONS = [], UNIT_START = [];
 UNITS.forEach((U, u) => {
   UNIT_START.push(LESSONS.length);
@@ -708,11 +722,13 @@ const LEB = [['karim99','LAU',1902],['nour.h','AUB',1720],['christa.l','USJ',171
 const GLOBAL = [['finn.o','UK',2214],['layla.q','AE',2187],['omar.s','SA',2150],['karim99','LB',1902],['hana.m','JO',1880],['youssef.e','EG',1861]];
 
 /* ---------- state ---------- */
-const INITIAL = {streak:7, streakToday:false, hearts:5, xpTotal:1240, weekly:215, rating:1388, done:0, tab:'learn', view:'week', last:null, wait:false, newBadge:null, pick:null,
+/* A brand-new player starts from nothing: no streak, no points, the starting league, a 1,000 rating
+   (the starting value in DEVELOPMENT_PLAN.md) and no trophies. Other players stay as sample data. */
+const INITIAL = {streak:0, streakToday:false, hearts:5, xpTotal:0, weekly:0, rating:1000, done:0, reports:[], tab:'learn', view:'week', last:null, wait:false, newBadge:null, pick:null,
   onboarded:false, level:null, placed:false, testedOut:[], scrollCur:false,
   lview:'course', vault:{}, bonus:0, certs:{}, missed:[], openUnit:null,
   tview:'comps', joined:['AUB-CUP'], created:{}, credits:1, clan:null, requested:[], createdClans:[], clanQ:'', draft:null,
-  trophies:[{name:'Global Weekly Sprint', when:'Week 41, 2026', place:2, of:3880}]};
+  trophies:[]};
 /* Progress is kept in this browser only (a per-device convenience for demos), never sent anywhere.
    Storage can be blocked (private windows, previews), so every access is wrapped. */
 const SAVE_KEY = 'bullpen-demo-v2';
@@ -723,10 +739,29 @@ function loadState(){
     if(!saved || typeof saved !== 'object') return fresh;
     const st = Object.assign(fresh, saved);
     st.done = Math.min(Math.max(0, st.done | 0), 999); st.pick = null; st.last = null; st.draft = null; st.scrollCur = true;
+    if(!Array.isArray(st.reports)) st.reports = [];
+    // Newer saves name the lessons that are done, so reordering or adding units can't shift anyone's progress.
+    if(Array.isArray(saved.doneKeys)){
+      const done = new Set(saved.doneKeys), tested = new Set(saved.testedOutKeys || []);
+      const firstOpen = LESSONS.findIndex(L => !done.has(lessonKey(L)));
+      st.done = firstOpen < 0 ? LESSONS.length : firstOpen;
+      st.testedOut = LESSONS.map((L, i) => tested.has(lessonKey(L)) ? i : -1).filter(i => i >= 0 && i < st.done);
+    }
+    delete st.doneKeys; delete st.testedOutKeys;
     return st;
   } catch(e){ return fresh; }
 }
-function saveState(){ try { localStorage.setItem(SAVE_KEY, JSON.stringify(S)); } catch(e){} }
+/* A lesson's lasting name: its unit's id plus its title. Positions change when units move; this doesn't. */
+function lessonKey(L){ return UNITS[L.unit].id + ':' + L.title; }
+function saveState(){
+  try {
+    const out = Object.assign({}, S, {
+      doneKeys: LESSONS.slice(0, S.done).map(lessonKey),
+      testedOutKeys: S.testedOut.filter(i => typeof i === 'number' && LESSONS[i]).map(i => lessonKey(LESSONS[i]))
+    });
+    localStorage.setItem(SAVE_KEY, JSON.stringify(out));
+  } catch(e){}
+}
 function clearState(){ try { localStorage.removeItem(SAVE_KEY); } catch(e){} }
 let S = loadState();
 
@@ -1247,12 +1282,13 @@ function renderLeague(){
         moved = `<div class="moved near">${I.up}<span>You climbed from #${L.prevWeek} to #${L.newWeek}. ${need} more points reach the promotion zone.</span></div>`;
       }
     }
-    head = `<div class="lg-card">${I.shield}<div><h2>${TIERS[MY_TIER]} League</h2><p>Week 43 · ends in 3d 14h<br>Top 7 move up to ${TIERS[MY_TIER+1]}. Bottom 5 drop to ${TIERS[MY_TIER-1]}.</p></div></div>${moved}`;
+    head = `<div class="lg-card">${I.shield}<div><h2>${TIERS[MY_TIER]} League</h2><p>Week 43 · ends in 3d 14h<br>Top 7 move up to ${TIERS[MY_TIER+1]}. ${MY_TIER > 0 ? `Bottom 5 drop to ${TIERS[MY_TIER-1]}.` : `${TIERS[0]} is where everyone starts, so nobody drops.`}</p></div></div>${moved}`;
+    const demote = MY_TIER > 0; // the bottom league has no demotion zone
     all.forEach((p,i) => {
       const r = i+1;
       if(r === 8) list += '<li class="zone up">Promotion zone</li>';
-      if(r === 26) list += '<li class="zone down">Demotion zone</li>';
-      list += row(r, p.n, p.s, p.x, 'pts', {me:p.me, flash:p.me && L, zone: r<=7?'up':r>=26?'down':''});
+      if(r === 26 && demote) list += '<li class="zone down">Demotion zone</li>';
+      list += row(r, p.n, p.s, p.x, 'pts', {me:p.me, flash:p.me && L, zone: r<=7?'up':(r>=26 && demote)?'down':''});
     });
   } else if(v === 'aub'){
     const all = AUB.map(p => ({n:p[0], x:p[1]})).concat([{n:'you', x:S.rating, me:true}]).sort((a,b)=>b.x-a.x);
@@ -1328,6 +1364,11 @@ function renderProfile(){
       <ul class="trophies">${S.trophies.map(t => `<li><span class="rk medal m${t.place}">${t.place}</span><span><b>${esc(t.name)}</b><span>${PLACE_NAMES[t.place-1]} of ${fmt(t.of)} players · ${esc(t.when)}</span></span></li>`).join('') || '<li><span>Win or place top 3 in a competition to earn one.</span></li>'}</ul>
       <div class="sec-h">Badges</div>
       <div class="badges">${badges.map(b => `<div class="badge ${b.on?'on':'off'} ${S.newBadge===b.t?'new':''}"><div class="hex">${b.on?b.ic:I.lock}</div><b>${b.t}</b><span>${esc(b.s)}</span></div>`).join('')}</div>
+      ${S.reports.length ? `<div class="sec-h">Problems you reported</div>
+      <ul class="rp-list">${S.reports.slice(0, 5).map(r => `<li><b>${esc(r.reason)}</b>${esc(r.where)}${r.note ? `<br>“${esc(r.note)}”` : ''}</li>`).join('')}</ul>
+      ${S.reports.length > 5 ? `<p class="footnote" style="padding-block:6px 0">and ${S.reports.length - 5} more</p>` : ''}
+      <div class="btn-row" style="margin-top:10px"><button class="btn ghost" id="rpCopyAll">${S.reports.length === 1 ? 'Copy this report' : `Copy all ${S.reports.length} reports`}</button></div>
+      <div class="copy-msg" id="rpAllMsg" aria-live="polite"></div>` : ''}
       <div class="btn-row" style="margin-top:26px">
         <button class="btn gold" id="proBtn">Bullpen Pro</button>
         <button class="btn ghost" id="replaceBtn">${S.placed ? 'Retake the placement test' : 'Take the placement test'}</button>
@@ -1335,6 +1376,8 @@ function renderProfile(){
       </div>
       <div class="footnote">Prototype · progress is saved on this device only</div>
     </div>`;
+  const rpAll = $('#rpCopyAll');
+  if(rpAll) rpAll.onclick = () => copyText(S.reports.map(reportText).join('\n\n'), $('#rpAllMsg'), 'Copied. Paste it to the Bullpen team on WhatsApp.');
   $('#replaceBtn').onclick = () => showOnboard('intro');
   $('#proBtn').onclick = openPro;
   $('#resetBtn').onclick = () => { clearState(); S = JSON.parse(JSON.stringify(INITIAL)); closeSheet(); renderAll(); showTab('learn'); showOnboard('welcome'); };
@@ -1720,6 +1763,51 @@ function copyText(txt, el, okMsg){
   };
   try { navigator.clipboard.writeText(txt).then(done, fallback); } catch(e){ fallback(); }
 }
+
+/* ---------- report a problem ----------
+   The prototype has no server, so a report is kept on this device (Profile lists them) and copied
+   as text to send on WhatsApp. It always names the exact card or question it's about. */
+const REPORT_REASONS = ['A number looks wrong', 'The right answer is wrong', 'Confusing wording', 'Typo', 'Something else'];
+function reportWhere(){
+  if(!P) return 'Unknown screen';
+  const L = LSN();
+  if(P.phase === 'cards'){
+    const unit = L.vault !== undefined ? VAULT[L.vault].title : UNITS[L.unit].title;
+    return `${unit} · ${L.title} · card ${P.i+1} of ${L.cards.length}: "${L.cards[P.i].t}"`;
+  }
+  const q = L.qs[P.queue[0]];
+  if(!q) return L.title;
+  const text = q.q.replace(/<[^>]+>/g, '');
+  return `${QSRC.get(q.q) || L.title}: "${text.length > 90 ? text.slice(0, 87) + '…' : text}"`;
+}
+function reportText(r){ return `Bullpen problem report (${r.when})\nWhere: ${r.where}\nProblem: ${r.reason}${r.note ? `\nNote: ${r.note}` : ''}`; }
+function openReport(){
+  const where = reportWhere();
+  let reason = null;
+  openSheet(`<div class="sh-head"><div><span class="eyebrow">Report a problem</span><h2>What's wrong here?</h2></div><button class="icon-btn" id="tmClose" aria-label="Close">${I.x}</button></div>
+    <div class="rp-where">${esc(where)}</div>
+    <div class="rp-reasons" role="group" aria-label="Problem">${REPORT_REASONS.map(r => `<button type="button" aria-pressed="false" data-r="${esc(r)}">${r}</button>`).join('')}</div>
+    <div class="form" style="margin-top:14px"><label class="l" for="rpNote">Anything to add? (optional)</label>
+      <textarea class="field" id="rpNote" maxlength="400" placeholder="e.g. 5% of $2,000 is $100, not $1,000"></textarea></div>
+    <div class="btn-row" style="margin-top:16px"><button class="btn" id="rpGo" disabled>Save and copy report</button></div>
+    <div class="copy-msg" id="rpMsg" aria-live="polite"></div>`);
+  const go = $('#rpGo');
+  $('#tradeSheet').querySelectorAll('.rp-reasons button').forEach(b => b.onclick = () => {
+    reason = b.dataset.r;
+    $('#tradeSheet').querySelectorAll('.rp-reasons button').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+    go.disabled = false;
+  });
+  $('#tmClose').onclick = closeSheet;
+  go.onclick = () => {
+    if(!reason) return;
+    const r = {where, reason, note: $('#rpNote').value.trim(), when: new Date().toISOString().slice(0, 10)};
+    S.reports.unshift(r); S.reports = S.reports.slice(0, 50); saveState();
+    go.disabled = true; go.textContent = 'Saved';
+    copyText(reportText(r), $('#rpMsg'), 'Thanks. Saved on your profile and copied: paste it to the Bullpen team on WhatsApp.');
+  };
+}
+$('#pReport').innerHTML = I.flag;
+$('#pReport').onclick = openReport;
 $('#copyShare').onclick = () => copyText(shareText(), $('#copyMsg'), 'Copied. Paste it into WhatsApp or Instagram.');
 
 /* ---------- boot ---------- */
