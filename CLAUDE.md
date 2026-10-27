@@ -43,7 +43,8 @@ points, trophies; rating 1,000). All other players and numbers are fake.
    download standings as CSV, end it and award trophies to the top 3. Prizes are trophies and badges,
    never cash. A Bullpen Pro preview (example prices, "would you pay?") opens from the margin call
    and Profile.
-7. **Profile:** investor level and progress, stats, certificates, trophies, badges (one per unit,
+7. **Class mode** (preview): "I'm a teacher" on the first screen, or Profile → Teacher view, opens the teacher space. A teacher makes a class (code + invite link `?class=CODE`), assigns units with due dates, sees class progress per unit and per student (overdue / needs help), exports grades as CSV, and creates a class tournament (included in the class plan, no credit). A student joins with the code (demo: AUB-FINA310) and sees the assigned units with due dates at the top of Learn; the school covers Bullpen Pro (unlimited practice capital). Class results are samples made from a hash of each name.
+8. **Profile:** investor level and progress, stats, certificates, trophies, badges (one per unit,
    main and Vault), retake placement, restart demo.
 
 ## Where things live

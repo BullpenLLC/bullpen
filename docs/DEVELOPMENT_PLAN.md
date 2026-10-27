@@ -181,7 +181,7 @@ Streak reminders at the user's usual time, league movement, competition start/en
 - **"Explain this" button** on any card for a simpler version, generated from our own text.
 - **Live events:** earnings-week challenges, Fed-day prediction quizzes (no money), market-crash history replays.
 - **Replay mode:** trade through a historical period (2008, 2020) at speed.
-- **Teacher tools:** assign units, see class progress, export grades, run class tournaments.
+- **Teacher tools:** assign units, see class progress, export grades, run class tournaments. (Prototype of Class mode built Oct 2026; the real app needs teacher accounts, rosters and privacy rules for under-18s.)
 - **Creator leagues:** finance creators host leagues for their followers.
 - **Pebble link (separate company):** a verified real-portfolio league for adults via Pebble's broker connections, with a revenue share agreed in writing.
 - **Widgets and watch:** streak and capital on the home screen; a daily question on the watch.

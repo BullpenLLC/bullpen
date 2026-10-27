@@ -507,6 +507,51 @@ textarea.field{min-height:84px; resize:vertical; line-height:1.4}
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important; transition:none!important}
 }
+
+/* Class mode */
+.t-space{position:absolute; inset:0; background:var(--surface); display:flex; flex-direction:column; z-index:30}
+.t-head{display:flex; align-items:center; gap:12px; padding-block:16px 10px; border-bottom:1.5px solid var(--line)}
+.t-head h2{font-size:21px; margin-top:2px}
+.t-body{flex:1; min-height:0; overflow-y:auto; overscroll-behavior:contain; padding-bottom:28px}
+.t-intro{color:var(--ink-2); margin:14px 0 0; font-size:14.5px}
+.t-code{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:14px}
+.score.four{grid-template-columns:repeat(4,1fr)}
+.t-next{display:flex; gap:10px; align-items:flex-start; margin-top:12px; padding:12px 14px; border-radius:14px; background:var(--sky-tint); color:var(--sky); font-size:13px}
+.t-next svg{width:20px; height:20px; flex:none}
+.t-next b{display:block; color:var(--ink); font-size:14px}
+.t-next>span{color:var(--ink-2)}
+.t-list{list-style:none; margin:10px 0 0; padding:0; display:grid; gap:8px}
+.t-list li{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 12px; border:1.5px solid var(--line); border-radius:14px}
+.t-list li>span:first-child{min-width:0; flex:1}
+.t-list b{display:block; font-size:14.5px}
+.t-list li span span{display:block; font-size:12.5px; color:var(--ink-2)}
+.t-list .pbar{margin-top:6px; height:5px}
+.t-note{margin:8px 14px 12px; font-size:12.5px; color:var(--ink-2)}
+.t-unit .u-head h3{font-size:16.5px}
+.pill.bear{background:var(--bear-tint); color:var(--bear-ink)}
+.pill.gold{background:var(--gold-tint); color:var(--gold-ink)}
+.t-pick-list{list-style:none; margin:10px 0 0; padding:0; display:grid; gap:8px}
+.t-pick-list li{border:1.5px solid var(--line); border-radius:14px; overflow:hidden}
+.t-pick-list li.on{border-color:var(--bull)}
+.t-pick{display:flex; align-items:center; gap:12px; width:100%; text-align:left; background:none; border:0; padding:10px 12px; color:var(--ink)}
+.t-pick .lt b{display:block; font-size:14.5px}
+.t-pick .lt span{font-size:12.5px; color:var(--ink-2)}
+.t-box{width:24px; height:24px; border-radius:8px; border:2px solid var(--line); display:grid; place-items:center; flex:none; color:var(--on-bull)}
+.t-pick[aria-pressed="true"] .t-box{background:var(--bull); border-color:var(--bull)}
+.t-box svg{width:16px; height:16px}
+select.field.sm{margin:0 12px 10px; width:calc(100% - 24px); padding:8px 12px; font-size:14px}
+.class-card{margin-top:14px; border:1.5px solid var(--line); border-radius:16px; padding:14px; background:var(--surface)}
+.cc-h{display:flex; justify-content:space-between; gap:10px; align-items:flex-start}
+.cc-h h3{font-size:18px; margin-top:2px}
+.cc-h .host{font-size:13px; color:var(--ink-2)}
+.cl-list{list-style:none; margin:12px 0 0; padding:0; display:grid; gap:8px}
+.cl-row{display:flex; justify-content:space-between; align-items:center; gap:10px; width:100%; text-align:left; background:var(--surface-2); border:0; border-radius:12px; padding:10px 12px; color:var(--ink)}
+.cl-row .lt{flex:1; min-width:0}
+.cl-row .lt b{display:block; font-size:14.5px}
+.cl-row .lt>span{font-size:12.5px; color:var(--ink-2); display:block}
+.cl-row .pbar{margin-top:6px; height:5px}
+.class-card .link-btn,.class-card .btn.sm{margin-top:10px; display:block}
+.ob-teacher{display:block; margin:18px auto 0; background:none; border:0; color:var(--sky); font-weight:800; font-size:14.5px; padding:8px}
 </style>
 
 <aside class="about">
@@ -537,6 +582,9 @@ textarea.field{min-height:84px; resize:vertical; line-height:1.4}
     <button class="tab" data-tab="league"><span class="tab-ic" data-ic="trophy"></span>League</button>
     <button class="tab" data-tab="profile"><span class="tab-ic" data-ic="user"></span>Profile</button>
   </nav>
+
+  <!-- TEACHER SPACE -->
+  <section class="t-space" id="teacher" hidden aria-label="Teacher space"></section>
 
   <!-- LESSON PLAYER -->
   <section class="player" id="player" hidden aria-label="Lesson">
@@ -724,7 +772,7 @@ const GLOBAL = [['finn.o','UK',2214],['layla.q','AE',2187],['omar.s','SA',2150],
 /* ---------- state ---------- */
 /* A brand-new player starts from nothing: no streak, no points, the starting league, a 1,000 rating
    (the starting value in DEVELOPMENT_PLAN.md) and no trophies. Other players stay as sample data. */
-const INITIAL = {streak:0, streakToday:false, hearts:5, xpTotal:0, weekly:0, rating:1000, done:0, reports:[], tab:'learn', view:'week', last:null, wait:false, newBadge:null, pick:null,
+const INITIAL = {role:'student', classes:{}, myClass:null, tCode:null, tTab:'overview', tDraft:null, streak:0, streakToday:false, hearts:5, xpTotal:0, weekly:0, rating:1000, done:0, reports:[], tab:'learn', view:'week', last:null, wait:false, newBadge:null, pick:null,
   onboarded:false, level:null, placed:false, testedOut:[], scrollCur:false,
   lview:'course', vault:{}, bonus:0, certs:{}, missed:[], openUnit:null,
   tview:'comps', joined:['AUB-CUP'], created:{}, credits:1, clan:null, requested:[], createdClans:[], clanQ:'', draft:null,
@@ -799,10 +847,11 @@ function renderLearn(){
   const body = S.lview === 'vault' ? renderVault() : S.lview === 'guide' ? renderGuide() : renderCourse();
   $('#s-learn').innerHTML = statusBar() + `<div class="pad">
     <div class="seg lv" role="group" aria-label="Learn">${tabs.map(t => `<button data-v="${t[0]}" aria-pressed="${S.lview===t[0]}">${t[1]}</button>`).join('')}</div>
+    ${S.lview === 'course' ? classCard() : ''}
     ${body}
     <div class="footnote">Prototype · progress is saved on this device only</div></div>`;
   $('#s-learn').querySelectorAll('.seg.lv button').forEach(b => b.onclick = () => { S.lview = b.dataset.v; renderLearn(); $('#s-learn').scrollTop = 0; });
-  bindLearn();
+  bindLearn(); bindClassCard();
   if(S.scrollCur && S.lview === 'course'){
     S.scrollCur = false;
     requestAnimationFrame(() => {
@@ -835,7 +884,7 @@ function renderCourse(){
     units.forEach(u => {
       const U = UNITS[u], start = UNIT_START[u], len = U.lessons.length, d = unitDone(u);
       const locked = start > cur, complete = d === len, open = !complete || S.openUnit === u;
-      html += `<section class="ucard${locked ? ' locked' : ''}"><div class="u-head"><div><div class="k">Unit ${u+1}${complete ? ' · complete' : ''}</div><h3>${esc(U.title)}</h3></div><div class="u-prog">${d}/${len}</div></div>
+      html += `<section class="ucard${locked ? ' locked' : ''}" id="uc-${U.id}"><div class="u-head"><div><div class="k">Unit ${u+1}${complete ? ' · complete' : ''}</div><h3>${esc(U.title)}</h3></div><div class="u-prog">${d}/${len}</div></div>
         <div class="pbar"><i style="width:${d/len*100}%"></i></div>`;
       if(locked){
         html += u === firstLocked && u > 0
@@ -866,7 +915,7 @@ function renderVault(){
     <div class="vs"><span>${fmt(S.bonus)} Vault points</span><span>${cleared} of ${VAULT.length} units cleared</span></div></div>`;
   VAULT.forEach((U, v) => {
     const d = S.vault[U.id] || 0, len = U.lessons.length, complete = d >= len, open = !complete || S.openUnit === 'v' + v;
-    html += `<section class="ucard"><div class="u-head"><div><div class="k">Vault ${v+1}${complete ? ' · cleared' : ''}</div><h3>${esc(U.title)}</h3></div><div class="u-prog">${d}/${len}</div></div>
+    html += `<section class="ucard" id="uc-${U.id}"><div class="u-head"><div><div class="k">Vault ${v+1}${complete ? ' · cleared' : ''}</div><h3>${esc(U.title)}</h3></div><div class="u-prog">${d}/${len}</div></div>
       <div class="pbar"><i style="width:${d/len*100}%"></i></div>`;
     html += open ? lessonRows(U.lessons, j => j < d ? 'done' : j === d ? 'current' : 'locked', j => `v${v}.${j}`) + (complete ? `<button class="u-more" data-close="v${v}">Hide lessons</button>` : '')
                  : `<button class="u-more" data-open="v${v}">Review the ${len} lessons</button>`;
@@ -1075,7 +1124,8 @@ const CLASSMATES = [['maya.s','AUB'],['karl.d','AUB'],['lea.f','AUB'],['tarek.z'
 function bindHostTools(code){
   const C = S.created[code];
   const st = $('#hostStart'); if(st) st.onclick = () => {
-    C.board = CLASSMATES.map(([n, s]) => [n, s, Math.round((0.2 + Math.random() * 1.6) * 100) / 100]).concat([['You', 'AUB', Math.round((0.2 + Math.random() * 1.6) * 100) / 100]]);
+    const roster = C.classCode && S.classes[C.classCode] && S.classes[C.classCode].students.length ? S.classes[C.classCode].students.slice(0, 12).map(n => [n, S.classes[C.classCode].school]) : CLASSMATES;
+    C.board = roster.map(([n, s]) => [n, s, Math.round((0.2 + Math.random() * 1.6) * 100) / 100]).concat([['You', 'AUB', Math.round((0.2 + Math.random() * 1.6) * 100) / 100]]);
     C.players = C.board.length; C.starts = 'Live · week 1'; saveState(); renderTrade(); openComp(code, 'Started. Standings update as people trade.');
   };
   const cv = $('#hostCsv'); if(cv) cv.onclick = () => {
@@ -1370,7 +1420,9 @@ function renderProfile(){
       <div class="btn-row" style="margin-top:10px"><button class="btn ghost" id="rpCopyAll">${S.reports.length === 1 ? 'Copy this report' : `Copy all ${S.reports.length} reports`}</button></div>
       <div class="copy-msg" id="rpAllMsg" aria-live="polite"></div>` : ''}
       <div class="btn-row" style="margin-top:26px">
-        <button class="btn gold" id="proBtn">Bullpen Pro</button>
+        <button class="btn gold" id="proBtn">${myClass() ? 'Bullpen Pro · included by your school' : 'Bullpen Pro'}</button>
+        <button class="btn ghost" id="classBtn">${myClass() ? 'Your class: ' + esc(myClass().name) : 'Join a class'}</button>
+        <button class="btn ghost" id="teacherBtn">Teacher view</button>
         <button class="btn ghost" id="replaceBtn">${S.placed ? 'Retake the placement test' : 'Take the placement test'}</button>
         <button class="btn ghost" id="resetBtn">Restart the demo</button>
       </div>
@@ -1380,7 +1432,9 @@ function renderProfile(){
   if(rpAll) rpAll.onclick = () => copyText(S.reports.map(reportText).join('\n\n'), $('#rpAllMsg'), 'Copied. Paste it to the Bullpen team on WhatsApp.');
   $('#replaceBtn').onclick = () => showOnboard('intro');
   $('#proBtn').onclick = openPro;
-  $('#resetBtn').onclick = () => { clearState(); S = JSON.parse(JSON.stringify(INITIAL)); closeSheet(); renderAll(); showTab('learn'); showOnboard('welcome'); };
+  $('#classBtn').onclick = () => { if(myClass()){ showTab('learn'); S.lview = 'course'; renderLearn(); $('#s-learn').scrollTop = 0; } else openJoinClass(); };
+  $('#teacherBtn').onclick = openTeacher;
+  $('#resetBtn').onclick = () => { clearState(); S = JSON.parse(JSON.stringify(INITIAL)); teacherEl.hidden = true; closeSheet(); renderAll(); showTab('learn'); showOnboard('welcome'); };
 }
 
 /* ---------- Bullpen Pro (preview for interviews; nothing can be bought in the prototype) ---------- */
@@ -1394,6 +1448,7 @@ function openPro(){
     ['No ads', 'Ever.']
   ];
   openSheet(`<div class="sh-head"><div><span class="eyebrow">Preview</span><h2>Bullpen Pro</h2></div><button class="icon-btn" id="tmClose" aria-label="Close">${I.x}</button></div>
+    ${myClass() ? `<div class="ob-note">Your school covers Bullpen Pro for ${esc(myClass().name)}. Nothing to pay.</div>` : ''}
     <p class="sh-sub">Everything in the course stays free. Pro is for people who want to go further, faster.</p>
     <ul class="rules">${perks.map(([t, d]) => `<li>${I.check}<span><b style="color:var(--ink)">${t}.</b> ${d}</span></li>`).join('')}</ul>
     <div class="score" style="margin-top:16px"><div><b>$3.99</b><span>per month</span></div><div class="hl"><b>$29.99</b><span>per year</span></div><div><b>Free</b><span>with a school licence</span></div></div>
@@ -1505,7 +1560,7 @@ function onPrimary(){
       btn.className = 'btn'; btn.textContent = 'Continue';
     } else {
       P.mistakes++; P.missed.add(qi);
-      if(!test){ S.hearts = Math.max(0, S.hearts-1); setHearts(); }
+      if(!test && !hasPro()){ S.hearts = Math.max(0, S.hearts-1); setHearts(); }
       setFoot('bad'); $('#fbIc').innerHTML = I.x;
       $('#fbTitle').textContent = test ? 'Not quite' : 'Not quite · −$1k capital';
       $('#fbText').textContent = 'Answer: ' + q.o[q.a] + '. ' + q.e;
@@ -1613,7 +1668,9 @@ function showOnboard(step, data = {}){
         ${choice('beginner', I.book, 'var(--bull-tint)', 'var(--bull-ink)', "I'm new to this", 'Start from the basics: what a stock is, risk, and spreading your money out.')}
         ${choice('intermediate', I.candles, 'var(--sky-tint)', 'var(--sky)', 'I know the basics', 'Take a short placement test and skip what you already know.')}
         ${choice('advanced', I.up, 'var(--gold-tint)', 'var(--gold-ink)', 'I already invest', 'Same test. Prove it and jump straight to harder units.')}
-      </div>`;
+      </div>
+      <button class="ob-teacher" id="obTeacher">I'm a teacher or run a school programme →</button>`;
+    $('#obTeacher').onclick = () => { closeOnboard(); openTeacher(); };
     body.querySelectorAll('.choice').forEach(b => b.onclick = () => {
       S.level = b.dataset.lv;
       if(S.level === 'beginner'){ S.done = 0; S.testedOut = []; closeOnboard(); }
@@ -1810,12 +1867,260 @@ $('#pReport').innerHTML = I.flag;
 $('#pReport').onclick = openReport;
 $('#copyShare').onclick = () => copyText(shareText(), $('#copyMsg'), 'Copied. Paste it into WhatsApp or Instagram.');
 
+/* ---------- class mode ----------
+   A teacher makes a class, assigns units with due dates, watches class progress, exports grades and runs a
+   class tournament. A student joins with the class code and sees the assigned units; the school covers Pro.
+   There is no server: classes live in this browser, and the students' numbers are samples made from a hash
+   of their name, so the same class always shows the same results. */
+const DAY_MS = 86400000;
+const isoDay = t => new Date(t).toISOString().slice(0, 10);
+const todayMs = () => new Date(isoDay(Date.now()) + 'T00:00:00Z').getTime();
+const dueIn = n => isoDay(todayMs() + n * DAY_MS);
+const daysUntil = s => Math.round((new Date(s + 'T00:00:00Z').getTime() - todayMs()) / DAY_MS);
+const dueWords = s => { const d = daysUntil(s); return d < 0 ? `Overdue by ${-d} day${d === -1 ? '' : 's'}` : d === 0 ? 'Due today' : d === 1 ? 'Due tomorrow' : `Due in ${d} days`; };
+const unitById = id => UNITS.concat(VAULT).find(U => U.id === id);
+const CLASS_NAMES = ['Maya S.','Karl D.','Lea F.','Tarek Z.','Nour H.','Reem A.','Jad T.','Sara B.','Omar K.','Lynn C.','Hadi M.','Dana R.','Rami G.','Celine B.','Ziad N.','Yara J.','Elie W.','Mira S.','Fadi A.','Joelle K.','Nabil H.','Tala M.','Wissam Q.','Rita E.'];
+function hash32(s){ let h = 2166136261; for(const c of String(s)){ h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
+/* the sample class every teacher can open; due dates are relative to today so "overdue" always shows */
+function demoClass(){
+  return {code:'AUB-FINA310', name:'FINA 310 · Investments', school:'AUB', teacher:'Prof. R. Haddad', demo:true,
+    assigned:[{id:UNITS[0].id, due:dueIn(-3)}, {id:UNITS[1].id, due:dueIn(4)}, {id:UNITS[2].id, due:dueIn(11)}],
+    students:CLASS_NAMES.slice(), tournament:null};
+}
+const findClass = code => (S.classes && S.classes[code]) || (code === 'AUB-FINA310' ? demoClass() : null);
+const myClass = () => S.myClass ? findClass(S.myClass) : null;
+const hasPro = () => !!myClass(); // the school licence covers Pro for its students
+
+/* how far a student is through one assigned unit: { pct 0-100, score or null } */
+function simProgress(cls, name, a){
+  const diligence = 0.35 + (hash32(name + cls.code) % 1000) / 1000 * 0.65, r = (hash32(cls.code + name + a.id) % 1000) / 1000;
+  const days = daysUntil(a.due), bar = days < 0 ? 0.95 : days <= 3 ? 0.6 : 0.3;
+  const pct = r < diligence * bar ? 100 : Math.round((1 - r) * (days < 0 ? 70 : 90) / 10) * 10;
+  const skill = 48 + (hash32(name + 'skill') % 1000) / 1000 * 46, wobble = ((hash32(name + a.id + 'score') % 1000) / 1000 - 0.5) * 16;
+  const score = pct === 0 ? null : Math.max(35, Math.min(100, Math.round(skill + wobble)));
+  return {pct, score};
+}
+/* the signed-in student's own progress, from the real lessons */
+function myProgress(a){
+  const u = UNITS.findIndex(U => U.id === a.id);
+  if(u >= 0) return {pct: Math.round(unitDone(u) / UNITS[u].lessons.length * 100), score:null};
+  const U = unitById(a.id); return {pct: U ? Math.round(Math.min(S.vault[U.id] || 0, U.lessons.length) / U.lessons.length * 100) : 0, score:null};
+}
+function rosterOf(cls){
+  const rows = cls.students.map(n => ({name:n, me:false, per:cls.assigned.map(a => simProgress(cls, n, a))}));
+  if(S.myClass === cls.code) rows.push({name:'You (this device)', me:true, per:cls.assigned.map(myProgress)});
+  rows.forEach(r => {
+    const sc = r.per.filter(p => p.score !== null);
+    r.avg = r.per.length ? Math.round(r.per.reduce((s, p) => s + p.pct, 0) / r.per.length) : 0;
+    r.score = sc.length ? Math.round(sc.reduce((s, p) => s + p.score, 0) / sc.length) : null;
+    r.overdue = cls.assigned.some((a, i) => daysUntil(a.due) < 0 && r.per[i].pct < 100);
+    r.status = !cls.assigned.length ? 'none' : r.avg === 100 ? 'done' : r.overdue ? 'overdue' : (r.score !== null && r.score < 65) ? 'help' : 'track';
+  });
+  return rows;
+}
+const STATUS_LABEL = {done:['Done','bull'], track:['On track','soft'], overdue:['Overdue','bear'], help:['Needs help','gold'], none:['Nothing assigned','soft']};
+const statusPill = s => `<span class="pill ${STATUS_LABEL[s][1]}">${STATUS_LABEL[s][0]}</span>`;
+function missedLesson(cls, id){ const U = unitById(id); if(!U) return ''; const ls = U.lessons.filter(L => L.cards.length); return ls[hash32(cls.code + id + 'miss') % ls.length].title; }
+function classCsv(cls){
+  const rows = rosterOf(cls).filter(r => !r.me), nl = String.fromCharCode(10);
+  const head = ['student'].concat(...cls.assigned.map(a => { const t = unitById(a.id).title; return [t + ' completion %', t + ' score %']; }), ['average completion %', 'average score %', 'status']);
+  const lines = rows.map(r => [r.name].concat(...r.per.map(p => [p.pct, p.score === null ? '' : p.score]), [r.avg, r.score === null ? '' : r.score, STATUS_LABEL[r.status][0]]));
+  return [head].concat(lines).map(l => l.map(x => `"${String(x).replace(/"/g, '""')}"`).join(',')).join(nl);
+}
+function downloadText(name, text, msgEl){
+  try { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], {type:'text/csv'})); a.download = name; document.body.appendChild(a); a.click(); a.remove(); msgEl.textContent = 'Downloaded ' + name; }
+  catch(e){ msgEl.textContent = text; }
+}
+const classInvite = code => location.origin + location.pathname + '?class=' + encodeURIComponent(code);
+
+/* ----- teacher space ----- */
+const teacherEl = $('#teacher');
+function openTeacher(){ S.role = 'teacher'; teacherEl.hidden = false; renderTeacher(); saveState(); }
+function closeTeacher(){ S.role = 'student'; S.tCode = null; teacherEl.hidden = true; renderAll(); saveState(); }
+function renderTeacher(){
+  const cls = S.tCode ? findClass(S.tCode) : null;
+  if(S.tCode && !cls) S.tCode = null;
+  teacherEl.innerHTML = `<header class="t-head pad"><button class="icon-btn" id="tBack" aria-label="${cls ? 'Back to your classes' : 'Back to the student app'}">${I.x}</button>
+      <div><span class="eyebrow">Teacher space</span><h2>${cls ? esc(cls.name) : 'Your classes'}</h2></div></header>
+    <div class="t-body pad" id="tBody">${cls ? classView(cls) : classList()}</div>`;
+  $('#tBack').onclick = () => { if(cls){ S.tCode = null; renderTeacher(); } else closeTeacher(); };
+  if(cls) bindClassView(cls); else bindClassList();
+  $('#tBody').scrollTop = 0;
+}
+function classList(){
+  const list = Object.values(S.classes);
+  return `<p class="t-intro">Make a class, assign units with due dates, see who is keeping up and run a class tournament. Students join with a code and get Bullpen Pro free through your school.</p>
+    <div class="card-list">${list.map(c => { const rs = rosterOf(c), avg = rs.length ? Math.round(rs.reduce((s, r) => s + r.avg, 0) / rs.length) : 0;
+      return `<button class="comp" data-class="${esc(c.code)}"><div class="comp-top"><div><h3>${esc(c.name)}</h3><div class="host">${esc(c.school)} · code ${esc(c.code)}</div></div><span class="pill soft">${rs.length} students</span></div>
+        <div class="meta"><span class="chip">${c.assigned.length} unit${c.assigned.length === 1 ? '' : 's'} assigned</span><span class="chip">${avg}% done</span></div></button>`; }).join('') || '<div class="empty">No classes yet. Make one, or open the sample class to look around.</div>'}</div>
+    <div class="btn-row" style="margin-top:16px"><button class="btn" id="tNew">+ New class</button>
+      ${S.classes['AUB-FINA310'] ? '' : '<button class="btn ghost" id="tSample">Open the sample class (24 students)</button>'}</div>
+    <div class="footnote">Class mode is a preview. Students and results are samples; nothing is sent anywhere.<br>Under-18 students join through the teacher's code only, with no public clans, ads or social links.</div>`;
+}
+function bindClassList(){
+  teacherEl.querySelectorAll('[data-class]').forEach(b => b.onclick = () => { S.tCode = b.dataset.class; S.tTab = 'overview'; renderTeacher(); });
+  const smp = $('#tSample'); if(smp) smp.onclick = () => { const c = demoClass(); S.classes[c.code] = c; S.tCode = c.code; S.tTab = 'overview'; saveState(); renderTeacher(); };
+  $('#tNew').onclick = openNewClass;
+}
+function openNewClass(){
+  openSheet(`<div class="sh-head"><div><span class="eyebrow">New class</span><h2>Make a class</h2></div><button class="icon-btn" id="tmClose" aria-label="Close">${I.x}</button></div>
+    <p class="sh-sub">You get a code and a link. Students who join with it are in your class.</p>
+    <div class="form"><div><label class="l" for="ncName">Class name</label><input class="field" id="ncName" maxlength="40" placeholder="e.g. FINA 310 · Investments"></div>
+      <div><label class="l" for="ncSchool">School or university</label><input class="field" id="ncSchool" maxlength="40" placeholder="e.g. AUB"></div></div>
+    <div class="btn-row" style="margin-top:16px"><button class="btn" id="ncGo">Make the class</button></div><div class="msg bad" id="ncMsg" aria-live="polite"></div>`);
+  $('#tmClose').onclick = closeSheet;
+  $('#ncGo').onclick = () => {
+    const name = $('#ncName').value.trim(), school = $('#ncSchool').value.trim();
+    if(name.length < 3){ $('#ncMsg').textContent = 'Give the class a name (at least 3 letters).'; return; }
+    const stem = (school || name).toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 4) || 'CL';
+    let code; do { code = stem + '-' + Math.floor(1000 + Math.random() * 9000); } while(findClass(code));
+    S.classes[code] = {code, name, school: school || 'My school', teacher:'You', assigned:[], students:[], tournament:null};
+    S.tCode = code; S.tTab = 'overview'; saveState(); closeSheet(); renderTeacher();
+  };
+}
+const T_TABS = [['overview','Overview'],['assign','Assign'],['progress','Progress'],['tournament','Tournament']];
+function classView(cls){
+  const tab = S.tTab || 'overview';
+  const body = tab === 'assign' ? tAssign(cls) : tab === 'progress' ? tProgress(cls) : tab === 'tournament' ? tTournament(cls) : tOverview(cls);
+  return `<div class="t-code"><span class="chip">Class code ${esc(cls.code)}</span><button class="link-btn" id="tCopy">Copy invite link</button></div><div class="copy-msg" id="tCopyMsg" aria-live="polite"></div>
+    <div class="seg" role="group" aria-label="Class">${T_TABS.map(t => `<button data-t="${t[0]}" aria-pressed="${tab === t[0]}">${t[1]}</button>`).join('')}</div>${body}`;
+}
+function bindClassView(cls){
+  teacherEl.querySelectorAll('.seg button').forEach(b => b.onclick = () => { S.tTab = b.dataset.t; renderTeacher(); });
+  $('#tCopy').onclick = () => copyText(classInvite(cls.code) + (' (code ' + cls.code + ')'), $('#tCopyMsg'), 'Copied. Students open the link, or type the code under Learn.');
+  const tab = S.tTab || 'overview';
+  if(tab === 'assign') bindAssign(cls); else if(tab === 'progress') bindProgress(cls); else if(tab === 'tournament') bindTournament(cls); else bindOverview(cls);
+}
+function tOverview(cls){
+  const rs = rosterOf(cls).filter(r => !r.me);
+  if(!rs.length) return `<div class="empty" style="margin-top:16px">No students yet. Share the code ${esc(cls.code)} and they appear here when they join. For the demo you can fill the class with 24 sample students.</div>
+    <div class="btn-row" style="margin-top:12px"><button class="btn" id="tFill">Add 24 sample students</button></div>`;
+  const avg = Math.round(rs.reduce((s, r) => s + r.avg, 0) / rs.length), over = rs.filter(r => r.status === 'overdue').length, help = rs.filter(r => r.status === 'help').length;
+  const flagged = rs.filter(r => r.status === 'overdue' || r.status === 'help').slice(0, 5);
+  const next = cls.assigned.slice().sort((a, b) => a.due.localeCompare(b.due)).filter(a => daysUntil(a.due) >= 0)[0];
+  return `<div class="score four"><div><b>${rs.length}</b><span>students</span></div><div><b>${avg}%</b><span>avg done</span></div><div><b>${over}</b><span>overdue</span></div><div><b>${help}</b><span>need help</span></div></div>
+    ${next ? `<div class="t-next">${I.up}<span><b>Next due: ${esc(unitById(next.id).title)}</b>${dueWords(next.due)} · ${next.due}</span></div>` : ''}
+    <div class="sec-h">Needs attention</div>
+    <ul class="t-list">${flagged.map(r => `<li><span><b>${esc(r.name)}</b><span>${r.status === 'overdue' ? 'Behind on an assigned unit' : 'Averaging ' + r.score + '% on the quizzes'}</span></span>${statusPill(r.status)}</li>`).join('') || '<li><span>Everyone is on track.</span></li>'}</ul>
+    <div class="btn-row" style="margin-top:16px"><button class="btn" id="tToAssign">Assign units</button><button class="btn ghost" id="tToCsv">Export grades (CSV)</button></div><div class="copy-msg" id="tMsg" aria-live="polite"></div>`;
+}
+function bindOverview(cls){
+  const f = $('#tFill'); if(f) f.onclick = () => { cls.students = CLASS_NAMES.slice(); saveState(); renderTeacher(); };
+  const a = $('#tToAssign'); if(a) a.onclick = () => { S.tTab = 'assign'; renderTeacher(); };
+  const c = $('#tToCsv'); if(c) c.onclick = () => downloadText(cls.code.toLowerCase() + '-grades.csv', classCsv(cls), $('#tMsg'));
+}
+const WEEKS = [[7,'1 week'],[14,'2 weeks'],[21,'3 weeks'],[28,'4 weeks'],[42,'6 weeks']];
+function tAssign(cls){
+  const row = U => { const a = cls.assigned.find(x => x.id === U.id);
+    return `<li class="${a ? 'on' : ''}"><button class="t-pick" data-pick="${esc(U.id)}" aria-pressed="${!!a}"><span class="t-box">${a ? I.check : ''}</span><span class="lt"><b>${esc(U.title)}</b><span>${U.lessons.length} lessons</span></span></button>
+      ${a ? `<select class="field sm" data-due="${esc(U.id)}" aria-label="Due date for ${esc(U.title)}">${WEEKS.some(([d]) => d === daysUntil(a.due)) ? '' : `<option value="keep" selected>${dueWords(a.due)} · ${a.due}</option>`}${WEEKS.map(([d, t]) => `<option value="${d}" ${d === daysUntil(a.due) ? 'selected' : ''}>Due in ${t}</option>`).join('')}</select>` : ''}</li>`; };
+  return `<p class="t-intro">Tick the units your class should do. Students see them at the top of Learn with the due date.</p>
+    ${STAGES.map((st, si) => `<div class="sec-h">Stage ${si+1} · ${esc(st.title)}</div><ul class="t-pick-list">${UNITS.filter(U => U.stage === si).map(row).join('')}</ul>`).join('')}
+    <div class="sec-h">The Vault (optional deep dives)</div><ul class="t-pick-list">${VAULT.map(row).join('')}</ul>
+    <div class="footnote">${cls.assigned.length} unit${cls.assigned.length === 1 ? '' : 's'} assigned. Students open earlier units first, so a later unit unlocks as they work through the course.</div>`;
+}
+function bindAssign(cls){
+  teacherEl.querySelectorAll('[data-pick]').forEach(b => b.onclick = () => {
+    const id = b.dataset.pick, i = cls.assigned.findIndex(a => a.id === id);
+    if(i >= 0) cls.assigned.splice(i, 1); else cls.assigned.push({id, due:dueIn(14)});
+    cls.assigned.sort((a, b) => UNITS.concat(VAULT).indexOf(unitById(a.id)) - UNITS.concat(VAULT).indexOf(unitById(b.id)));
+    saveState(); const y = $('#tBody').scrollTop; renderTeacher(); $('#tBody').scrollTop = y;
+  });
+  teacherEl.querySelectorAll('[data-due]').forEach(s => s.onchange = () => {
+    const a = cls.assigned.find(x => x.id === s.dataset.due); if(a && s.value !== 'keep'){ a.due = dueIn(+s.value); saveState(); }
+  });
+}
+function tProgress(cls){
+  const rs = rosterOf(cls).filter(r => !r.me);
+  if(!cls.assigned.length) return `<div class="empty" style="margin-top:16px">Assign a unit first, then its progress shows here.</div>`;
+  if(!rs.length) return `<div class="empty" style="margin-top:16px">No students have joined yet. Add the sample students on the Overview tab to see how this looks.</div>`;
+  const per = cls.assigned.map((a, i) => { const done = rs.filter(r => r.per[i].pct === 100).length, sc = rs.map(r => r.per[i].score).filter(x => x !== null);
+    return {a, done, avg: Math.round(rs.reduce((s, r) => s + r.per[i].pct, 0) / rs.length), score: sc.length ? Math.round(sc.reduce((s, x) => s + x, 0) / sc.length) : null}; });
+  const order = {overdue:0, help:1, track:2, done:3, none:4};
+  return `<div class="sec-h">By unit</div>${per.map(p => `<section class="ucard t-unit"><div class="u-head"><div><div class="k">${dueWords(p.a.due)}</div><h3>${esc(unitById(p.a.id).title)}</h3></div><div class="u-prog">${p.done}/${rs.length} done</div></div>
+      <div class="pbar"><i style="width:${p.avg}%"></i></div><p class="t-note">${p.avg}% average completion · ${p.score === null ? 'no quiz scores yet' : p.score + '% average quiz score'}<br>Most missed lesson: ${esc(missedLesson(cls, p.a.id))}</p></section>`).join('')}
+    <div class="sec-h">By student</div><ul class="t-list">${rs.slice().sort((a, b) => order[a.status] - order[b.status]).map(r => `<li><span><b>${esc(r.name)}</b><span>${r.avg}% done${r.score === null ? '' : ' · ' + r.score + '% quizzes'}</span><span class="pbar"><i style="width:${r.avg}%"></i></span></span>${statusPill(r.status)}</li>`).join('')}</ul>
+    <div class="btn-row" style="margin-top:16px"><button class="btn" id="tCsv">Export grades (CSV)</button></div><div class="copy-msg" id="tMsg" aria-live="polite"></div>`;
+}
+function bindProgress(cls){ const c = $('#tCsv'); if(c) c.onclick = () => downloadText(cls.code.toLowerCase() + '-grades.csv', classCsv(cls), $('#tMsg')); }
+function tTournament(cls){
+  const code = cls.tournament, C = code && comp(code);
+  if(C) return `<p class="t-intro">Your class is competing. Students join with the tournament code and are ranked on skill, like every Bullpen competition.</p>${compCard(code)}
+    <div class="btn-row" style="margin-top:14px"><button class="btn" id="tOpenComp">Open tournament (start, standings, trophies)</button></div>`;
+  const d = S.tDraft || (S.tDraft = {len:'6 weeks', cash:100000, assets:['Stocks & ETFs']});
+  const pills = (k, opts, multi) => `<div class="pills" data-k="${k}"${multi ? ' data-multi="1"' : ''}>${opts.map(o => `<button type="button" data-val="${esc(o[0])}" aria-pressed="${multi ? d[k].includes(o[0]) : d[k] === o[0]}">${o[1]}</button>`).join('')}</div>`;
+  return `<p class="t-intro">Run a trading tournament just for this class. It is included in your class plan: no tournament credit is used, and there is no player limit.</p>
+    <div class="form"><div><span class="l">Length</span>${pills('len', [['2 weeks','2 weeks'],['6 weeks','6 weeks'],['Semester','Semester']])}</div>
+      <div><span class="l">Starting cash</span>${pills('cash', [[10000,'$10,000'],[100000,'$100,000']])}</div>
+      <div><span class="l">What students can trade</span>${pills('assets', [['Stocks & ETFs','Stocks & ETFs'],['Crypto','Crypto'],['Gold','Gold']], true)}</div></div>
+    <div class="btn-row" style="margin-top:16px"><button class="btn" id="tMakeComp">Create the class tournament</button></div>`;
+}
+function bindTournament(cls){
+  const open = $('#tOpenComp'); if(open) open.onclick = () => { closeTeacher(); showTab('trade'); S.tview = 'comps'; renderTrade(); openComp(cls.tournament); };
+  teacherEl.querySelectorAll('.pills button').forEach(b => b.onclick = () => {
+    const box = b.parentElement, k = box.dataset.k, d = S.tDraft; let v = b.dataset.val; if(k === 'cash') v = +v;
+    if(box.dataset.multi){ d[k] = d[k].includes(v) ? d[k].filter(x => x !== v) : d[k].concat(v); if(!d[k].length) d[k] = [v]; } else d[k] = v;
+    renderTeacher();
+  });
+  const mk = $('#tMakeComp'); if(mk) mk.onclick = () => {
+    const d = S.tDraft; let code; do { code = cls.code.split('-')[0] + '-T' + Math.floor(100 + Math.random() * 900); } while(comp(code));
+    S.created[code] = {name: cls.name + ' Trading Challenge', host: cls.teacher + ' · ' + cls.school, kind:'Class', vis:'Code', players: Math.max(1, cls.students.length), len:d.len,
+      starts:'Starts when you press go', cash:d.cash, assets:d.assets.join(', '), prize:'Trophy and Winner badge', classCode:cls.code};
+    S.joined.unshift(code); cls.tournament = code; S.tDraft = null; saveState(); renderTeacher();
+  };
+}
+
+/* ----- student side ----- */
+function classCard(){
+  const cls = myClass();
+  if(!cls) return `<button class="place-link" id="joinClassBtn"><span><b>In a class?</b><span>Join with your teacher's code. Your school covers Bullpen Pro.</span></span><span class="go">Join →</span></button>`;
+  const rows = cls.assigned.slice().sort((a, b) => a.due.localeCompare(b.due)).map(a => {
+    const U = unitById(a.id), p = myProgress(a), d = daysUntil(a.due), u = UNITS.indexOf(U);
+    const locked = u >= 0 && UNIT_START[u] > S.done, late = d < 0 && p.pct < 100;
+    return `<li><button class="cl-row" data-goto="${esc(a.id)}"><span class="lt"><b>${esc(U.title)}</b><span>${p.pct === 100 ? 'Done' : locked ? 'Finish ' + esc(UNITS[u-1].title) + ' first' : p.pct + '% done'}</span><span class="pbar"><i style="width:${p.pct}%"></i></span></span>
+      <span class="pill ${p.pct === 100 ? 'bull' : late ? 'bear' : 'soft'}">${p.pct === 100 ? '✓' : dueWords(a.due)}</span></button></li>`; }).join('');
+  const t = cls.tournament && comp(cls.tournament);
+  return `<section class="class-card"><div class="cc-h"><div><span class="eyebrow">Your class</span><h3>${esc(cls.name)}</h3><div class="host">${esc(cls.teacher)} · ${esc(cls.school)}</div></div><span class="pill bull">Pro via school</span></div>
+    ${rows ? `<ul class="cl-list">${rows}</ul>` : '<p class="t-note">Nothing assigned yet.</p>'}
+    ${t ? (S.joined.includes(cls.tournament) ? `<button class="link-btn" id="clComp">Class tournament: ${esc(t.name)} →</button>` : `<button class="btn sm" id="clJoinComp">Join the class tournament</button>`) : ''}
+    <button class="link-btn" id="leaveClass">Leave class</button></section>`;
+}
+function bindClassCard(){
+  const j = $('#joinClassBtn'); if(j) j.onclick = openJoinClass;
+  document.querySelectorAll('[data-goto]').forEach(b => b.onclick = () => {
+    const id = b.dataset.goto, u = UNITS.findIndex(U => U.id === id), v = VAULT.findIndex(U => U.id === id);
+    if(u >= 0){ S.lview = 'course'; if(unitDone(u) === UNITS[u].lessons.length) S.openUnit = u; } else { S.lview = 'vault'; S.openUnit = 'v' + v; }
+    renderLearn(); const el = document.getElementById('uc-' + id); if(el) el.scrollIntoView({block:'start'});
+  });
+  const lv = $('#leaveClass'); if(lv) lv.onclick = () => { S.myClass = null; saveState(); renderAll(); };
+  const cc = $('#clComp'); if(cc) cc.onclick = () => { showTab('trade'); S.tview = 'comps'; renderTrade(); openComp(myClass().tournament); };
+  const cj = $('#clJoinComp'); if(cj) cj.onclick = () => { S.joined.unshift(myClass().tournament); renderAll(); showTab('trade'); S.tview = 'comps'; renderTrade(); openComp(myClass().tournament, "You're in the class tournament."); };
+}
+function joinClass(code){ const cls = findClass(code); if(!cls) return null; S.myClass = code; saveState(); return cls; }
+function openJoinClass(){
+  openSheet(`<div class="sh-head"><div><span class="eyebrow">Class</span><h2>Join your class</h2></div><button class="icon-btn" id="tmClose" aria-label="Close">${I.x}</button></div>
+    <p class="sh-sub">Type the code your teacher gave you. Your teacher sees your progress on the units they assign, and your school covers Bullpen Pro.</p>
+    <div class="code-row"><input class="field" id="jcIn" placeholder="e.g. AUB-FINA310" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Class code"><button class="btn sm" id="jcGo">Join</button></div>
+    <div class="msg" id="jcMsg" aria-live="polite"></div><div class="demo-note">Demo code: AUB-FINA310 (or one from the teacher space).</div>`);
+  $('#tmClose').onclick = closeSheet;
+  const go = () => { const code = $('#jcIn').value.trim().toUpperCase(), m = $('#jcMsg');
+    if(!code){ m.className = 'msg bad'; m.textContent = "Type the code your teacher gave you."; return; }
+    const cls = joinClass(code);
+    if(!cls){ m.className = 'msg bad'; m.textContent = `No class uses the code ${code}. Check it with your teacher.`; return; }
+    closeSheet(); renderAll(); };
+  $('#jcGo').onclick = go; $('#jcIn').onkeydown = e => { if(e.key === 'Enter') go(); };
+}
+
 /* ---------- boot ---------- */
 renderAll();
 showTab('learn');
 const invite = (new URLSearchParams(location.search).get('join') || '').trim().toUpperCase();
+const classInviteCode = (new URLSearchParams(location.search).get('class') || '').trim().toUpperCase();
+const invitedClass = classInviteCode && joinClass(classInviteCode);
+if(invitedClass) renderAll();
+if(S.role === 'teacher') openTeacher();
 if(comp(invite) && !S.joined.includes(invite)) showOnboard('invite', {code:invite});
-else if(!S.onboarded) showOnboard('welcome');
+else if(!S.onboarded) showOnboard('welcome', invitedClass ? {joined:invitedClass.name} : {});
 })();
 </script>
 
