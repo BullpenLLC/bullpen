@@ -571,6 +571,17 @@ select.field.sm{margin:0 12px 10px; width:calc(100% - 24px); padding:8px 12px; f
 #mkQ{margin-top:10px}
 .quick{display:flex; gap:8px; margin-top:8px}
 .quick button{flex:1; border:1.5px solid var(--line); background:var(--surface-2); border-radius:10px; padding:6px; font-weight:700; font-size:13px; color:var(--ink-2)}
+
+.mc-alert{display:flex; gap:10px; align-items:flex-start; margin-top:16px; padding:12px 14px; border-radius:14px; background:var(--bear-tint); color:var(--bear-ink); font-size:13.5px; font-weight:600}
+.mc-alert svg{width:20px; height:20px; flex:none}
+.mg-card{margin-top:14px; border:1.5px solid var(--line); border-radius:16px; padding:12px 14px}
+.mg-card .score{margin-top:12px}
+.score .bad-tile{background:var(--bear-tint)} .score .bad-tile b{color:var(--bear-ink)}
+.score .warn-tile{background:var(--gold-tint)} .score .warn-tile b{color:var(--gold-ink)}
+.mg-meter{position:relative; overflow:visible; height:8px; margin-top:12px}
+.mg-meter i{border-radius:8px} .mg-meter.warn i{background:var(--gold)} .mg-meter.bad i{background:var(--bear)}
+.mg-meter u{position:absolute; top:-3px; bottom:-3px; width:2px; background:var(--ink); text-decoration:none}
+.mk-row.itm{background:var(--surface-2)}
 </style>
 
 <aside class="about">
@@ -1282,25 +1293,31 @@ function openCreateClan(open = true){
 /* ---------- practice trading ----------
    A working paper-trading account. Prices are SAMPLE prices from a seeded random walk (one step per market day),
    so the same day always shows the same prices. Real prices need a data provider (see DEVELOPMENT_PLAN.md).
-   Market orders fill at the current price; limit orders wait until the price reaches yours. No shorting or margin yet. */
+   Market orders fill at the current price; limit orders wait until the price reaches yours.
+   Short selling and margin unlock with the unit "Short selling and margin"; options with "Options basics".
+   Margin follows that unit's rules: 50% of a position's value must be your own money to open it, and the broker
+   sells for you when equity falls below 25%. Options are cash-settled, and sold options must be covered. */
 const MARKET = [
-  {sym:'AAPL', name:'Apple', type:'stock', p0:230, beta:1.1, idio:0.012, dec:2}, {sym:'MSFT', name:'Microsoft', type:'stock', p0:420, beta:1.0, idio:0.011, dec:2},
-  {sym:'NVDA', name:'Nvidia', type:'stock', p0:135, beta:1.6, idio:0.022, dec:2}, {sym:'TSLA', name:'Tesla', type:'stock', p0:250, beta:1.8, idio:0.026, dec:2},
-  {sym:'JPM', name:'JPMorgan Chase', type:'stock', p0:210, beta:1.0, idio:0.010, dec:2}, {sym:'XOM', name:'Exxon Mobil', type:'stock', p0:115, beta:0.7, idio:0.011, dec:2},
-  {sym:'KO', name:'Coca-Cola', type:'stock', p0:68, beta:0.4, idio:0.007, dec:2}, {sym:'DIS', name:'Disney', type:'stock', p0:95, beta:1.1, idio:0.014, dec:2},
-  {sym:'SPY', name:'S&P 500 ETF', type:'etf', p0:570, beta:1.0, idio:0.002, dec:2}, {sym:'QQQ', name:'Nasdaq 100 ETF', type:'etf', p0:480, beta:1.2, idio:0.003, dec:2},
-  {sym:'AGG', name:'US bond ETF', type:'etf', p0:98, beta:-0.05, idio:0.003, dec:2}, {sym:'VXUS', name:'World ex-US ETF', type:'etf', p0:65, beta:0.8, idio:0.004, dec:2},
-  {sym:'BTC', name:'Bitcoin', type:'crypto', p0:68000, beta:1.5, idio:0.030, dec:2}, {sym:'ETH', name:'Ethereum', type:'crypto', p0:2500, beta:1.7, idio:0.036, dec:2},
-  {sym:'SOL', name:'Solana', type:'crypto', p0:145, beta:1.9, idio:0.045, dec:2}, {sym:'XAU', name:'Gold (per oz)', type:'gold', p0:2650, beta:0.05, idio:0.007, dec:2}
+  {sym:'AAPL', name:'Apple', type:'stock', p0:230, beta:1.1, idio:0.012}, {sym:'MSFT', name:'Microsoft', type:'stock', p0:420, beta:1.0, idio:0.011},
+  {sym:'NVDA', name:'Nvidia', type:'stock', p0:135, beta:1.6, idio:0.022}, {sym:'TSLA', name:'Tesla', type:'stock', p0:250, beta:1.8, idio:0.026},
+  {sym:'JPM', name:'JPMorgan Chase', type:'stock', p0:210, beta:1.0, idio:0.010}, {sym:'XOM', name:'Exxon Mobil', type:'stock', p0:115, beta:0.7, idio:0.011},
+  {sym:'KO', name:'Coca-Cola', type:'stock', p0:68, beta:0.4, idio:0.007}, {sym:'DIS', name:'Disney', type:'stock', p0:95, beta:1.1, idio:0.014},
+  {sym:'SPY', name:'S&P 500 ETF', type:'etf', p0:570, beta:1.0, idio:0.002}, {sym:'QQQ', name:'Nasdaq 100 ETF', type:'etf', p0:480, beta:1.2, idio:0.003},
+  {sym:'AGG', name:'US bond ETF', type:'etf', p0:98, beta:-0.05, idio:0.003}, {sym:'VXUS', name:'World ex-US ETF', type:'etf', p0:65, beta:0.8, idio:0.004},
+  {sym:'BTC', name:'Bitcoin', type:'crypto', p0:68000, beta:1.5, idio:0.030}, {sym:'ETH', name:'Ethereum', type:'crypto', p0:2500, beta:1.7, idio:0.036},
+  {sym:'SOL', name:'Solana', type:'crypto', p0:145, beta:1.9, idio:0.045}, {sym:'XAU', name:'Gold (per oz)', type:'gold', p0:2650, beta:0.05, idio:0.007}
 ];
 const MKT_BY = Object.fromEntries(MARKET.map(m => [m.sym, m]));
 const TYPE_LABEL = {stock:'Stocks', etf:'ETFs', crypto:'Crypto', gold:'Gold'};
 const START_CASH = 10000, WARM = 60;
+const INIT_MARGIN = 0.5, MAINT = 0.25, LOAN_RATE = 0.08, BORROW_RATE = 0.03, RF = 0.04; // annual rates, charged per market day / 252
+const SHORT_UNIT = 'Short selling and margin';
+const unitFinished = t => { const u = UNITS.findIndex(U => U.title === t); return u >= 0 && S.done >= UNIT_START[u] + UNITS[u].lessons.length; };
+const marginUnlocked = () => unitFinished(SHORT_UNIT);
 function gauss(seed){ const a = (hash32(seed + 'a') % 100000 + 0.5) / 100000, b = (hash32(seed + 'b') % 100000 + 0.5) / 100000; return Math.sqrt(-2 * Math.log(a)) * Math.cos(2 * Math.PI * b); }
 const LOGS = {};
-/* log-price of an instrument at market day d (day 0 is the sample price); history before day 0 exists so charts have a past */
 function logAt(m, d){
-  const arr = LOGS[m.sym] || (LOGS[m.sym] = [0]); // arr[i] = cumulative log return from day -WARM to day -WARM+i
+  const arr = LOGS[m.sym] || (LOGS[m.sym] = [0]);
   while(arr.length <= d + WARM){
     const day = arr.length - WARM, mkt = 0.009 * gauss('mkt' + day), r = m.beta * mkt + m.idio * gauss(m.sym + day) + 0.0003;
     arr.push(arr[arr.length - 1] + r);
@@ -1310,10 +1327,43 @@ function logAt(m, d){
 const pxAt = (sym, d) => { const m = MKT_BY[sym]; return m.p0 * Math.exp(logAt(m, d) - logAt(m, 0)); };
 const money = n => (n < 0 ? '-$' : '$') + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
 const signed = n => (n > 0 ? '+' : n < 0 ? '-' : '') + Math.abs(n).toFixed(2) + '%';
-const qtyOf = (m, v) => m.type === 'crypto' || m.type === 'gold' ? Math.floor(v * 10000) / 10000 : Math.floor(v);
-const fmtQty = (m, q) => m.type === 'crypto' || m.type === 'gold' ? String(+q.toFixed(4)) : String(q);
-const trAcct = () => S.tr || (S.tr = {day:0, cash:START_CASH, pos:{}, orders:[], hist:[{d:0, eq:START_CASH}], log:[], auto:false, f:'all', q:''});
-const equityNow = () => { const a = trAcct(); return a.cash + Object.entries(a.pos).reduce((n, [sym, p]) => n + p.qty * pxAt(sym, a.day), 0); };
+const isOpt = k => k.charAt(1) === '|' && k.charAt(0) === 'O';
+const isCoin = m => m && (m.type === 'crypto' || m.type === 'gold');
+const qtyOf = (m, v) => isCoin(m) ? Math.floor(v * 10000) / 10000 : Math.floor(v);
+const fmtQty = (m, q) => isCoin(m) ? String(+q.toFixed(4)) : String(q);
+
+/* options: Black-Scholes prices on the sample underlying, cash-settled, 100 per contract */
+function ncdf(x){ const t = 1 / (1 + 0.2316419 * Math.abs(x)), p = 0.3989423 * Math.exp(-x * x / 2) * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274)))); return x > 0 ? 1 - p : p; }
+const npdf = x => Math.exp(-x * x / 2) / Math.sqrt(2 * Math.PI);
+function bsm(Sp, K, T, v, call){
+  if(T <= 0) return {price: call ? Math.max(0, Sp - K) : Math.max(0, K - Sp), delta: call ? (Sp > K ? 1 : 0) : (Sp < K ? -1 : 0), theta:0, vega:0};
+  const sq = v * Math.sqrt(T), d1 = (Math.log(Sp / K) + (RF + v * v / 2) * T) / sq, d2 = d1 - sq, disc = Math.exp(-RF * T);
+  return {price: call ? Sp * ncdf(d1) - K * disc * ncdf(d2) : K * disc * ncdf(-d2) - Sp * ncdf(-d1), delta: call ? ncdf(d1) : ncdf(d1) - 1,
+    theta: (-(Sp * npdf(d1) * v) / (2 * Math.sqrt(T)) - (call ? 1 : -1) * RF * K * disc * ncdf(call ? d2 : -d2)) / 365, vega: Sp * npdf(d1) * Math.sqrt(T) / 100};
+}
+const ivOf = sym => { const m = MKT_BY[sym]; return Math.sqrt((m.beta * 0.009) ** 2 + m.idio ** 2) * Math.sqrt(252) * 1.1; };
+const optable = m => m.type === 'stock' || m.type === 'etf';
+const optKey = (sym, exp, K, c) => `O|${sym}|${exp}|${K}|${c}`;
+const optParts = k => { const [, sym, exp, K, c] = k.split('|'); return {sym, exp:+exp, K:+K, call:c === 'C'}; };
+function optGreeks(key, d){ const o = optParts(key); return bsm(pxAt(o.sym, d), o.K, (o.exp - d) / 365, ivOf(o.sym), o.call); }
+const optMid = (key, d) => optGreeks(key, d).price;
+const optName = k => { const o = optParts(k); return `${o.sym} ${o.K} ${o.call ? 'Call' : 'Put'}`; };
+const expiriesFrom = d => [...new Set([(Math.floor(d / 7) + 1) * 7, (Math.floor(d / 7) + 2) * 7, (Math.floor(d / 7) + 3) * 7, (Math.floor((d + 30) / 28) + 1) * 28])].sort((a, b) => a - b);
+function strikesFor(sym, d){ const px = pxAt(sym, d), step = px >= 400 ? 10 : px >= 150 ? 5 : px >= 60 ? 2.5 : 1, atm = Math.round(px / step) * step; return Array.from({length:9}, (_, i) => +(atm + (i - 4) * step).toFixed(2)); }
+const askOf = mid => Math.max(0.01, +(mid * 1.02).toFixed(2)), bidOf = mid => Math.max(0.01, +(mid * 0.98).toFixed(2)); // 2% each side of the model price
+
+const trAcct = () => {
+  const a = S.tr || (S.tr = {day:0, cash:START_CASH, pos:{}, orders:[], hist:[{d:0, eq:START_CASH}], log:[], auto:false, f:'all', q:'', margin:false, call:null, alert:'', costs:0});
+  if(a.margin === undefined){ a.margin = false; a.call = null; a.alert = ''; a.costs = 0; } // accounts saved before margin existed
+  a.orders.forEach(o => { if(!o.key) o.key = o.sym; }); a.log.forEach(l => { if(!l.key) l.key = l.sym; });
+  return a;
+};
+const valueOf = (k, p, d) => isOpt(k) ? p.qty * 100 * optMid(k, d) : p.qty * pxAt(k, d);
+const equityNow = () => { const a = trAcct(); return a.cash + Object.entries(a.pos).reduce((n, [k, p]) => n + valueOf(k, p, a.day), 0); };
+function marginState(a){
+  let L = 0, Sv = 0; Object.entries(a.pos).forEach(([k, p]) => { if(isOpt(k)) return; const v = p.qty * pxAt(k, a.day); if(v > 0) L += v; else Sv -= v; });
+  const E = equityNow(), G = L + Sv; return {L, S:Sv, G, E, ratio: G > 0 ? E / G : null, loan: Math.max(0, -a.cash)};
+}
 /* season score = total return divided by how far the account typically wandered (daily swings x sqrt(days)) */
 function trStats(){
   const a = trAcct(), eq = a.hist.map(h => h.eq), ret = (eq[eq.length - 1] / START_CASH - 1) * 100;
@@ -1323,24 +1373,78 @@ function trStats(){
   const swings = sd * Math.sqrt(rs.length); let peak = eq[0], dd = 0; eq.forEach(v => { peak = Math.max(peak, v); dd = Math.min(dd, (v / peak - 1) * 100); });
   return {ret, swings, score: swings > 0.05 ? ret / swings : null, dd};
 }
-function placeOrder(o){ // {sym, side, qty, kind, limit}
-  const a = trAcct(), m = MKT_BY[o.sym], px = pxAt(o.sym, a.day);
-  if(o.kind === 'limit'){ a.orders.push({id:Date.now() + Math.random(), sym:o.sym, side:o.side, qty:o.qty, limit:o.limit, day:a.day}); return {ok:true, msg:`Limit order placed: it fills when ${o.sym} reaches ${money(o.limit)}.`}; }
-  return fill(a, o.sym, o.side, o.qty, px, 'Market');
+const bad = msg => ({ok:false, msg});
+/* one place every order ends up: sides are buy, sell, short, cover (options: buy, sell). Returns {ok, msg}. */
+function fill(a, key, side, qty, price, kind){
+  const opt = isOpt(key), mult = opt ? 100 : 1, m = opt ? null : MKT_BY[key], cur = a.pos[key] ? a.pos[key].qty : 0, amt = qty * price * mult;
+  const name = opt ? optName(key) : key, label = {buy:'Bought', sell:'Sold', short:'Sold short', cover:'Covered'}[side];
+  const delta = side === 'buy' || side === 'cover' ? qty : -qty;
+  if(!opt){
+    if(side === 'buy' && cur < 0) return bad(`You're short ${key}. Use Cover to buy it back.`);
+    if(side === 'sell' && (cur <= 0 || qty > cur + 1e-9)) return bad(`You only hold ${cur > 0 ? fmtQty(m, cur) : 0} ${key}. To sell more, open a short.`);
+    if(side === 'short' && cur > 0) return bad(`You hold ${key}. Sell it first, or add to the position.`);
+    if(side === 'short' && !(a.margin && marginUnlocked())) return bad(marginUnlocked() ? 'Turn on the margin account first: short selling needs borrowed shares.' : `Finish ${SHORT_UNIT} to unlock short selling.`);
+    if(side === 'cover' && (cur >= 0 || qty > -cur + 1e-9)) return bad(`You're short ${cur < 0 ? fmtQty(m, -cur) : 0} ${key}.`);
+  } else {
+    const o = optParts(key);
+    if(side === 'sell' && cur <= 0){ // writing: covered calls and cash-secured puts only
+      if(o.call){ const have = a.pos[o.sym] ? Math.max(0, a.pos[o.sym].qty) : 0, written = Object.entries(a.pos).filter(([k, p]) => isOpt(k) && optParts(k).sym === o.sym && optParts(k).call && p.qty < 0).reduce((n, [, p]) => n - p.qty, 0);
+        if((written + qty) * 100 > have + 1e-9) return bad(`Covered calls only: each contract needs 100 shares of ${o.sym}. You hold ${fmtQty(MKT_BY[o.sym], have)}.`); }
+      else { const secured = Object.entries(a.pos).filter(([k, p]) => isOpt(k) && !optParts(k).call && p.qty < 0).reduce((n, [k, p]) => n - p.qty * 100 * optParts(k).K, 0);
+        if(secured + qty * 100 * o.K > a.cash + 1e-6) return bad(`Cash-secured puts only: you'd need ${money(secured + qty * 100 * o.K)} set aside and have ${money(a.cash)}.`); }
+    }
+    if(side === 'sell' && cur > 0 && qty > cur + 1e-9) return bad(`You only hold ${cur} contract${cur === 1 ? '' : 's'}.`);
+    if(side === 'buy' && cur < 0 && qty > -cur + 1e-9) return bad(`You're short ${-cur} contract${cur === -1 ? '' : 's'}.`);
+    if(side === 'buy' && cur >= 0 && amt > a.cash + 0.005) return bad(`Not enough cash: that costs ${money(amt)} and you have ${money(a.cash)}.`);
+  }
+  const before = JSON.stringify([a.cash, a.pos]);
+  a.cash += side === 'buy' || side === 'cover' ? -amt : amt;
+  const p = a.pos[key] || (a.pos[key] = {qty:0, cost:0});
+  if(p.qty !== 0 && Math.sign(delta) !== Math.sign(p.qty)) p.cost -= p.cost * Math.min(1, Math.abs(delta) / Math.abs(p.qty)); else p.cost += delta * price * mult;
+  p.qty += delta; if(Math.abs(p.qty) < 1e-9) delete a.pos[key];
+  if(!opt){
+    const ms = marginState(a);
+    if(!a.margin && a.cash < -0.005){ [a.cash, a.pos] = JSON.parse(before); return bad(`Not enough cash: that costs ${money(amt)}. Margin accounts can borrow, once ${SHORT_UNIT} is done.`); }
+    if(a.margin && (side === 'buy' || side === 'short') && ms.G > 0 && ms.E < INIT_MARGIN * ms.G - 0.005){
+      [a.cash, a.pos] = JSON.parse(before);
+      return bad(`Over the margin limit: you must fund at least ${Math.round(INIT_MARGIN * 100)}% of your positions yourself. Positions can reach about ${money(ms.E / INIT_MARGIN)} with your ${money(ms.E)} of equity.`);
+    }
+  }
+  a.log.unshift({day:a.day, key, side, qty, price, kind}); a.log = a.log.slice(0, 30);
+  return {ok:true, msg:`${label} ${opt ? qty + ' × ' + name : fmtQty(m, qty) + ' ' + key} at ${money(price)}${opt ? ' (per share, ×100)' : ''}.`};
 }
-function fill(a, sym, side, qty, price, kind){
-  const m = MKT_BY[sym], cost = qty * price;
-  if(side === 'buy'){ if(cost > a.cash + 0.005) return {ok:false, msg:`Not enough cash: you need ${money(cost)} and have ${money(a.cash)}.`};
-    const p = a.pos[sym] || (a.pos[sym] = {qty:0, cost:0}); p.qty += qty; p.cost += cost; a.cash -= cost; }
-  else { const p = a.pos[sym]; if(!p || qty > p.qty + 1e-9) return {ok:false, msg:`You only hold ${p ? fmtQty(m, p.qty) : 0} ${sym}. Short selling isn't open yet.`};
-    p.cost -= p.cost * (qty / p.qty); p.qty -= qty; a.cash += cost; if(p.qty < 1e-9) delete a.pos[sym]; }
-  a.log.unshift({day:a.day, sym, side, qty, price, kind}); a.log = a.log.slice(0, 30);
-  return {ok:true, msg:`${side === 'buy' ? 'Bought' : 'Sold'} ${fmtQty(m, qty)} ${sym} at ${money(price)}.`};
+function placeOrder(o){ // {key, side, qty, kind, limit}
+  const a = trAcct();
+  if(o.kind === 'limit'){ a.orders.push({id:Date.now() + Math.random(), key:o.key, side:o.side, qty:o.qty, limit:o.limit, day:a.day}); return {ok:true, msg:`Limit order placed: it fills when ${o.key} reaches ${money(o.limit)}.`}; }
+  return fill(a, o.key, o.side, o.qty, isOpt(o.key) ? (o.side === 'buy' ? askOf(optMid(o.key, a.day)) : bidOf(optMid(o.key, a.day))) : pxAt(o.key, a.day), 'Market');
+}
+/* close every position, biggest first, until the account is back above the safe level (the broker acts without asking) */
+function forcedSales(a){
+  const sold = [];
+  const order = () => Object.entries(a.pos).filter(([k]) => !isOpt(k)).sort((x, y) => Math.abs(valueOf(y[0], y[1], a.day)) - Math.abs(valueOf(x[0], x[1], a.day)));
+  let guard = 0;
+  while(guard++ < 20){ const ms = marginState(a); if(ms.G <= 0 || ms.E >= 0.35 * ms.G) break;
+    const next = order()[0]; if(!next) break; const [k, p] = next, px = pxAt(k, a.day);
+    const r = fill(a, k, p.qty > 0 ? 'sell' : 'cover', Math.abs(p.qty), px, 'Forced'); if(!r.ok) break; sold.push(k); }
+  return sold;
 }
 function nextDay(){
-  const a = trAcct(); a.day++;
-  a.orders = a.orders.filter(o => { const px = pxAt(o.sym, a.day), hit = o.side === 'buy' ? px <= o.limit : px >= o.limit;
-    if(!hit) return true; const r = fill(a, o.sym, o.side, o.qty, o.side === 'buy' ? Math.min(px, o.limit) : Math.max(px, o.limit), 'Limit'); return !r.ok && false; });
+  const a = trAcct(); a.day++; a.alert = '';
+  // charges first: interest on borrowed cash and the fee for borrowed shares
+  const ms0 = marginState(a), interest = (ms0.loan * LOAN_RATE + ms0.S * BORROW_RATE) / 252; if(interest > 0){ a.cash -= interest; a.costs += interest; }
+  // limit orders
+  a.orders = a.orders.filter(o => { const px = isOpt(o.key) ? optMid(o.key, a.day) : pxAt(o.key, a.day), hit = o.side === 'buy' || o.side === 'cover' ? px <= o.limit : px >= o.limit;
+    if(!hit) return true; fill(a, o.key, o.side, o.qty, o.side === 'buy' || o.side === 'cover' ? Math.min(px, o.limit) : Math.max(px, o.limit), 'Limit'); return false; });
+  // options expire on their day: cash-settled at the value of the stock that day
+  Object.keys(a.pos).filter(isOpt).forEach(k => { const o = optParts(k); if(o.exp > a.day) return; const p = a.pos[k], S0 = pxAt(o.sym, o.exp), iv = o.call ? Math.max(0, S0 - o.K) : Math.max(0, o.K - S0);
+    a.cash += p.qty * 100 * iv; a.log.unshift({day:a.day, key:k, side: p.qty > 0 ? 'sell' : 'buy', qty:Math.abs(p.qty), price:iv, kind: iv > 0 ? 'Expired in the money' : 'Expired worthless'}); delete a.pos[k];
+    a.alert += `${optName(k)} expired ${iv > 0 ? 'in the money: ' + (p.qty > 0 ? 'you received ' : 'you paid ') + money(Math.abs(p.qty) * 100 * iv) : 'worthless'}. `; });
+  // margin: below 25% equity the broker calls for cash; if it is still short on the next day, it sells
+  const ms = marginState(a);
+  if(ms.G > 0 && ms.E < MAINT * ms.G){
+    if(a.call){ const sold = forcedSales(a); a.alert += `Margin call not met: the broker sold ${sold.join(', ')} to bring the account back in line. `; a.call = null; }
+    else { a.call = {day:a.day, need: MAINT * ms.G - ms.E}; a.alert += `Margin call: your equity is ${Math.round(ms.E / ms.G * 100)}% of your positions, under the ${MAINT * 100}% minimum. Add cash by selling or covering, or the broker sells for you next market day. `; }
+  } else a.call = null;
   a.hist.push({d:a.day, eq:equityNow()}); saveState();
 }
 let autoTimer = null;
@@ -1356,33 +1460,48 @@ function sparkSvg(vals, cls, label){
 }
 function marketRow(m, a){
   const px = pxAt(m.sym, a.day), ch = (px / pxAt(m.sym, a.day - 1) - 1) * 100, held = a.pos[m.sym];
-  return `<li><button class="mk-row" data-sym="${m.sym}"><span class="mk-n"><b>${m.sym}</b><span>${esc(m.name)}${held ? ' · you hold ' + fmtQty(m, held.qty) : ''}</span></span><span class="mk-p"><b>${money(px)}</b><span class="${ch >= 0 ? 'good-t' : 'bad-t'}">${signed(ch)}</span></span></button></li>`;
+  return `<li><button class="mk-row" data-sym="${m.sym}"><span class="mk-n"><b>${m.sym}</b><span>${esc(m.name)}${held ? ' · you ' + (held.qty < 0 ? 'are short ' + fmtQty(m, -held.qty) : 'hold ' + fmtQty(m, held.qty)) : ''}</span></span><span class="mk-p"><b>${money(px)}</b><span class="${ch >= 0 ? 'good-t' : 'bad-t'}">${signed(ch)}</span></span></button></li>`;
+}
+function positionRow(k, p, a){
+  const opt = isOpt(k), m = opt ? null : MKT_BY[k], val = valueOf(k, p, a.day), pl = val - p.cost, short = p.qty < 0;
+  const title = opt ? `${p.qty} × ${optName(k)}` : `${short ? 'Short ' : ''}${k}`, sub = opt ? `exp day ${optParts(k).exp} · ${money(val)}` : `${fmtQty(m, Math.abs(p.qty))} · ${money(Math.abs(val))}${short ? ' owed' : ''}`;
+  return `<li><button class="mk-row" ${opt ? `data-opt="${esc(k)}"` : `data-sym="${k}"`}><span class="mk-n"><b>${esc(title)}</b><span>${esc(sub)}</span></span><span class="mk-p"><b class="${pl >= 0 ? 'good-t' : 'bad-t'}">${pl >= 0 ? '+' : '-'}${money(Math.abs(pl))}</b><span>${signed(pl / Math.max(0.01, Math.abs(p.cost)) * 100)}</span></span></button></li>`;
 }
 let trNote = '';
+function marginCard(a){
+  if(!marginUnlocked()) return `<ul class="rules"><li>${I.lock}<span>Short selling and margin unlock when you finish ${SHORT_UNIT}.</span></li></ul>`;
+  const ms = marginState(a), r = ms.ratio, level = r === null ? 'ok' : r < MAINT ? 'bad' : r < 0.4 ? 'warn' : 'ok';
+  return `<div class="mg-card ${a.margin ? '' : 'off'}"><label class="t-toggle" style="margin:0"><input type="checkbox" id="mgTog" ${a.margin ? 'checked' : ''}><span><b>Margin account</b><span>Borrow cash to buy (${Math.round(LOAN_RATE * 100)}% a year) and sell short (${Math.round(BORROW_RATE * 100)}% a year on shares borrowed). You must fund ${Math.round(INIT_MARGIN * 100)}% of positions yourself; below ${Math.round(MAINT * 100)}% the broker sells for you.</span></span></label>
+    ${a.margin ? `<div class="score"><div><b>${money(ms.loan).replace('.00', '')}</b><span>Borrowed</span></div><div><b>${money(ms.G).replace('.00', '')}</b><span>Positions</span></div><div class="${level === 'bad' ? 'bad-tile' : level === 'warn' ? 'warn-tile' : ''}"><b>${r === null ? '–' : r > 1 ? '100%+' : Math.round(r * 100) + '%'}</b><span>Your share</span></div></div>
+      ${r !== null ? `<div class="pbar mg-meter ${level}" aria-label="Your share of positions is ${Math.round(r * 100)} percent; the broker sells below ${MAINT * 100}"><i style="width:${Math.max(0, Math.min(100, r * 100))}%"></i><u style="left:${MAINT * 100}%"></u></div>` : ''}
+      <div class="demo-note">${a.costs > 0 ? 'Interest and borrow fees so far: ' + money(a.costs) + '. ' : ''}Your share = equity ÷ positions. The line marks the ${MAINT * 100}% minimum.</div>` : ''}</div>`;
+}
 function tradePortfolio(){
   const note = trNote; trNote = '';
   const a = trAcct(), eq = equityNow(), st = trStats(), dayPrev = a.hist.length > 1 ? a.hist[a.hist.length - 2].eq : START_CASH, dayCh = (eq / dayPrev - 1) * 100;
-  const pos = Object.entries(a.pos), q = a.q.trim().toLowerCase();
-  const list = MARKET.filter(m => (a.f === 'all' || m.type === a.f) && (!q || m.sym.toLowerCase().includes(q) || m.name.toLowerCase().includes(q)));
-  const hist = a.hist.map(h => h.eq);
+  const pos = Object.entries(a.pos), q = a.q.trim().toLowerCase(), optView = a.f === 'options';
+  const list = MARKET.filter(m => (a.f === 'all' || m.type === a.f || (optView && optable(m))) && (!q || m.sym.toLowerCase().includes(q) || m.name.toLowerCase().includes(q)));
+  const hist = a.hist.map(h => h.eq), flash = a.alert || (a.call ? 'Margin call open.' : '');
   return `${note ? `<div class="moved" style="margin-top:16px">${I.check}<span>${esc(note)}</span></div>` : ''}
+    ${flash ? `<div class="mc-alert" role="alert">${I.flag}<span>${esc(flash)}</span></div>` : ''}
     <div class="pf-card"><div class="pf-top"><div><span class="eyebrow">Practice account · day ${a.day}</span><div class="pf-val">${money(eq)}</div></div><span class="${st.ret >= 0 ? 'up-t' : 'dn-t'}">${signed(st.ret)} since start</span></div>
       ${hist.length > 1 ? sparkSvg(hist, 'spark', 'Account value over time') : '<div class="demo-note">Place a trade, then move the market on a day to start the chart.</div>'}
       <div class="score"><div><b>${money(a.cash).replace('.00', '')}</b><span>Cash</span></div><div><b>${st.swings === null ? '–' : st.swings.toFixed(1) + '%'}</b><span>Swings</span></div><div class="hl"><b>${st.score === null ? '–' : st.score.toFixed(2)}</b><span>Season score</span></div></div>
       <div class="demo-note">${st.score === null ? 'The score appears after 3 market days: return divided by swings, so steady skill beats a lucky gamble.' : `Today ${signed(dayCh)} · worst drop ${st.dd.toFixed(1)}%. Score is return divided by swings, the idea from Measuring risk.`}</div>
       <div class="tr-ctl"><button class="btn sm" id="trNext">Next market day</button><button class="btn sm ghost" id="trAuto" aria-pressed="${a.auto}">${a.auto ? 'Pause' : 'Auto-play'}</button></div></div>
+    ${marginCard(a)}
     <div class="sec-h">Your positions</div>
-    ${pos.length ? `<ul class="mk-list">${pos.map(([sym, p]) => { const m = MKT_BY[sym], px = pxAt(sym, a.day), val = p.qty * px, pl = val - p.cost;
-      return `<li><button class="mk-row" data-sym="${sym}"><span class="mk-n"><b>${sym}</b><span>${fmtQty(m, p.qty)} · ${money(val)}</span></span><span class="mk-p"><b class="${pl >= 0 ? 'good-t' : 'bad-t'}">${pl >= 0 ? '+' : '-'}${money(Math.abs(pl))}</b><span>${signed(pl / p.cost * 100)}</span></span></button></li>`; }).join('')}</ul>` : '<div class="empty">No positions yet. Pick something from the market below.</div>'}
-    ${a.orders.length ? `<div class="sec-h">Waiting orders</div><ul class="mk-list">${a.orders.map(o => `<li><div class="mk-row"><span class="mk-n"><b>${o.side === 'buy' ? 'Buy' : 'Sell'} ${fmtQty(MKT_BY[o.sym], o.qty)} ${o.sym}</b><span>at ${money(o.limit)} or ${o.side === 'buy' ? 'lower' : 'higher'} · now ${money(pxAt(o.sym, a.day))}</span></span><button class="link-btn" data-cancel="${o.id}">Cancel</button></div></li>`).join('')}</ul>` : ''}
+    ${pos.length ? `<ul class="mk-list">${pos.map(([k, p]) => positionRow(k, p, a)).join('')}</ul>` : '<div class="empty">No positions yet. Pick something from the market below.</div>'}
+    ${a.orders.length ? `<div class="sec-h">Waiting orders</div><ul class="mk-list">${a.orders.map(o => `<li><div class="mk-row"><span class="mk-n"><b>${{buy:'Buy', sell:'Sell', short:'Short', cover:'Cover'}[o.side]} ${fmtQty(MKT_BY[o.key], o.qty)} ${o.key}</b><span>at ${money(o.limit)} or ${o.side === 'buy' || o.side === 'cover' ? 'lower' : 'higher'} · now ${money(pxAt(o.key, a.day))}</span></span><button class="link-btn" data-cancel="${o.id}">Cancel</button></div></li>`).join('')}</ul>` : ''}
     <div class="sec-h">Market</div>
     <input class="field" id="mkQ" placeholder="Search a name or symbol" value="${esc(a.q)}" aria-label="Search the market" autocomplete="off">
-    <div class="pills tr-f" role="group" aria-label="Filter">${[['all','All']].concat(Object.entries(TYPE_LABEL)).map(([k, t]) => `<button type="button" data-f="${k}" aria-pressed="${a.f === k}">${t}</button>`).join('')}</div>
+    <div class="pills tr-f" role="group" aria-label="Filter">${[['all','All']].concat(Object.entries(TYPE_LABEL), [['options', optionsUnlocked() ? 'Options' : 'Options 🔒']]).map(([k, t]) => `<button type="button" data-f="${k}" aria-pressed="${a.f === k}">${t}</button>`).join('')}</div>
+    ${optView ? `<div class="demo-note" style="text-align:left">${optionsUnlocked() ? 'Pick a stock or ETF to see its option chain.' : `Options unlock when you finish ${UNITS[optionsUnit()] ? UNITS[optionsUnit()].title : 'Options basics'}.`}</div>` : ''}
     <ul class="mk-list">${list.map(m => marketRow(m, a)).join('') || '<li class="empty">Nothing matches.</li>'}</ul>
-    ${a.log.length ? `<div class="sec-h">Recent trades</div><ul class="mk-list log">${a.log.slice(0, 5).map(l => `<li><div class="mk-row"><span class="mk-n"><b>${l.side === 'buy' ? 'Bought' : 'Sold'} ${fmtQty(MKT_BY[l.sym], l.qty)} ${l.sym}</b><span>day ${l.day} · ${l.kind} order</span></span><span class="mk-p"><b>${money(l.price)}</b></span></div></li>`).join('')}</ul>` : ''}
+    ${a.log.length ? `<div class="sec-h">Recent trades</div><ul class="mk-list log">${a.log.slice(0, 5).map(l => `<li><div class="mk-row"><span class="mk-n"><b>${{buy:'Bought', sell:'Sold', short:'Sold short', cover:'Covered'}[l.side]} ${isOpt(l.key) ? l.qty + ' × ' + optName(l.key) : fmtQty(MKT_BY[l.key], l.qty) + ' ' + l.key}</b><span>day ${l.day} · ${l.kind}</span></span><span class="mk-p"><b>${money(l.price)}</b></span></div></li>`).join('')}</ul>` : ''}
     <ul class="rules"><li>${I.check}<span>Market orders fill at the price on screen. Limit orders wait until the price reaches yours, as in the Placing orders lesson.</span></li>
       <li>${I.check}<span>Season score is return divided by swings, so steady skill beats a lucky gamble. Spreading across assets lowers swings.</span></li>
-      <li>${I.lock}<span>Short selling, margin and options open up later in the real app. You can only buy and sell what you hold for now.</span></li></ul>
+      <li>${I.check}<span>Options are cash-settled and you can only sell covered calls or cash-secured puts here. Prices come from a model on the sample stock price.</span></li></ul>
     <div class="btn-row" style="margin-top:14px"><button class="btn ghost" id="trReset">Reset the practice account</button></div>
     <div class="season"><div class="tagrow"><span class="pill">Starts Feb 2027</span><span class="eyebrow" style="color:var(--on-banner-2)">Season 1</span></div><h2>AUB Investing Cup</h2>
       <p>Everyone starts with $10,000 in fake money and trades for one season. Competitions rank your practice account's season score.</p>
@@ -1395,46 +1514,94 @@ function bindPortfolio(){
   $('#trAuto').onclick = () => { setAuto(!a.auto); renderTrade(); };
   $('#trReset').onclick = () => { setAuto(false); S.tr = null; saveState(); renderTrade(); };
   $('#waitBtn').onclick = () => { S.wait = true; renderTrade(); };
+  const mg = $('#mgTog'); if(mg) mg.onchange = () => {
+    if(!mg.checked){ const ms = marginState(a); if(ms.S > 0 || a.cash < 0){ mg.checked = true; trNote = 'Close your shorts and pay back the loan before turning margin off.'; renderTrade(); return; } }
+    a.margin = mg.checked; saveState(); renderTrade(); };
   $('#mkQ').oninput = e => { a.q = e.target.value; const pos = e.target.selectionStart; renderTrade(); const n = $('#mkQ'); n.focus(); n.setSelectionRange(pos, pos); };
   $('#s-trade').querySelectorAll('.tr-f button').forEach(b => b.onclick = () => { a.f = b.dataset.f; renderTrade(); });
-  $('#s-trade').querySelectorAll('[data-sym]').forEach(b => b.onclick = () => openTicket(b.dataset.sym));
+  $('#s-trade').querySelectorAll('[data-sym]').forEach(b => b.onclick = () => a.f === 'options' ? openChain(b.dataset.sym) : openTicket(b.dataset.sym));
+  $('#s-trade').querySelectorAll('[data-opt]').forEach(b => b.onclick = () => openOptTicket(b.dataset.opt));
   $('#s-trade').querySelectorAll('[data-cancel]').forEach(b => b.onclick = () => { a.orders = a.orders.filter(o => String(o.id) !== b.dataset.cancel); saveState(); renderTrade(); });
 }
+const SIDE_LABEL = {buy:'Buy', sell:'Sell', short:'Short', cover:'Cover'};
 function openTicket(sym, d){
-  const a = trAcct(), m = MKT_BY[sym], px = pxAt(sym, a.day), held = a.pos[sym], tk = d || {side:'buy', kind:'market', qty:'', limit:''};
+  const a = trAcct(), m = MKT_BY[sym], px = pxAt(sym, a.day), held = a.pos[sym], unlocked = marginUnlocked() && a.margin;
+  const tk = d || {side: held && held.qty < 0 ? 'cover' : 'buy', kind:'market', qty:'', limit:''};
   const series = []; for(let i = Math.max(-WARM, a.day - 40); i <= a.day; i++) series.push(pxAt(sym, i));
-  const qty = parseFloat(tk.qty) || 0, limit = parseFloat(tk.limit) || 0, usePx = tk.kind === 'limit' && limit > 0 ? limit : px, total = qty * usePx;
-  const maxQty = tk.side === 'buy' ? qtyOf(m, a.cash / px) : (held ? held.qty : 0);
+  const qty = parseFloat(tk.qty) || 0, limit = parseFloat(tk.limit) || 0, usePx = tk.kind === 'limit' && limit > 0 ? limit : px, total = qty * usePx, ms = marginState(a);
+  const maxQty = tk.side === 'buy' ? qtyOf(m, (a.margin ? Math.max(0, ms.E / INIT_MARGIN - ms.G) : Math.max(0, a.cash)) / px) : tk.side === 'short' ? qtyOf(m, Math.max(0, ms.E / INIT_MARGIN - ms.G) / px) : tk.side === 'sell' ? Math.max(0, held ? held.qty : 0) : Math.max(0, held ? -held.qty : 0);
   const ch = (px / pxAt(sym, a.day - 1) - 1) * 100;
+  const sides = ['buy', 'sell', 'short', 'cover'], lockedSide = s => (s === 'short' || s === 'cover') && !unlocked && !(s === 'cover' && held && held.qty < 0);
   openSheet(`<div class="sh-head"><div><span class="eyebrow">${TYPE_LABEL[m.type]}</span><h2>${m.sym} · ${esc(m.name)}</h2></div><button class="icon-btn" id="tmClose" aria-label="Close">${I.x}</button></div>
     <div class="pf-top" style="margin-top:8px"><div class="pf-val">${money(px)}</div><span class="${ch >= 0 ? 'up-t' : 'dn-t'}">${signed(ch)} today</span></div>
     ${sparkSvg(series, 'spark', m.sym + ' price over recent days')}
-    ${held ? `<div class="demo-note">You hold ${fmtQty(m, held.qty)} · worth ${money(held.qty * px)} · average cost ${money(held.cost / held.qty)}</div>` : ''}
-    <div class="seg" role="group" aria-label="Side" style="grid-template-columns:1fr 1fr"><button data-side="buy" aria-pressed="${tk.side === 'buy'}">Buy</button><button data-side="sell" aria-pressed="${tk.side === 'sell'}">Sell</button></div>
+    ${held ? `<div class="demo-note">${held.qty < 0 ? `You are short ${fmtQty(m, -held.qty)} · you owe ${money(-held.qty * px)}` : `You hold ${fmtQty(m, held.qty)} · worth ${money(held.qty * px)}`} · average price ${money(held.cost / held.qty)}</div>` : ''}
+    <div class="seg" role="group" aria-label="Side" style="grid-template-columns:repeat(4,1fr)">${sides.map(s => `<button data-side="${s}" aria-pressed="${tk.side === s}">${SIDE_LABEL[s]}${lockedSide(s) ? ' 🔒' : ''}</button>`).join('')}</div>
     <div class="seg" role="group" aria-label="Order type" style="grid-template-columns:1fr 1fr;margin-top:8px"><button data-kind="market" aria-pressed="${tk.kind === 'market'}">Market</button><button data-kind="limit" aria-pressed="${tk.kind === 'limit'}">Limit</button></div>
-    <div class="form" style="margin-top:12px"><div><label class="l" for="tkQty">${m.type === 'crypto' || m.type === 'gold' ? 'Amount (decimals allowed)' : 'Shares'}</label><input class="field" id="tkQty" inputmode="decimal" placeholder="0" value="${esc(tk.qty)}" autocomplete="off">
+    ${lockedSide(tk.side) ? `<div class="demo-note" style="text-align:left">${marginUnlocked() ? 'Turn on the margin account in the Portfolio view to sell short.' : `Short selling unlocks when you finish ${SHORT_UNIT}.`}</div>` : ''}
+    ${optable(m) && optionsUnlocked() ? '<div class="btn-row" style="margin-top:10px"><button class="btn ghost sm" id="tkChain" style="width:100%">See the option chain</button></div>' : ''}
+    <div class="form" style="margin-top:12px"><div><label class="l" for="tkQty">${isCoin(m) ? 'Amount (decimals allowed)' : 'Shares'}</label><input class="field" id="tkQty" inputmode="decimal" placeholder="0" value="${esc(tk.qty)}" autocomplete="off">
       <div class="quick">${[25, 50, 100].map(p => `<button type="button" data-pct="${p}">${p === 100 ? 'Max' : p + '%'}</button>`).join('')}</div></div>
-      ${tk.kind === 'limit' ? `<div><label class="l" for="tkLim">Limit price (${tk.side === 'buy' ? 'buy at this or lower' : 'sell at this or higher'})</label><input class="field" id="tkLim" inputmode="decimal" placeholder="${px.toFixed(2)}" value="${esc(tk.limit)}" autocomplete="off"></div>` : ''}</div>
-    <div class="cost"><span>${tk.kind === 'limit' ? 'Order value at your limit' : 'Estimated ' + (tk.side === 'buy' ? 'cost' : 'proceeds')}</span><b>${money(total)}</b></div>
-    <div class="demo-note">Cash ${money(a.cash)}${tk.side === 'buy' ? ' · you can afford up to ' + fmtQty(m, maxQty) : ''}. No fees in the prototype.</div>
-    <div class="btn-row" style="margin-top:14px"><button class="btn ${tk.side === 'buy' ? '' : 'bad'}" id="tkGo">${tk.kind === 'limit' ? 'Place limit order' : (tk.side === 'buy' ? 'Buy' : 'Sell') + ' ' + sym}</button></div><div class="msg" id="tkMsg" aria-live="polite"></div>`);
+      ${tk.kind === 'limit' ? `<div><label class="l" for="tkLim">Limit price (${tk.side === 'buy' || tk.side === 'cover' ? 'at this or lower' : 'at this or higher'})</label><input class="field" id="tkLim" inputmode="decimal" placeholder="${px.toFixed(2)}" value="${esc(tk.limit)}" autocomplete="off"></div>` : ''}</div>
+    <div class="cost"><span>${tk.kind === 'limit' ? 'Order value at your limit' : 'Estimated ' + (tk.side === 'buy' || tk.side === 'cover' ? 'cost' : 'proceeds')}</span><b>${money(total)}</b></div>
+    <div class="demo-note">Cash ${money(a.cash)} · up to ${fmtQty(m, maxQty)} ${SIDE_LABEL[tk.side].toLowerCase()}${a.margin && (tk.side === 'buy' || tk.side === 'short') ? ' with your margin limit' : ''}. No fees in the prototype.</div>
+    <div class="btn-row" style="margin-top:14px"><button class="btn ${tk.side === 'buy' || tk.side === 'cover' ? '' : 'bad'}" id="tkGo">${tk.kind === 'limit' ? 'Place limit order' : SIDE_LABEL[tk.side] + ' ' + sym}</button></div><div class="msg" id="tkMsg" aria-live="polite"></div>`);
   const cur = () => ({side:tk.side, kind:tk.kind, qty:$('#tkQty').value, limit: $('#tkLim') ? $('#tkLim').value : ''});
   $('#tmClose').onclick = closeSheet;
+  const ch2 = $('#tkChain'); if(ch2) ch2.onclick = () => openChain(sym);
   $('#tradeSheet').querySelectorAll('[data-side]').forEach(b => b.onclick = () => { const t = cur(); t.side = b.dataset.side; openTicket(sym, t); });
   $('#tradeSheet').querySelectorAll('[data-kind]').forEach(b => b.onclick = () => { const t = cur(); t.kind = b.dataset.kind; openTicket(sym, t); });
   $('#tradeSheet').querySelectorAll('[data-pct]').forEach(b => b.onclick = () => { const t = cur(); t.qty = String(fmtQty(m, qtyOf(m, maxQty * (+b.dataset.pct / 100)))); openTicket(sym, t); });
-  const upd = () => { const t = cur(); openTicket(sym, t); const el = $('#tkQty'); };
-  $('#tkQty').onchange = upd; if($('#tkLim')) $('#tkLim').onchange = upd;
+  $('#tkQty').onchange = () => openTicket(sym, cur()); if($('#tkLim')) $('#tkLim').onchange = () => openTicket(sym, cur());
   $('#tkGo').onclick = () => {
     const t = cur(), q = qtyOf(m, parseFloat(t.qty) || 0), lim = parseFloat(t.limit) || 0, msg = $('#tkMsg'); msg.className = 'msg bad';
-    if(q <= 0){ msg.textContent = m.type === 'crypto' || m.type === 'gold' ? 'Type an amount above zero.' : 'Type a whole number of shares above zero.'; return; }
+    if(lockedSide(t.side)){ msg.textContent = marginUnlocked() ? 'Turn on the margin account in the Portfolio view first.' : `Finish ${SHORT_UNIT} to unlock short selling.`; return; }
+    if(q <= 0){ msg.textContent = isCoin(m) ? 'Type an amount above zero.' : 'Type a whole number of shares above zero.'; return; }
     if(t.kind === 'limit' && lim <= 0){ msg.textContent = 'Type the limit price.'; return; }
-    if(t.kind === 'limit' && t.side === 'buy' && q * lim > a.cash + 0.005){ msg.textContent = `Not enough cash for that: ${money(q * lim)} needed, ${money(a.cash)} available.`; return; }
-    if(t.kind === 'limit' && t.side === 'sell' && q > (held ? held.qty : 0) + 1e-9){ msg.textContent = `You only hold ${held ? fmtQty(m, held.qty) : 0} ${sym}.`; return; }
-    const r = placeOrder({sym, side:t.side, qty:q, kind:t.kind, limit:lim});
+    const r = placeOrder({key:sym, side:t.side, qty:q, kind:t.kind, limit:lim});
     if(!r.ok){ msg.textContent = r.msg; return; }
     trNote = r.msg; saveState(); renderTrade(); closeSheet();
   };
+}
+/* options chain and ticket */
+function openChain(sym, st){
+  const a = trAcct(), m = MKT_BY[sym], px = pxAt(sym, a.day), c = st || {exp:expiriesFrom(a.day)[0], call:true};
+  if(!optionsUnlocked()){ openSheet(`<div class="sh-head"><div><span class="eyebrow">Options</span><h2>${sym}</h2></div><button class="icon-btn" id="tmClose" aria-label="Close">${I.x}</button></div><div class="empty" style="margin-top:16px">${I.lock.replace('<svg', '<svg width="22" height="22"')}<br>Options unlock when you finish ${UNITS[optionsUnit()] ? UNITS[optionsUnit()].title : 'Options basics'}.</div>`); $('#tmClose').onclick = closeSheet; return; }
+  const exps = expiriesFrom(a.day); if(!exps.includes(c.exp)) c.exp = exps[0];
+  const rows = strikesFor(sym, a.day).map(K => { const key = optKey(sym, c.exp, K, c.call ? 'C' : 'P'), g = optGreeks(key, a.day), itm = c.call ? px > K : px < K, held = a.pos[key];
+    return `<li><button class="mk-row ${itm ? 'itm' : ''}" data-ok="${esc(key)}"><span class="mk-n"><b>${K}</b><span>${itm ? 'in the money' : 'out of the money'}${held ? ' · you ' + (held.qty > 0 ? 'hold ' : 'are short ') + Math.abs(held.qty) : ''}</span></span><span class="mk-p"><b>${money(g.price)}</b><span>Δ ${g.delta.toFixed(2)}</span></span></button></li>`; }).join('');
+  openSheet(`<div class="sh-head"><div><span class="eyebrow">Option chain</span><h2>${sym} · ${money(px)}</h2></div><button class="icon-btn" id="tmClose" aria-label="Close">${I.x}</button></div>
+    <div class="pills" role="group" aria-label="Expiry" style="margin-top:12px">${exps.map(e => `<button type="button" data-exp="${e}" aria-pressed="${e === c.exp}">Day ${e} · ${e - a.day}d</button>`).join('')}</div>
+    <div class="seg" role="group" aria-label="Calls or puts" style="grid-template-columns:1fr 1fr"><button data-cp="C" aria-pressed="${c.call}">Calls</button><button data-cp="P" aria-pressed="${!c.call}">Puts</button></div>
+    <div class="demo-note" style="text-align:left">Price per share, 100 shares per contract. Δ is delta: how much the price moves per $1 in ${sym}. Tap a strike to trade.</div>
+    <ul class="mk-list">${rows}</ul>`);
+  $('#tmClose').onclick = closeSheet;
+  $('#tradeSheet').querySelectorAll('[data-exp]').forEach(b => b.onclick = () => openChain(sym, {exp:+b.dataset.exp, call:c.call}));
+  $('#tradeSheet').querySelectorAll('[data-cp]').forEach(b => b.onclick = () => openChain(sym, {exp:c.exp, call:b.dataset.cp === 'C'}));
+  $('#tradeSheet').querySelectorAll('[data-ok]').forEach(b => b.onclick = () => openOptTicket(b.dataset.ok));
+}
+function openOptTicket(key, d){
+  const a = trAcct(), o = optParts(key), g = optGreeks(key, a.day), px = pxAt(o.sym, a.day), held = a.pos[key], tk = d || {side: held && held.qty < 0 ? 'buy' : 'buy', qty:'1'};
+  const ask = askOf(g.price), bid = bidOf(g.price), qty = Math.max(0, Math.floor(parseFloat(tk.qty) || 0)), price = tk.side === 'buy' ? ask : bid, total = qty * 100 * price;
+  const be = o.call ? o.K + ask : o.K - ask, closing = held && ((tk.side === 'sell' && held.qty > 0) || (tk.side === 'buy' && held.qty < 0));
+  const risk = closing ? 'Closing your position at the current price.' : tk.side === 'buy' ? `Most you can lose: the ${money(total)} you pay. ${o.call ? `It pays off above ${money(be)} at expiry.` : `It pays off below ${money(be)} at expiry.`}` : o.call ? `Covered call: it caps your gain on ${o.sym} at ${money(o.K + bid)} a share. If ${o.sym} ends above ${money(o.K)} you pay the difference.` : `Cash-secured put: you keep the ${money(total)} premium if ${o.sym} stays above ${money(o.K)}; below it you pay the shortfall, up to ${money(qty * 100 * (o.K - bid))}.`;
+  openSheet(`<div class="sh-head"><div><span class="eyebrow">${o.call ? 'Call' : 'Put'} option · expires day ${o.exp}</span><h2>${o.sym} ${o.K}</h2></div><button class="icon-btn" id="tmClose" aria-label="Close">${I.x}</button></div>
+    <div class="score"><div><b>${money(bid)}</b><span>Bid</span></div><div><b>${money(g.price)}</b><span>Model</span></div><div><b>${money(ask)}</b><span>Ask</span></div></div>
+    <div class="score" style="margin-top:8px"><div><b>${g.delta.toFixed(2)}</b><span>Delta</span></div><div><b>${(g.theta * 100).toFixed(2)}</b><span>Decay/day</span></div><div><b>${(g.vega * 100).toFixed(2)}</b><span>Per vol pt</span></div></div>
+    <div class="demo-note" style="text-align:left">${o.sym} is ${money(px)} · ${o.exp - a.day} day${o.exp - a.day === 1 ? '' : 's'} left. Decay and vega are per contract (100 shares).${held ? ` You ${held.qty > 0 ? 'hold' : 'are short'} ${Math.abs(held.qty)}.` : ''}</div>
+    <div class="seg" role="group" aria-label="Side" style="grid-template-columns:1fr 1fr"><button data-oside="buy" aria-pressed="${tk.side === 'buy'}">Buy</button><button data-oside="sell" aria-pressed="${tk.side === 'sell'}">Sell</button></div>
+    <div class="form" style="margin-top:12px"><div><label class="l" for="otQty">Contracts</label><input class="field" id="otQty" inputmode="numeric" value="${esc(tk.qty)}" autocomplete="off"></div></div>
+    <div class="cost"><span>${tk.side === 'buy' ? 'Cost' : 'Premium received'} at ${money(price)} × 100</span><b>${money(total)}</b></div>
+    <div class="demo-note" style="text-align:left">${esc(risk)}</div>
+    <div class="btn-row" style="margin-top:14px"><button class="btn ${tk.side === 'buy' ? '' : 'bad'}" id="otGo">${tk.side === 'buy' ? 'Buy' : 'Sell'} ${qty || ''} contract${qty === 1 ? '' : 's'}</button><button class="btn ghost" id="otBack">Back to the chain</button></div><div class="msg" id="otMsg" aria-live="polite"></div>`);
+  const cur = () => ({side:tk.side, qty:$('#otQty').value});
+  $('#tmClose').onclick = closeSheet; $('#otBack').onclick = () => openChain(o.sym, {exp:o.exp, call:o.call});
+  $('#tradeSheet').querySelectorAll('[data-oside]').forEach(b => b.onclick = () => { const t = cur(); t.side = b.dataset.oside; openOptTicket(key, t); });
+  $('#otQty').onchange = () => openOptTicket(key, cur());
+  $('#otGo').onclick = () => { const t = cur(), q = Math.floor(parseFloat(t.qty) || 0), msg = $('#otMsg'); msg.className = 'msg bad';
+    if(q <= 0){ msg.textContent = 'Type a whole number of contracts above zero.'; return; }
+    const r = placeOrder({key, side:t.side, qty:q, kind:'market'});
+    if(!r.ok){ msg.textContent = r.msg; return; } trNote = r.msg; saveState(); renderTrade(); closeSheet(); };
 }
 
 /* ---------- league ---------- */

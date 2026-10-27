@@ -91,3 +91,4 @@ See the checklists in `docs/CURRICULUM.md` (content) and `docs/DEVELOPMENT_PLAN.
 - Trading section built: working practice account in the Trade tab (sample prices, market + limit orders, positions, season score; competitions rank it). Not yet: short selling, margin, options, live prices.
 
 - Class mode, institution preview and trading section pushed straight to main (fast-forward, founder-authorised, no PR) and live. The saved GitHub token is rejected by the REST API even when git push works, so PRs need the web page until the login is refreshed.
+- Practice account now has short selling, margin (calls + forced sales) and options (chain, covered calls, cash-secured puts, expiry), gated by Short selling and margin / Options basics. Tested at 320px.

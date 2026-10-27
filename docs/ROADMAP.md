@@ -58,7 +58,7 @@ The prototype's code will not become the real app. It is a sketch for testing. W
 - [x] Ready for interviews: new players start from zero, saved progress survives reordering, "Report a problem" on every card and question
 - [x] Class mode preview: teacher space, assignments, class progress, CSV grades, class tournaments, student join, school-paid Pro
 - [x] Institutional accounts: plan in docs/INSTITUTIONS.md and a mock admin screen (plans, seats, teachers, school email, quote)
-- [x] Trading section in the prototype: practice account with 16 sample instruments, market and limit orders, positions, season score, competitions rank it. Still to build: short selling, margin, options, real prices
+- [x] Trading section in the prototype: practice account with 16 sample instruments, market and limit orders, positions, season score, competitions rank it. Short selling, margin (calls and forced sales) and options (chain, covered/secured writing, expiry) added and unit-gated. Still to build: naked options and spreads, order types beyond market and limit, real prices
 - [ ] Finance professor reviews all six units
 
 ## Phase 2: Test demand (weeks 1-3)
