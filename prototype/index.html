@@ -559,6 +559,18 @@ select.field.sm{margin:0 12px 10px; width:calc(100% - 24px); padding:8px 12px; f
 .t-toggle input{width:22px; height:22px; margin-top:2px; accent-color:var(--bull); flex:none}
 .t-toggle b{display:block; font-size:14.5px}
 .t-toggle span span{display:block; font-size:12.5px; color:var(--ink-2)}
+
+.dn-t{color:var(--bear-ink); font-family:var(--font-mono); font-weight:700; font-size:14px}
+.tr-ctl{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px}
+.tr-ctl .btn.sm{width:100%}
+.mk-list{list-style:none; margin:10px 0 0; padding:0; display:grid; gap:8px}
+.mk-row{display:flex; justify-content:space-between; align-items:center; gap:10px; width:100%; text-align:left; background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:10px 12px; color:var(--ink)}
+.mk-n{min-width:0; flex:1} .mk-n b{display:block; font-size:15px} .mk-n span{display:block; font-size:12.5px; color:var(--ink-2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.mk-p{text-align:right; flex:none} .mk-p b{display:block; font-family:var(--font-mono); font-size:14.5px} .mk-p span{font-family:var(--font-mono); font-size:12.5px; font-weight:700}
+.tr-f{margin-top:10px}
+#mkQ{margin-top:10px}
+.quick{display:flex; gap:8px; margin-top:8px}
+.quick button{flex:1; border:1.5px solid var(--line); background:var(--surface-2); border-radius:10px; padding:6px; font-weight:700; font-size:13px; color:var(--ink-2)}
 </style>
 
 <aside class="about">
@@ -779,7 +791,7 @@ const GLOBAL = [['finn.o','UK',2214],['layla.q','AE',2187],['omar.s','SA',2150],
 /* ---------- state ---------- */
 /* A brand-new player starts from nothing: no streak, no points, the starting league, a 1,000 rating
    (the starting value in DEVELOPMENT_PLAN.md) and no trophies. Other players stay as sample data. */
-const INITIAL = {role:'student', classes:{}, inst:{plan:'campus', invites:[], domain:true, quote:null}, myClass:null, tCode:null, tTab:'overview', tDraft:null, streak:0, streakToday:false, hearts:5, xpTotal:0, weekly:0, rating:1000, done:0, reports:[], tab:'learn', view:'week', last:null, wait:false, newBadge:null, pick:null,
+const INITIAL = {role:'student', classes:{}, inst:{plan:'campus', invites:[], domain:true, quote:null}, tr:null, myClass:null, tCode:null, tTab:'overview', tDraft:null, streak:0, streakToday:false, hearts:5, xpTotal:0, weekly:0, rating:1000, done:0, reports:[], tab:'learn', view:'week', last:null, wait:false, newBadge:null, pick:null,
   onboarded:false, level:null, placed:false, testedOut:[], scrollCur:false,
   lview:'course', vault:{}, bonus:0, certs:{}, missed:[], openUnit:null,
   tview:'comps', joined:['AUB-CUP'], created:{}, credits:1, clan:null, requested:[], createdClans:[], clanQ:'', draft:null,
@@ -1040,14 +1052,14 @@ function renderTrade(){
   const body = S.tview === 'clans' ? tradeClans() : S.tview === 'portfolio' ? tradePortfolio() : tradeComps();
   $('#s-trade').innerHTML = `
     <div class="pad">
-      <div class="screen-h"><h1>Trading game</h1><p>Fake money. Real prices. Ranked on skill.</p></div>
+      <div class="screen-h"><h1>Trading game</h1><p>Fake money. Ranked on skill.</p></div>
       <div class="seg three" role="group" aria-label="Trading game">${tabs.map(t => `<button data-v="${t[0]}" aria-pressed="${S.tview===t[0]}">${t[1]}</button>`).join('')}</div>
       ${body}
     </div>`;
   $('#s-trade').querySelectorAll('.seg button').forEach(b => b.onclick = () => { S.tview = b.dataset.v; renderTrade(); });
   if(S.tview === 'comps') bindComps();
   else if(S.tview === 'clans') bindClans();
-  else $('#waitBtn').onclick = () => { S.wait = true; renderTrade(); };
+  else bindPortfolio();
 }
 
 /* competitions */
@@ -1095,7 +1107,8 @@ function openComp(code, note){
     board = `<div class="sec-h" style="margin-top:18px">Standings · season score${C.ended ? ' · final' : ''}</div><ol class="mini-board">${sorted.map((p, i) => `<li class="${p[0] === 'You' ? 'me' : ''}"><span class="rk ${i<3?'medal m'+(i+1):''}">${i+1}</span><span class="nm">${esc(p[0])} <em>· ${esc(p[1])}</em></span><span class="pts">${p[2].toFixed(2)}</span></li>`).join('')}</ol>`;
   } else if(C.live){
     const rows = TOP5.map((p, i) => `<li><span class="rk ${i<3?'medal m'+(i+1):''}">${i+1}</span><span class="nm">${p[0]} <em>· ${p[1]}</em></span><span class="pts">${p[2].toFixed(2)}</span></li>`).join('');
-    const me = joined ? `<li class="me"><span class="rk">${C.me[0]}</span><span class="nm">You</span><span class="pts">${C.me[1].toFixed(2)}</span></li>` : '';
+    const ts = trStats(), mine = ts.score, myRank = mine === null ? null : (TOP5.some(p => p[2] <= mine) ? TOP5.filter(p => p[2] > mine).length + 1 : 5 + Math.max(1, Math.round((C.players - 5) / (1 + Math.exp((mine - 0.4) / 0.35)))));
+    const me = joined ? (mine === null ? `<li class="me"><span class="rk">·</span><span class="nm">You</span><span class="pts">trade for 3 market days</span></li>` : `<li class="me"><span class="rk">${myRank}</span><span class="nm">You</span><span class="pts">${mine.toFixed(2)}</span></li>`) : '';
     board = `<div class="sec-h" style="margin-top:18px">Standings · season score</div><ol class="mini-board">${rows}${me ? '<li class="gap-row" aria-hidden="true">· · ·</li>' + me : ''}</ol>`;
   }
   openSheet(`
@@ -1266,49 +1279,162 @@ function openCreateClan(open = true){
 }
 
 /* the original sample portfolio, now its own view */
+/* ---------- practice trading ----------
+   A working paper-trading account. Prices are SAMPLE prices from a seeded random walk (one step per market day),
+   so the same day always shows the same prices. Real prices need a data provider (see DEVELOPMENT_PLAN.md).
+   Market orders fill at the current price; limit orders wait until the price reaches yours. No shorting or margin yet. */
+const MARKET = [
+  {sym:'AAPL', name:'Apple', type:'stock', p0:230, beta:1.1, idio:0.012, dec:2}, {sym:'MSFT', name:'Microsoft', type:'stock', p0:420, beta:1.0, idio:0.011, dec:2},
+  {sym:'NVDA', name:'Nvidia', type:'stock', p0:135, beta:1.6, idio:0.022, dec:2}, {sym:'TSLA', name:'Tesla', type:'stock', p0:250, beta:1.8, idio:0.026, dec:2},
+  {sym:'JPM', name:'JPMorgan Chase', type:'stock', p0:210, beta:1.0, idio:0.010, dec:2}, {sym:'XOM', name:'Exxon Mobil', type:'stock', p0:115, beta:0.7, idio:0.011, dec:2},
+  {sym:'KO', name:'Coca-Cola', type:'stock', p0:68, beta:0.4, idio:0.007, dec:2}, {sym:'DIS', name:'Disney', type:'stock', p0:95, beta:1.1, idio:0.014, dec:2},
+  {sym:'SPY', name:'S&P 500 ETF', type:'etf', p0:570, beta:1.0, idio:0.002, dec:2}, {sym:'QQQ', name:'Nasdaq 100 ETF', type:'etf', p0:480, beta:1.2, idio:0.003, dec:2},
+  {sym:'AGG', name:'US bond ETF', type:'etf', p0:98, beta:-0.05, idio:0.003, dec:2}, {sym:'VXUS', name:'World ex-US ETF', type:'etf', p0:65, beta:0.8, idio:0.004, dec:2},
+  {sym:'BTC', name:'Bitcoin', type:'crypto', p0:68000, beta:1.5, idio:0.030, dec:2}, {sym:'ETH', name:'Ethereum', type:'crypto', p0:2500, beta:1.7, idio:0.036, dec:2},
+  {sym:'SOL', name:'Solana', type:'crypto', p0:145, beta:1.9, idio:0.045, dec:2}, {sym:'XAU', name:'Gold (per oz)', type:'gold', p0:2650, beta:0.05, idio:0.007, dec:2}
+];
+const MKT_BY = Object.fromEntries(MARKET.map(m => [m.sym, m]));
+const TYPE_LABEL = {stock:'Stocks', etf:'ETFs', crypto:'Crypto', gold:'Gold'};
+const START_CASH = 10000, WARM = 60;
+function gauss(seed){ const a = (hash32(seed + 'a') % 100000 + 0.5) / 100000, b = (hash32(seed + 'b') % 100000 + 0.5) / 100000; return Math.sqrt(-2 * Math.log(a)) * Math.cos(2 * Math.PI * b); }
+const LOGS = {};
+/* log-price of an instrument at market day d (day 0 is the sample price); history before day 0 exists so charts have a past */
+function logAt(m, d){
+  const arr = LOGS[m.sym] || (LOGS[m.sym] = [0]); // arr[i] = cumulative log return from day -WARM to day -WARM+i
+  while(arr.length <= d + WARM){
+    const day = arr.length - WARM, mkt = 0.009 * gauss('mkt' + day), r = m.beta * mkt + m.idio * gauss(m.sym + day) + 0.0003;
+    arr.push(arr[arr.length - 1] + r);
+  }
+  return arr[d + WARM];
+}
+const pxAt = (sym, d) => { const m = MKT_BY[sym]; return m.p0 * Math.exp(logAt(m, d) - logAt(m, 0)); };
+const money = n => (n < 0 ? '-$' : '$') + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+const signed = n => (n > 0 ? '+' : n < 0 ? '-' : '') + Math.abs(n).toFixed(2) + '%';
+const qtyOf = (m, v) => m.type === 'crypto' || m.type === 'gold' ? Math.floor(v * 10000) / 10000 : Math.floor(v);
+const fmtQty = (m, q) => m.type === 'crypto' || m.type === 'gold' ? String(+q.toFixed(4)) : String(q);
+const trAcct = () => S.tr || (S.tr = {day:0, cash:START_CASH, pos:{}, orders:[], hist:[{d:0, eq:START_CASH}], log:[], auto:false, f:'all', q:''});
+const equityNow = () => { const a = trAcct(); return a.cash + Object.entries(a.pos).reduce((n, [sym, p]) => n + p.qty * pxAt(sym, a.day), 0); };
+/* season score = total return divided by how far the account typically wandered (daily swings x sqrt(days)) */
+function trStats(){
+  const a = trAcct(), eq = a.hist.map(h => h.eq), ret = (eq[eq.length - 1] / START_CASH - 1) * 100;
+  if(eq.length < 4) return {ret, swings:null, score:null, dd:0};
+  const rs = []; for(let i = 1; i < eq.length; i++) rs.push((eq[i] / eq[i-1] - 1) * 100);
+  const mean = rs.reduce((s, x) => s + x, 0) / rs.length, sd = Math.sqrt(rs.reduce((s, x) => s + (x - mean) ** 2, 0) / (rs.length - 1));
+  const swings = sd * Math.sqrt(rs.length); let peak = eq[0], dd = 0; eq.forEach(v => { peak = Math.max(peak, v); dd = Math.min(dd, (v / peak - 1) * 100); });
+  return {ret, swings, score: swings > 0.05 ? ret / swings : null, dd};
+}
+function placeOrder(o){ // {sym, side, qty, kind, limit}
+  const a = trAcct(), m = MKT_BY[o.sym], px = pxAt(o.sym, a.day);
+  if(o.kind === 'limit'){ a.orders.push({id:Date.now() + Math.random(), sym:o.sym, side:o.side, qty:o.qty, limit:o.limit, day:a.day}); return {ok:true, msg:`Limit order placed: it fills when ${o.sym} reaches ${money(o.limit)}.`}; }
+  return fill(a, o.sym, o.side, o.qty, px, 'Market');
+}
+function fill(a, sym, side, qty, price, kind){
+  const m = MKT_BY[sym], cost = qty * price;
+  if(side === 'buy'){ if(cost > a.cash + 0.005) return {ok:false, msg:`Not enough cash: you need ${money(cost)} and have ${money(a.cash)}.`};
+    const p = a.pos[sym] || (a.pos[sym] = {qty:0, cost:0}); p.qty += qty; p.cost += cost; a.cash -= cost; }
+  else { const p = a.pos[sym]; if(!p || qty > p.qty + 1e-9) return {ok:false, msg:`You only hold ${p ? fmtQty(m, p.qty) : 0} ${sym}. Short selling isn't open yet.`};
+    p.cost -= p.cost * (qty / p.qty); p.qty -= qty; a.cash += cost; if(p.qty < 1e-9) delete a.pos[sym]; }
+  a.log.unshift({day:a.day, sym, side, qty, price, kind}); a.log = a.log.slice(0, 30);
+  return {ok:true, msg:`${side === 'buy' ? 'Bought' : 'Sold'} ${fmtQty(m, qty)} ${sym} at ${money(price)}.`};
+}
+function nextDay(){
+  const a = trAcct(); a.day++;
+  a.orders = a.orders.filter(o => { const px = pxAt(o.sym, a.day), hit = o.side === 'buy' ? px <= o.limit : px >= o.limit;
+    if(!hit) return true; const r = fill(a, o.sym, o.side, o.qty, o.side === 'buy' ? Math.min(px, o.limit) : Math.max(px, o.limit), 'Limit'); return !r.ok && false; });
+  a.hist.push({d:a.day, eq:equityNow()}); saveState();
+}
+let autoTimer = null;
+function setAuto(on){ const a = trAcct(); a.auto = on; clearInterval(autoTimer); autoTimer = null;
+  if(on) autoTimer = setInterval(() => { if(S.tab !== 'trade' || S.tview !== 'portfolio' || !$('#tradeModal').hidden) return; nextDay(); renderTrade(); }, 2500); }
+
+function sparkSvg(vals, cls, label){
+  const w = 320, h = 80, min = Math.min(...vals), max = Math.max(...vals), span = (max - min) || 1;
+  const xy = vals.map((v, i) => [(i / (vals.length - 1 || 1)) * (w - 8) + 4, h - 6 - ((v - min) / span) * (h - 12)]);
+  const up = vals[vals.length - 1] >= vals[0], col = up ? 'var(--bull)' : 'var(--bear)', tint = up ? 'var(--bull-tint)' : 'var(--bear-tint)', last = xy[xy.length - 1];
+  return `<svg class="${cls}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" role="img" aria-label="${esc(label)}"><path d="M${xy[0][0]},${h} L${xy.map(p => p.map(n => n.toFixed(1)).join(',')).join(' L')} L${last[0]},${h} Z" fill="${tint}"/>
+    <polyline points="${xy.map(p => p.map(n => n.toFixed(1)).join(',')).join(' ')}" fill="none" stroke="${col}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/><circle cx="${last[0]}" cy="${last[1]}" r="4" fill="${col}"/></svg>`;
+}
+function marketRow(m, a){
+  const px = pxAt(m.sym, a.day), ch = (px / pxAt(m.sym, a.day - 1) - 1) * 100, held = a.pos[m.sym];
+  return `<li><button class="mk-row" data-sym="${m.sym}"><span class="mk-n"><b>${m.sym}</b><span>${esc(m.name)}${held ? ' · you hold ' + fmtQty(m, held.qty) : ''}</span></span><span class="mk-p"><b>${money(px)}</b><span class="${ch >= 0 ? 'good-t' : 'bad-t'}">${signed(ch)}</span></span></button></li>`;
+}
+let trNote = '';
 function tradePortfolio(){
-  const pts = [10000,10040,9980,10110,10090,10180,10150,10260,10210,10330,10290,10380,10350,10440,10410,10482];
-  const min = 9940, max = 10520, w = 320, h = 80;
-  const xy = pts.map((v,i) => [ (i/(pts.length-1))*(w-8)+4, h-6-((v-min)/(max-min))*(h-12) ]);
-  const line = xy.map(p => p.map(n=>n.toFixed(1)).join(',')).join(' ');
-  const area = `M${xy[0][0]},${h} L` + xy.map(p=>p.join(',')).join(' L') + ` L${xy[xy.length-1][0]},${h} Z`;
-  const last = xy[xy.length-1];
-  return `
-      <div class="season">
-        <div class="tagrow"><span class="pill">Starts Feb 2027</span><span class="eyebrow" style="color:var(--on-banner-2)">Season 1</span></div>
-        <h2>AUB Investing Cup</h2>
-        <p>Everyone starts with $10,000 in fake money. Trade stocks, ETFs, crypto and gold for one season. Rankings use risk-adjusted return, so one lucky bet won't win it.</p>
-      </div>
-      <div class="pf-card">
-        <div class="pf-top"><div><span class="eyebrow">Sample portfolio</span><div class="pf-val">$10,482</div></div><span class="up-t">+4.8% season</span></div>
-        <svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-label="Sample portfolio value over the season, rising from $10,000 to $10,482">
-          <line x1="0" x2="${w}" y1="${(h-6-((10000-min)/(max-min))*(h-12)).toFixed(1)}" y2="${(h-6-((10000-min)/(max-min))*(h-12)).toFixed(1)}" stroke="var(--line)" stroke-dasharray="4 4"/>
-          <path d="${area}" fill="var(--bull-tint)"/>
-          <polyline points="${line}" fill="none" stroke="var(--bull)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
-          <circle cx="${last[0]}" cy="${last[1]}" r="4" fill="var(--bull)"/>
-        </svg>
-        <ul class="hold">
-          <li><span>Global stock ETF</span><span>45%</span><span class="good-t">+3.9%</span></li>
-          <li><span>Bond ETF</span><span>15%</span><span class="good-t">+0.8%</span></li>
-          <li><span>Gold</span><span>20%</span><span class="good-t">+6.2%</span></li>
-          <li><span>Bitcoin</span><span>10%</span><span class="good-t">+11.4%</span></li>
-          <li><span>Cash</span><span>10%</span><span>0.0%</span></li>
-        </ul>
-        <div class="score">
-          <div><b>+4.8%</b><span>Return</span></div>
-          <div><b>6.1%</b><span>Swings</span></div>
-          <div class="hl"><b>0.79</b><span>Season score</span></div>
-        </div>
-      </div>
-      <ul class="rules">
-        <li>${I.check}<span>Season score is return divided by how much your portfolio swung, so steady skill beats a lucky gamble.</span></li>
-        <li>${I.check}<span>Orders fill at the next market price after you tap, never at an old price on screen.</span></li>
-        <li>${I.check}<span>One account per phone number. No resets mid-season.</span></li>
-        ${optionsUnit() >= 0 ? `<li>${optionsUnlocked() ? I.check : I.lock}<span>${optionsUnlocked() ? 'Options trading is unlocked for your tournaments.' : `Options trading unlocks when you finish Unit ${optionsUnit()+1}, Options basics.`}</span></li>` : ''}
-      </ul>
-      <div style="margin-top:18px"><button class="btn gold" id="waitBtn">${S.wait?'Noted for the demo':'Get notified when it opens'}</button></div>
-      <div class="demo-note" ${S.wait?'':'hidden'}>Demo only. The real waitlist opens with the landing page.</div>
-      <div class="footnote">Sample portfolio for the prototype. Not real trades or advice.</div>`;
+  const note = trNote; trNote = '';
+  const a = trAcct(), eq = equityNow(), st = trStats(), dayPrev = a.hist.length > 1 ? a.hist[a.hist.length - 2].eq : START_CASH, dayCh = (eq / dayPrev - 1) * 100;
+  const pos = Object.entries(a.pos), q = a.q.trim().toLowerCase();
+  const list = MARKET.filter(m => (a.f === 'all' || m.type === a.f) && (!q || m.sym.toLowerCase().includes(q) || m.name.toLowerCase().includes(q)));
+  const hist = a.hist.map(h => h.eq);
+  return `${note ? `<div class="moved" style="margin-top:16px">${I.check}<span>${esc(note)}</span></div>` : ''}
+    <div class="pf-card"><div class="pf-top"><div><span class="eyebrow">Practice account · day ${a.day}</span><div class="pf-val">${money(eq)}</div></div><span class="${st.ret >= 0 ? 'up-t' : 'dn-t'}">${signed(st.ret)} since start</span></div>
+      ${hist.length > 1 ? sparkSvg(hist, 'spark', 'Account value over time') : '<div class="demo-note">Place a trade, then move the market on a day to start the chart.</div>'}
+      <div class="score"><div><b>${money(a.cash).replace('.00', '')}</b><span>Cash</span></div><div><b>${st.swings === null ? '–' : st.swings.toFixed(1) + '%'}</b><span>Swings</span></div><div class="hl"><b>${st.score === null ? '–' : st.score.toFixed(2)}</b><span>Season score</span></div></div>
+      <div class="demo-note">${st.score === null ? 'The score appears after 3 market days: return divided by swings, so steady skill beats a lucky gamble.' : `Today ${signed(dayCh)} · worst drop ${st.dd.toFixed(1)}%. Score is return divided by swings, the idea from Measuring risk.`}</div>
+      <div class="tr-ctl"><button class="btn sm" id="trNext">Next market day</button><button class="btn sm ghost" id="trAuto" aria-pressed="${a.auto}">${a.auto ? 'Pause' : 'Auto-play'}</button></div></div>
+    <div class="sec-h">Your positions</div>
+    ${pos.length ? `<ul class="mk-list">${pos.map(([sym, p]) => { const m = MKT_BY[sym], px = pxAt(sym, a.day), val = p.qty * px, pl = val - p.cost;
+      return `<li><button class="mk-row" data-sym="${sym}"><span class="mk-n"><b>${sym}</b><span>${fmtQty(m, p.qty)} · ${money(val)}</span></span><span class="mk-p"><b class="${pl >= 0 ? 'good-t' : 'bad-t'}">${pl >= 0 ? '+' : '-'}${money(Math.abs(pl))}</b><span>${signed(pl / p.cost * 100)}</span></span></button></li>`; }).join('')}</ul>` : '<div class="empty">No positions yet. Pick something from the market below.</div>'}
+    ${a.orders.length ? `<div class="sec-h">Waiting orders</div><ul class="mk-list">${a.orders.map(o => `<li><div class="mk-row"><span class="mk-n"><b>${o.side === 'buy' ? 'Buy' : 'Sell'} ${fmtQty(MKT_BY[o.sym], o.qty)} ${o.sym}</b><span>at ${money(o.limit)} or ${o.side === 'buy' ? 'lower' : 'higher'} · now ${money(pxAt(o.sym, a.day))}</span></span><button class="link-btn" data-cancel="${o.id}">Cancel</button></div></li>`).join('')}</ul>` : ''}
+    <div class="sec-h">Market</div>
+    <input class="field" id="mkQ" placeholder="Search a name or symbol" value="${esc(a.q)}" aria-label="Search the market" autocomplete="off">
+    <div class="pills tr-f" role="group" aria-label="Filter">${[['all','All']].concat(Object.entries(TYPE_LABEL)).map(([k, t]) => `<button type="button" data-f="${k}" aria-pressed="${a.f === k}">${t}</button>`).join('')}</div>
+    <ul class="mk-list">${list.map(m => marketRow(m, a)).join('') || '<li class="empty">Nothing matches.</li>'}</ul>
+    ${a.log.length ? `<div class="sec-h">Recent trades</div><ul class="mk-list log">${a.log.slice(0, 5).map(l => `<li><div class="mk-row"><span class="mk-n"><b>${l.side === 'buy' ? 'Bought' : 'Sold'} ${fmtQty(MKT_BY[l.sym], l.qty)} ${l.sym}</b><span>day ${l.day} · ${l.kind} order</span></span><span class="mk-p"><b>${money(l.price)}</b></span></div></li>`).join('')}</ul>` : ''}
+    <ul class="rules"><li>${I.check}<span>Market orders fill at the price on screen. Limit orders wait until the price reaches yours, as in the Placing orders lesson.</span></li>
+      <li>${I.check}<span>Season score is return divided by swings, so steady skill beats a lucky gamble. Spreading across assets lowers swings.</span></li>
+      <li>${I.lock}<span>Short selling, margin and options open up later in the real app. You can only buy and sell what you hold for now.</span></li></ul>
+    <div class="btn-row" style="margin-top:14px"><button class="btn ghost" id="trReset">Reset the practice account</button></div>
+    <div class="season"><div class="tagrow"><span class="pill">Starts Feb 2027</span><span class="eyebrow" style="color:var(--on-banner-2)">Season 1</span></div><h2>AUB Investing Cup</h2>
+      <p>Everyone starts with $10,000 in fake money and trades for one season. Competitions rank your practice account's season score.</p>
+      <button class="btn gold" id="waitBtn" style="margin-top:12px">${S.wait ? 'Noted for the demo' : 'Get notified when it opens'}</button></div>
+    <div class="footnote">Sample prices from a simulation, not live market data. Not real trades or advice.</div>`;
+}
+function bindPortfolio(){
+  const a = trAcct();
+  $('#trNext').onclick = () => { nextDay(); renderTrade(); };
+  $('#trAuto').onclick = () => { setAuto(!a.auto); renderTrade(); };
+  $('#trReset').onclick = () => { setAuto(false); S.tr = null; saveState(); renderTrade(); };
+  $('#waitBtn').onclick = () => { S.wait = true; renderTrade(); };
+  $('#mkQ').oninput = e => { a.q = e.target.value; const pos = e.target.selectionStart; renderTrade(); const n = $('#mkQ'); n.focus(); n.setSelectionRange(pos, pos); };
+  $('#s-trade').querySelectorAll('.tr-f button').forEach(b => b.onclick = () => { a.f = b.dataset.f; renderTrade(); });
+  $('#s-trade').querySelectorAll('[data-sym]').forEach(b => b.onclick = () => openTicket(b.dataset.sym));
+  $('#s-trade').querySelectorAll('[data-cancel]').forEach(b => b.onclick = () => { a.orders = a.orders.filter(o => String(o.id) !== b.dataset.cancel); saveState(); renderTrade(); });
+}
+function openTicket(sym, d){
+  const a = trAcct(), m = MKT_BY[sym], px = pxAt(sym, a.day), held = a.pos[sym], tk = d || {side:'buy', kind:'market', qty:'', limit:''};
+  const series = []; for(let i = Math.max(-WARM, a.day - 40); i <= a.day; i++) series.push(pxAt(sym, i));
+  const qty = parseFloat(tk.qty) || 0, limit = parseFloat(tk.limit) || 0, usePx = tk.kind === 'limit' && limit > 0 ? limit : px, total = qty * usePx;
+  const maxQty = tk.side === 'buy' ? qtyOf(m, a.cash / px) : (held ? held.qty : 0);
+  const ch = (px / pxAt(sym, a.day - 1) - 1) * 100;
+  openSheet(`<div class="sh-head"><div><span class="eyebrow">${TYPE_LABEL[m.type]}</span><h2>${m.sym} · ${esc(m.name)}</h2></div><button class="icon-btn" id="tmClose" aria-label="Close">${I.x}</button></div>
+    <div class="pf-top" style="margin-top:8px"><div class="pf-val">${money(px)}</div><span class="${ch >= 0 ? 'up-t' : 'dn-t'}">${signed(ch)} today</span></div>
+    ${sparkSvg(series, 'spark', m.sym + ' price over recent days')}
+    ${held ? `<div class="demo-note">You hold ${fmtQty(m, held.qty)} · worth ${money(held.qty * px)} · average cost ${money(held.cost / held.qty)}</div>` : ''}
+    <div class="seg" role="group" aria-label="Side" style="grid-template-columns:1fr 1fr"><button data-side="buy" aria-pressed="${tk.side === 'buy'}">Buy</button><button data-side="sell" aria-pressed="${tk.side === 'sell'}">Sell</button></div>
+    <div class="seg" role="group" aria-label="Order type" style="grid-template-columns:1fr 1fr;margin-top:8px"><button data-kind="market" aria-pressed="${tk.kind === 'market'}">Market</button><button data-kind="limit" aria-pressed="${tk.kind === 'limit'}">Limit</button></div>
+    <div class="form" style="margin-top:12px"><div><label class="l" for="tkQty">${m.type === 'crypto' || m.type === 'gold' ? 'Amount (decimals allowed)' : 'Shares'}</label><input class="field" id="tkQty" inputmode="decimal" placeholder="0" value="${esc(tk.qty)}" autocomplete="off">
+      <div class="quick">${[25, 50, 100].map(p => `<button type="button" data-pct="${p}">${p === 100 ? 'Max' : p + '%'}</button>`).join('')}</div></div>
+      ${tk.kind === 'limit' ? `<div><label class="l" for="tkLim">Limit price (${tk.side === 'buy' ? 'buy at this or lower' : 'sell at this or higher'})</label><input class="field" id="tkLim" inputmode="decimal" placeholder="${px.toFixed(2)}" value="${esc(tk.limit)}" autocomplete="off"></div>` : ''}</div>
+    <div class="cost"><span>${tk.kind === 'limit' ? 'Order value at your limit' : 'Estimated ' + (tk.side === 'buy' ? 'cost' : 'proceeds')}</span><b>${money(total)}</b></div>
+    <div class="demo-note">Cash ${money(a.cash)}${tk.side === 'buy' ? ' · you can afford up to ' + fmtQty(m, maxQty) : ''}. No fees in the prototype.</div>
+    <div class="btn-row" style="margin-top:14px"><button class="btn ${tk.side === 'buy' ? '' : 'bad'}" id="tkGo">${tk.kind === 'limit' ? 'Place limit order' : (tk.side === 'buy' ? 'Buy' : 'Sell') + ' ' + sym}</button></div><div class="msg" id="tkMsg" aria-live="polite"></div>`);
+  const cur = () => ({side:tk.side, kind:tk.kind, qty:$('#tkQty').value, limit: $('#tkLim') ? $('#tkLim').value : ''});
+  $('#tmClose').onclick = closeSheet;
+  $('#tradeSheet').querySelectorAll('[data-side]').forEach(b => b.onclick = () => { const t = cur(); t.side = b.dataset.side; openTicket(sym, t); });
+  $('#tradeSheet').querySelectorAll('[data-kind]').forEach(b => b.onclick = () => { const t = cur(); t.kind = b.dataset.kind; openTicket(sym, t); });
+  $('#tradeSheet').querySelectorAll('[data-pct]').forEach(b => b.onclick = () => { const t = cur(); t.qty = String(fmtQty(m, qtyOf(m, maxQty * (+b.dataset.pct / 100)))); openTicket(sym, t); });
+  const upd = () => { const t = cur(); openTicket(sym, t); const el = $('#tkQty'); };
+  $('#tkQty').onchange = upd; if($('#tkLim')) $('#tkLim').onchange = upd;
+  $('#tkGo').onclick = () => {
+    const t = cur(), q = qtyOf(m, parseFloat(t.qty) || 0), lim = parseFloat(t.limit) || 0, msg = $('#tkMsg'); msg.className = 'msg bad';
+    if(q <= 0){ msg.textContent = m.type === 'crypto' || m.type === 'gold' ? 'Type an amount above zero.' : 'Type a whole number of shares above zero.'; return; }
+    if(t.kind === 'limit' && lim <= 0){ msg.textContent = 'Type the limit price.'; return; }
+    if(t.kind === 'limit' && t.side === 'buy' && q * lim > a.cash + 0.005){ msg.textContent = `Not enough cash for that: ${money(q * lim)} needed, ${money(a.cash)} available.`; return; }
+    if(t.kind === 'limit' && t.side === 'sell' && q > (held ? held.qty : 0) + 1e-9){ msg.textContent = `You only hold ${held ? fmtQty(m, held.qty) : 0} ${sym}.`; return; }
+    const r = placeOrder({sym, side:t.side, qty:q, kind:t.kind, limit:lim});
+    if(!r.ok){ msg.textContent = r.msg; return; }
+    trNote = r.msg; saveState(); renderTrade(); closeSheet();
+  };
 }
 
 /* ---------- league ---------- */
@@ -2179,6 +2305,7 @@ const invite = (new URLSearchParams(location.search).get('join') || '').trim().t
 const classInviteCode = (new URLSearchParams(location.search).get('class') || '').trim().toUpperCase();
 const invitedClass = classInviteCode && joinClass(classInviteCode);
 if(invitedClass) renderAll();
+if(S.tr) S.tr.auto = false;
 if(S.role === 'teacher') openTeacher();
 if(comp(invite) && !S.joined.includes(invite)) showOnboard('invite', {code:invite});
 else if(!S.onboarded) showOnboard('welcome', invitedClass ? {joined:invitedClass.name} : {});

@@ -39,7 +39,7 @@ points, trophies; rating 1,000). All other players and numbers are fake.
    start in Penny, which has no demotion zone. Plus AUB, Lebanon and Global boards by Bullpen rating.
 6. **Trade** tab: competitions (join by code: AUB-CUP, FINA-310, IC-2027, or invite link; create a
    tournament: free up to 30 players and a month, bigger or semester-long uses a credit), clans
-   (search, join/request, create) and a sample portfolio. Options become a tournament asset after the
+   (search, join/request, create) and a working **practice account** (Portfolio view): $10,000 fake cash, 16 sample instruments (stocks, ETFs, crypto, gold) with prices from a seeded simulation (one step per market day; "Next market day" or Auto-play), market and limit orders, positions with profit and loss, an equity curve and a season score (return divided by swings, from the Measuring risk unit). Live competitions rank that score. No short selling, margin or options yet; prices are samples, not live data. Options become a tournament asset after the
    Options basics unit. Hosts of a created tournament get host tools: start it (demo classmates),
    download standings as CSV, end it and award trophies to the top 3. Prizes are trophies and badges,
    never cash. A Bullpen Pro preview (example prices, "would you pay?") opens from the margin call
