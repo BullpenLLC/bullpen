@@ -552,6 +552,13 @@ select.field.sm{margin:0 12px 10px; width:calc(100% - 24px); padding:8px 12px; f
 .cl-row .pbar{margin-top:6px; height:5px}
 .class-card .link-btn,.class-card .btn.sm{margin-top:10px; display:block}
 .ob-teacher{display:block; margin:18px auto 0; background:none; border:0; color:var(--sky); font-weight:800; font-size:14.5px; padding:8px}
+
+.seg.four-seg{grid-template-columns:repeat(4,1fr)}
+.pbar.over i{background:var(--bear)}
+.t-toggle{display:flex; gap:12px; align-items:flex-start; margin-top:16px; padding:12px 14px; border:1.5px solid var(--line); border-radius:14px}
+.t-toggle input{width:22px; height:22px; margin-top:2px; accent-color:var(--bull); flex:none}
+.t-toggle b{display:block; font-size:14.5px}
+.t-toggle span span{display:block; font-size:12.5px; color:var(--ink-2)}
 </style>
 
 <aside class="about">
@@ -772,7 +779,7 @@ const GLOBAL = [['finn.o','UK',2214],['layla.q','AE',2187],['omar.s','SA',2150],
 /* ---------- state ---------- */
 /* A brand-new player starts from nothing: no streak, no points, the starting league, a 1,000 rating
    (the starting value in DEVELOPMENT_PLAN.md) and no trophies. Other players stay as sample data. */
-const INITIAL = {role:'student', classes:{}, myClass:null, tCode:null, tTab:'overview', tDraft:null, streak:0, streakToday:false, hearts:5, xpTotal:0, weekly:0, rating:1000, done:0, reports:[], tab:'learn', view:'week', last:null, wait:false, newBadge:null, pick:null,
+const INITIAL = {role:'student', classes:{}, inst:{plan:'campus', invites:[], domain:true, quote:null}, myClass:null, tCode:null, tTab:'overview', tDraft:null, streak:0, streakToday:false, hearts:5, xpTotal:0, weekly:0, rating:1000, done:0, reports:[], tab:'learn', view:'week', last:null, wait:false, newBadge:null, pick:null,
   onboarded:false, level:null, placed:false, testedOut:[], scrollCur:false,
   lview:'course', vault:{}, bonus:0, certs:{}, missed:[], openUnit:null,
   tview:'comps', joined:['AUB-CUP'], created:{}, credits:1, clan:null, requested:[], createdClans:[], clanQ:'', draft:null,
@@ -1938,6 +1945,7 @@ const teacherEl = $('#teacher');
 function openTeacher(){ S.role = 'teacher'; teacherEl.hidden = false; renderTeacher(); saveState(); }
 function closeTeacher(){ S.role = 'student'; S.tCode = null; teacherEl.hidden = true; renderAll(); saveState(); }
 function renderTeacher(){
+  if(S.tCode === '@inst'){ renderInstitution(); return; }
   const cls = S.tCode ? findClass(S.tCode) : null;
   if(S.tCode && !cls) S.tCode = null;
   teacherEl.innerHTML = `<header class="t-head pad"><button class="icon-btn" id="tBack" aria-label="${cls ? 'Back to your classes' : 'Back to the student app'}">${I.x}</button>
@@ -1954,13 +1962,15 @@ function classList(){
       return `<button class="comp" data-class="${esc(c.code)}"><div class="comp-top"><div><h3>${esc(c.name)}</h3><div class="host">${esc(c.school)} · code ${esc(c.code)}</div></div><span class="pill soft">${rs.length} students</span></div>
         <div class="meta"><span class="chip">${c.assigned.length} unit${c.assigned.length === 1 ? '' : 's'} assigned</span><span class="chip">${avg}% done</span></div></button>`; }).join('') || '<div class="empty">No classes yet. Make one, or open the sample class to look around.</div>'}</div>
     <div class="btn-row" style="margin-top:16px"><button class="btn" id="tNew">+ New class</button>
-      ${S.classes['AUB-FINA310'] ? '' : '<button class="btn ghost" id="tSample">Open the sample class (24 students)</button>'}</div>
+      ${S.classes['AUB-FINA310'] ? '' : '<button class="btn ghost" id="tSample">Open the sample class (24 students)</button>'}
+      <button class="btn ghost" id="tInst">Institution and plan</button></div>
     <div class="footnote">Class mode is a preview. Students and results are samples; nothing is sent anywhere.<br>Under-18 students join through the teacher's code only, with no public clans, ads or social links.</div>`;
 }
 function bindClassList(){
   teacherEl.querySelectorAll('[data-class]').forEach(b => b.onclick = () => { S.tCode = b.dataset.class; S.tTab = 'overview'; renderTeacher(); });
   const smp = $('#tSample'); if(smp) smp.onclick = () => { const c = demoClass(); S.classes[c.code] = c; S.tCode = c.code; S.tTab = 'overview'; saveState(); renderTeacher(); };
   $('#tNew').onclick = openNewClass;
+  $('#tInst').onclick = () => { S.tCode = '@inst'; renderTeacher(); };
 }
 function openNewClass(){
   openSheet(`<div class="sh-head"><div><span class="eyebrow">New class</span><h2>Make a class</h2></div><button class="icon-btn" id="tmClose" aria-label="Close">${I.x}</button></div>
@@ -2068,6 +2078,57 @@ function bindTournament(cls){
       starts:'Starts when you press go', cash:d.cash, assets:d.assets.join(', '), prize:'Trophy and Winner badge', classCode:cls.code};
     S.joined.unshift(code); cls.tournament = code; S.tDraft = null; saveState(); renderTeacher();
   };
+}
+
+
+/* ----- institution admin (mock) -----
+   A school, university or programme buys seats. Every student seat includes Bullpen Pro for as long as the
+   student is enrolled; teachers get Class mode. Prices are examples to test with, not decisions. */
+const INST_PLANS = {
+  pilot:{name:'Pilot', seats:40, price:0, per:'free for one class, one semester', teachers:1},
+  class:{name:'Class', seats:60, price:149, per:'per semester', teachers:2},
+  campus:{name:'Campus', seats:1000, price:1200, per:'per semester', teachers:20},
+  university:{name:'University', seats:5000, price:4500, per:'per semester, custom terms', teachers:100}
+};
+const OTHER_TEACHERS = [['Dr. L. Karam', 'Corporate Finance', 38], ['Prof. M. Saab', 'Economics 201', 52], ['Ms. N. Fares', 'Finance Club', 71]];
+function renderInstitution(){
+  const plan = INST_PLANS[S.inst.plan] || INST_PLANS.campus, cls = Object.values(S.classes), school = (cls[0] && cls[0].school) || 'My school';
+  const mine = cls.reduce((n, c) => n + c.students.length, 0) + (myClass() ? 1 : 0), others = OTHER_TEACHERS.reduce((n, t) => n + t[2], 0);
+  const used = mine + others, over = used > plan.seats, pct = Math.min(100, Math.round(used / plan.seats * 100)), teachers = 1 + OTHER_TEACHERS.length + S.inst.invites.length;
+  teacherEl.innerHTML = `<header class="t-head pad"><button class="icon-btn" id="tBack" aria-label="Back to your classes">${I.x}</button>
+      <div><span class="eyebrow">Institution</span><h2>${esc(school)}</h2></div></header>
+    <div class="t-body pad" id="tBody">
+      <p class="t-intro">One account for the whole school. Teachers run classes under it, and every enrolled student gets Bullpen Pro free.</p>
+      <div class="sec-h">Plan</div>
+      <div class="seg four-seg" role="group" aria-label="Plan">${Object.entries(INST_PLANS).map(([k, v]) => `<button data-plan="${k}" aria-pressed="${S.inst.plan === k}">${v.name}</button>`).join('')}</div>
+      <div class="score"><div><b>${plan.price ? '$' + fmt(plan.price) : 'Free'}</b><span>${esc(plan.per)}</span></div><div><b>${fmt(plan.seats)}</b><span>student seats</span></div><div><b>${plan.teachers}</b><span>teacher accounts</span></div></div>
+      <div class="demo-note">Example prices for testing the idea, not final. Per seat this is ${plan.price ? '$' + (plan.price / plan.seats).toFixed(2) : '$0'} a student a semester, against $29.99 a year for one student paying alone.</div>
+      <div class="sec-h">Seats</div>
+      <div class="pbar ${over ? 'over' : ''}" aria-label="${used} of ${plan.seats} seats used"><i style="width:${pct}%"></i></div>
+      <p class="t-note" style="margin-inline:0">${fmt(used)} of ${fmt(plan.seats)} seats used${over ? ` · ${fmt(used - plan.seats)} over: pick a bigger plan before students lose Pro` : ''}. A seat frees up when a student leaves a class or the semester ends.</p>
+      <div class="sec-h">Teachers (${teachers})</div>
+      <ul class="t-list"><li><span><b>${esc(cls[0] ? cls[0].teacher === 'You' ? 'You (admin)' : cls[0].teacher + ' (admin)' : 'You (admin)')}</b><span>${cls.length} class${cls.length === 1 ? '' : 'es'} · ${fmt(mine)} students</span></span><span class="pill bull">Admin</span></li>
+        ${OTHER_TEACHERS.map(t => `<li><span><b>${esc(t[0])}</b><span>${esc(t[1])} · ${t[2]} students</span></span><span class="pill soft">Teacher</span></li>`).join('')}
+        ${S.inst.invites.map(e => `<li><span><b>${esc(e)}</b><span>Invite sent</span></span><span class="pill gold">Pending</span></li>`).join('')}</ul>
+      <div class="code-row"><input class="field" id="invIn" type="email" placeholder="teacher@school.edu" autocomplete="off" aria-label="Teacher email"><button class="btn sm" id="invGo">Invite</button></div>
+      <div class="msg" id="invMsg" aria-live="polite"></div>
+      <div class="sec-h">Rules</div>
+      <ul class="rules"><li>${I.check}<span><b style="color:var(--ink)">Pro for enrolled students.</b> Unlimited practice capital, the whole Vault, trade analytics. It ends when the student leaves.</span></li>
+        <li>${I.check}<span><b style="color:var(--ink)">Class mode for teachers.</b> Assignments, class progress, grade export, class tournaments with no credit and no player limit.</span></li>
+        <li>${I.check}<span><b style="color:var(--ink)">Students keep their own account.</b> Progress, points and badges stay with them after they leave. Only Pro and class results end.</span></li>
+        <li>${I.check}<span><b style="color:var(--ink)">Under-18 students</b> join through a teacher's code only, with no public clans, ads or social links. The school gives the consent.</span></li></ul>
+      <label class="t-toggle"><input type="checkbox" id="domTog" ${S.inst.domain ? 'checked' : ''}><span><b>Let students join with a school email</b><span>Anyone with an @${esc(school.toLowerCase().replace(/[^a-z0-9]/g, ''))}.edu.lb address joins the school's seats without a class code.</span></span></label>
+      <div class="btn-row" style="margin-top:16px"><button class="btn gold" id="quoteBtn">${S.inst.quote ? 'Quote requested' : 'Ask for a quote'}</button></div>
+      <div class="copy-msg" id="quoteMsg" aria-live="polite">${S.inst.quote ? 'Noted for the interview. Thanks!' : ''}</div>
+      <div class="footnote">Prototype: seats, teachers and prices are samples. Nothing is billed or sent.</div></div>`;
+  $('#tBack').onclick = () => { S.tCode = null; renderTeacher(); };
+  teacherEl.querySelectorAll('[data-plan]').forEach(b => b.onclick = () => { S.inst.plan = b.dataset.plan; saveState(); renderInstitution(); });
+  $('#invGo').onclick = () => { const e = $('#invIn').value.trim(), m = $('#invMsg');
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)){ m.className = 'msg bad'; m.textContent = 'Type the teacher\'s email address.'; return; }
+    if(teachers >= plan.teachers){ m.className = 'msg bad'; m.textContent = `The ${plan.name} plan has ${plan.teachers} teacher account${plan.teachers === 1 ? '' : 's'}. Pick a bigger plan to add more.`; return; }
+    S.inst.invites.push(e); saveState(); renderInstitution(); };
+  $('#domTog').onchange = e => { S.inst.domain = e.target.checked; saveState(); };
+  $('#quoteBtn').onclick = () => { S.inst.quote = plan.name; saveState(); renderInstitution(); };
 }
 
 /* ----- student side ----- */

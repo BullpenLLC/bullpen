@@ -57,7 +57,7 @@ The prototype's code will not become the real app. It is a sketch for testing. W
 - [x] Put the prototype online so anyone can open it with a link (phones included): https://bullpenllc.github.io/bullpen/prototype/
 - [x] Ready for interviews: new players start from zero, saved progress survives reordering, "Report a problem" on every card and question
 - [x] Class mode preview: teacher space, assignments, class progress, CSV grades, class tournaments, student join, school-paid Pro
-- [ ] Institutional accounts (admin screen, seats, bulk Pro): plan + mock screen
+- [x] Institutional accounts: plan in docs/INSTITUTIONS.md and a mock admin screen (plans, seats, teachers, school email, quote)
 - [ ] Trading section in the prototype (order ticket, positions, scoring)
 - [ ] Finance professor reviews all six units
 

@@ -87,3 +87,4 @@ See the checklists in `docs/CURRICULUM.md` (content) and `docs/DEVELOPMENT_PLAN.
 - Founder signed in; dev/curriculum-v2 merged to main as PR #7 (CI green). Live link now shows all 19 main + 8 Vault units.
 
 - Class mode preview built in the prototype (teacher space, assign + due dates, class progress, CSV grades, class tournament, student join with school-paid Pro). Next: institutional plan + mock admin screen, then the trading section.
+- Institution plan (docs/INSTITUTIONS.md) and mock admin screen added. Next: the trading section.

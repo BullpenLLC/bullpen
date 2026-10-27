@@ -14,6 +14,7 @@ points, trophies; rating 1,000). All other players and numbers are fake.
 - `docs/CURRICULUM.md`: every stage, unit and lesson, with status. The source of truth for content.
 - `docs/DEVELOPMENT_PLAN.md`: architecture, data model, features, trading game rules, compliance, money, phases, backlog.
 - `docs/CONTENT_SPEC.md`: how to write a unit. Follow it exactly.
+- `docs/INSTITUTIONS.md`: schools, universities, seats, Class mode, plans and rules (prices are examples).
 - `docs/ROADMAP.md`: checklist by phase. `docs/WORKLOG.md`: session log of the current build push.
 - `docs/research/investopedia-topic-map.md`: topic coverage check and sources.
 
@@ -43,7 +44,7 @@ points, trophies; rating 1,000). All other players and numbers are fake.
    download standings as CSV, end it and award trophies to the top 3. Prizes are trophies and badges,
    never cash. A Bullpen Pro preview (example prices, "would you pay?") opens from the margin call
    and Profile.
-7. **Class mode** (preview): "I'm a teacher" on the first screen, or Profile → Teacher view, opens the teacher space. A teacher makes a class (code + invite link `?class=CODE`), assigns units with due dates, sees class progress per unit and per student (overdue / needs help), exports grades as CSV, and creates a class tournament (included in the class plan, no credit). A student joins with the code (demo: AUB-FINA310) and sees the assigned units with due dates at the top of Learn; the school covers Bullpen Pro (unlimited practice capital). Class results are samples made from a hash of each name.
+7. **Class mode** (preview): "I'm a teacher" on the first screen, or Profile → Teacher view, opens the teacher space. A teacher makes a class (code + invite link `?class=CODE`), assigns units with due dates, sees class progress per unit and per student (overdue / needs help), exports grades as CSV, and creates a class tournament (included in the class plan, no credit). A student joins with the code (demo: AUB-FINA310) and sees the assigned units with due dates at the top of Learn; the school covers Bullpen Pro (unlimited practice capital). Class results are samples made from a hash of each name. "Institution and plan" in the teacher space is a mock admin screen: plans (Pilot, Class, Campus, University), seats, teacher invites, a school-email toggle and a quote request.
 8. **Profile:** investor level and progress, stats, certificates, trophies, badges (one per unit,
    main and Vault), retake placement, restart demo.
 
