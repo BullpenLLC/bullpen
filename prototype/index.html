@@ -563,6 +563,24 @@ select.field.sm{margin:0 12px 10px; width:calc(100% - 24px); padding:8px 12px; f
 .dn-t{color:var(--bear-ink); font-family:var(--font-mono); font-weight:700; font-size:14px}
 .tr-ctl{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px}
 .tr-ctl .btn.sm{width:100%}
+/* Replay 2020 */
+.tr-ctl.three{grid-template-columns:repeat(3,1fr)}
+.r20-intro{margin-top:16px; padding:14px; border-radius:16px; background:var(--sky-tint); display:grid; gap:4px; font-size:14px}
+.r20-intro b{color:var(--sky)} .r20-intro span{color:var(--ink-2)}
+.r20-legend{display:flex; flex-wrap:wrap; gap:14px; font-size:12px; color:var(--ink-2); margin-top:2px}
+.r20-legend span{display:flex; align-items:center; gap:6px}
+.r20-legend i{display:inline-block; width:16px; height:3px; border-radius:2px}
+.r20-legend i.dash{background:repeating-linear-gradient(90deg, var(--ink-2) 0 5px, transparent 5px 9px)}
+.r20-news{margin-top:14px; display:grid; gap:8px}
+.r20-news > div{padding:12px 14px; border-radius:16px; background:var(--surface-2); display:grid; gap:3px; font-size:13.5px; color:var(--ink-2)}
+.r20-news > div b{color:var(--ink); font-size:14.5px; line-height:1.35}
+.r20-news > div.today{background:var(--gold-tint)}
+.r20-news > div.today .eyebrow{color:var(--gold-ink)}
+.r20-end{margin-top:16px; padding:16px; border-radius:20px; border:2px solid var(--line)}
+.r20-end h2{font-size:24px; margin-top:4px}
+.r20-vs{display:grid; gap:12px; margin-top:12px}
+.r20-vs .score{margin-top:6px}
+.r20-verdict{margin:14px 0 0; font-weight:600}
 .mk-list{list-style:none; margin:10px 0 0; padding:0; display:grid; gap:8px}
 .mk-row{display:flex; justify-content:space-between; align-items:center; gap:10px; width:100%; text-align:left; background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:10px 12px; color:var(--ink)}
 .mk-n{min-width:0; flex:1} .mk-n b{display:block; font-size:15px} .mk-n span{display:block; font-size:12.5px; color:var(--ink-2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
@@ -721,6 +739,7 @@ select.field.sm{margin:0 12px 10px; width:calc(100% - 24px); padding:8px 12px; f
 <script src="content/accounts.js"></script>
 <script src="content/tvm.js"></script>
 <script src="content/registry.js"></script>
+<script src="replay/replay-2020.js"></script>
 <script>
 (function(){
 const $ = s => document.querySelector(s);
@@ -802,7 +821,7 @@ const GLOBAL = [['finn.o','UK',2214],['layla.q','AE',2187],['omar.s','SA',2150],
 /* ---------- state ---------- */
 /* A brand-new player starts from nothing: no streak, no points, the starting league, a 1,000 rating
    (the starting value in DEVELOPMENT_PLAN.md) and no trophies. Other players stay as sample data. */
-const INITIAL = {role:'student', classes:{}, inst:{plan:'campus', invites:[], domain:true, quote:null}, tr:null, myClass:null, tCode:null, tTab:'overview', tDraft:null, streak:0, streakToday:false, hearts:5, xpTotal:0, weekly:0, rating:1000, done:0, reports:[], tab:'learn', view:'week', last:null, wait:false, newBadge:null, pick:null,
+const INITIAL = {role:'student', classes:{}, inst:{plan:'campus', invites:[], domain:true, quote:null}, tr:null, tr2020:null, trMode:'sample', r20done:false, r20best:null, myClass:null, tCode:null, tTab:'overview', tDraft:null, streak:0, streakToday:false, hearts:5, xpTotal:0, weekly:0, rating:1000, done:0, reports:[], tab:'learn', view:'week', last:null, wait:false, newBadge:null, pick:null,
   onboarded:false, level:null, placed:false, testedOut:[], scrollCur:false,
   lview:'course', vault:{}, bonus:0, certs:{}, missed:[], openUnit:null,
   tview:'comps', joined:['AUB-CUP'], created:{}, credits:1, clan:null, requested:[], createdClans:[], clanQ:'', draft:null,
@@ -1059,6 +1078,7 @@ const inviteLink = code => location.origin + location.pathname + '?join=' + enco
 const allClans = () => S.createdClans.concat(CLANS);
 
 function renderTrade(){
+  useMarket(S.tview === 'portfolio' && S.trMode === '2020');
   const tabs = [['comps','Competitions'],['clans','Clans'],['portfolio','Portfolio']];
   const body = S.tview === 'clans' ? tradeClans() : S.tview === 'portfolio' ? tradePortfolio() : tradeComps();
   $('#s-trade').innerHTML = `
@@ -1070,7 +1090,7 @@ function renderTrade(){
   $('#s-trade').querySelectorAll('.seg button').forEach(b => b.onclick = () => { S.tview = b.dataset.v; renderTrade(); });
   if(S.tview === 'comps') bindComps();
   else if(S.tview === 'clans') bindClans();
-  else bindPortfolio();
+  else { bindModes(); if(REPLAY_ON) bindReplay(); else bindPortfolio(); }
 }
 
 /* competitions */
@@ -1297,7 +1317,7 @@ function openCreateClan(open = true){
    Short selling and margin unlock with the unit "Short selling and margin"; options with "Options basics".
    Margin follows that unit's rules: 50% of a position's value must be your own money to open it, and the broker
    sells for you when equity falls below 25%. Options are cash-settled, and sold options must be covered. */
-const MARKET = [
+const SAMPLE_MARKET = [
   {sym:'AAPL', name:'Apple', type:'stock', p0:230, beta:1.1, idio:0.012}, {sym:'MSFT', name:'Microsoft', type:'stock', p0:420, beta:1.0, idio:0.011},
   {sym:'NVDA', name:'Nvidia', type:'stock', p0:135, beta:1.6, idio:0.022}, {sym:'TSLA', name:'Tesla', type:'stock', p0:250, beta:1.8, idio:0.026},
   {sym:'JPM', name:'JPMorgan Chase', type:'stock', p0:210, beta:1.0, idio:0.010}, {sym:'XOM', name:'Exxon Mobil', type:'stock', p0:115, beta:0.7, idio:0.011},
@@ -1307,7 +1327,15 @@ const MARKET = [
   {sym:'BTC', name:'Bitcoin', type:'crypto', p0:68000, beta:1.5, idio:0.030}, {sym:'ETH', name:'Ethereum', type:'crypto', p0:2500, beta:1.7, idio:0.036},
   {sym:'SOL', name:'Solana', type:'crypto', p0:145, beta:1.9, idio:0.045}, {sym:'XAU', name:'Gold (per oz)', type:'gold', p0:2650, beta:0.05, idio:0.007}
 ];
-const MKT_BY = Object.fromEntries(MARKET.map(m => [m.sym, m]));
+/* Two markets share one trading engine: the sample simulation above, and Replay 2020 (real daily closes,
+   prototype/replay/replay-2020.js). useMarket() picks one; renderTrade() calls it for the view on screen,
+   so competitions always rank the sample practice account. Each market has its own account (S.tr, S.tr2020). */
+const R20 = REPLAY_2020, R20_LAST = R20.dates.length - 1;
+const R20_MARKET = R20.assets.map(a => ({sym:a.sym, name:a.name, type:a.type, blurb:a.blurb, px:a.px}));
+const R20_NEWS = R20.news.map(n => Object.assign({day: R20.dates.indexOf(n.d)}, n));
+let REPLAY_ON = false, MARKET = SAMPLE_MARKET, MKT_BY = {};
+function useMarket(replay){ REPLAY_ON = !!replay; MARKET = REPLAY_ON ? R20_MARKET : SAMPLE_MARKET; MKT_BY = Object.fromEntries(MARKET.map(m => [m.sym, m])); }
+useMarket(false);
 const TYPE_LABEL = {stock:'Stocks', etf:'ETFs', crypto:'Crypto', gold:'Gold'};
 const START_CASH = 10000, WARM = 60;
 const INIT_MARGIN = 0.5, MAINT = 0.25, LOAN_RATE = 0.08, BORROW_RATE = 0.03, RF = 0.04; // annual rates, charged per market day / 252
@@ -1324,7 +1352,7 @@ function logAt(m, d){
   }
   return arr[d + WARM];
 }
-const pxAt = (sym, d) => { const m = MKT_BY[sym]; return m.p0 * Math.exp(logAt(m, d) - logAt(m, 0)); };
+const pxAt = (sym, d) => { const m = MKT_BY[sym]; if(REPLAY_ON) return m.px[Math.max(0, Math.min(R20_LAST, d))]; return m.p0 * Math.exp(logAt(m, d) - logAt(m, 0)); };
 const money = n => (n < 0 ? '-$' : '$') + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
 const signed = n => (n > 0 ? '+' : n < 0 ? '-' : '') + Math.abs(n).toFixed(2) + '%';
 const isOpt = k => k.charAt(1) === '|' && k.charAt(0) === 'O';
@@ -1342,7 +1370,7 @@ function bsm(Sp, K, T, v, call){
     theta: (-(Sp * npdf(d1) * v) / (2 * Math.sqrt(T)) - (call ? 1 : -1) * RF * K * disc * ncdf(call ? d2 : -d2)) / 365, vega: Sp * npdf(d1) * Math.sqrt(T) / 100};
 }
 const ivOf = sym => { const m = MKT_BY[sym]; return Math.sqrt((m.beta * 0.009) ** 2 + m.idio ** 2) * Math.sqrt(252) * 1.1; };
-const optable = m => m.type === 'stock' || m.type === 'etf';
+const optable = m => !REPLAY_ON && (m.type === 'stock' || m.type === 'etf'); // no options in Replay 2020 yet
 const optKey = (sym, exp, K, c) => `O|${sym}|${exp}|${K}|${c}`;
 const optParts = k => { const [, sym, exp, K, c] = k.split('|'); return {sym, exp:+exp, K:+K, call:c === 'C'}; };
 function optGreeks(key, d){ const o = optParts(key); return bsm(pxAt(o.sym, d), o.K, (o.exp - d) / 365, ivOf(o.sym), o.call); }
@@ -1353,7 +1381,8 @@ function strikesFor(sym, d){ const px = pxAt(sym, d), step = px >= 400 ? 10 : px
 const askOf = mid => Math.max(0.01, +(mid * 1.02).toFixed(2)), bidOf = mid => Math.max(0.01, +(mid * 0.98).toFixed(2)); // 2% each side of the model price
 
 const trAcct = () => {
-  const a = S.tr || (S.tr = {day:0, cash:START_CASH, pos:{}, orders:[], hist:[{d:0, eq:START_CASH}], log:[], auto:false, f:'all', q:'', margin:false, call:null, alert:'', costs:0});
+  const k = REPLAY_ON ? 'tr2020' : 'tr';
+  const a = S[k] || (S[k] = {day:0, cash:START_CASH, pos:{}, orders:[], hist:[{d:0, eq:START_CASH}], log:[], auto:false, f:'all', q:'', margin:false, call:null, alert:'', costs:0});
   if(a.margin === undefined){ a.margin = false; a.call = null; a.alert = ''; a.costs = 0; } // accounts saved before margin existed
   a.orders.forEach(o => { if(!o.key) o.key = o.sym; }); a.log.forEach(l => { if(!l.key) l.key = l.sym; });
   return a;
@@ -1365,8 +1394,9 @@ function marginState(a){
   const E = equityNow(), G = L + Sv; return {L, S:Sv, G, E, ratio: G > 0 ? E / G : null, loan: Math.max(0, -a.cash)};
 }
 /* season score = total return divided by how far the account typically wandered (daily swings x sqrt(days)) */
-function trStats(){
-  const a = trAcct(), eq = a.hist.map(h => h.eq), ret = (eq[eq.length - 1] / START_CASH - 1) * 100;
+function trStats(){ return statsOf(trAcct().hist.map(h => h.eq)); }
+function statsOf(eq){
+  const ret = (eq[eq.length - 1] / START_CASH - 1) * 100;
   if(eq.length < 4) return {ret, swings:null, score:null, dd:0};
   const rs = []; for(let i = 1; i < eq.length; i++) rs.push((eq[i] / eq[i-1] - 1) * 100);
   const mean = rs.reduce((s, x) => s + x, 0) / rs.length, sd = Math.sqrt(rs.reduce((s, x) => s + (x - mean) ** 2, 0) / (rs.length - 1));
@@ -1429,7 +1459,8 @@ function forcedSales(a){
   return sold;
 }
 function nextDay(){
-  const a = trAcct(); a.day++; a.alert = '';
+  const a = trAcct(); if(REPLAY_ON && a.day >= R20_LAST) return false; // the replay ends on 31 December
+  a.day++; a.alert = '';
   // charges first: interest on borrowed cash and the fee for borrowed shares
   const ms0 = marginState(a), interest = (ms0.loan * LOAN_RATE + ms0.S * BORROW_RATE) / 252; if(interest > 0){ a.cash -= interest; a.costs += interest; }
   // limit orders
@@ -1445,11 +1476,13 @@ function nextDay(){
     if(a.call){ const sold = forcedSales(a); a.alert += `Margin call not met: the broker sold ${sold.join(', ')} to bring the account back in line. `; a.call = null; }
     else { a.call = {day:a.day, need: MAINT * ms.G - ms.E}; a.alert += `Margin call: your equity is ${Math.round(ms.E / ms.G * 100)}% of your positions, under the ${MAINT * 100}% minimum. Add cash by selling or covering, or the broker sells for you next market day. `; }
   } else a.call = null;
-  a.hist.push({d:a.day, eq:equityNow()}); saveState();
+  a.hist.push({d:a.day, eq:equityNow()});
+  if(REPLAY_ON && a.day === R20_LAST) finishReplay(a);
+  saveState(); return true;
 }
 let autoTimer = null;
 function setAuto(on){ const a = trAcct(); a.auto = on; clearInterval(autoTimer); autoTimer = null;
-  if(on) autoTimer = setInterval(() => { if(S.tab !== 'trade' || S.tview !== 'portfolio' || !$('#tradeModal').hidden) return; nextDay(); renderTrade(); }, 2500); }
+  if(on) autoTimer = setInterval(() => { if(S.tab !== 'trade' || S.tview !== 'portfolio' || REPLAY_ON || !$('#tradeModal').hidden) return; nextDay(); renderTrade(); }, 2500); }
 
 function sparkSvg(vals, cls, label){
   const w = 320, h = 80, min = Math.min(...vals), max = Math.max(...vals), span = (max - min) || 1;
@@ -1477,12 +1510,13 @@ function marginCard(a){
       <div class="demo-note">${a.costs > 0 ? 'Interest and borrow fees so far: ' + money(a.costs) + '. ' : ''}Your share = equity ÷ positions. The line marks the ${MAINT * 100}% minimum.</div>` : ''}</div>`;
 }
 function tradePortfolio(){
+  if(REPLAY_ON) return modePicker() + tradeReplay();
   const note = trNote; trNote = '';
   const a = trAcct(), eq = equityNow(), st = trStats(), dayPrev = a.hist.length > 1 ? a.hist[a.hist.length - 2].eq : START_CASH, dayCh = (eq / dayPrev - 1) * 100;
   const pos = Object.entries(a.pos), q = a.q.trim().toLowerCase(), optView = a.f === 'options';
   const list = MARKET.filter(m => (a.f === 'all' || m.type === a.f || (optView && optable(m))) && (!q || m.sym.toLowerCase().includes(q) || m.name.toLowerCase().includes(q)));
   const hist = a.hist.map(h => h.eq), flash = a.alert || (a.call ? 'Margin call open.' : '');
-  return `${note ? `<div class="moved" style="margin-top:16px">${I.check}<span>${esc(note)}</span></div>` : ''}
+  return `${modePicker()}${note ? `<div class="moved" style="margin-top:16px">${I.check}<span>${esc(note)}</span></div>` : ''}
     ${flash ? `<div class="mc-alert" role="alert">${I.flag}<span>${esc(flash)}</span></div>` : ''}
     <div class="pf-card"><div class="pf-top"><div><span class="eyebrow">Practice account · day ${a.day}</span><div class="pf-val">${money(eq)}</div></div><span class="${st.ret >= 0 ? 'up-t' : 'dn-t'}">${signed(st.ret)} since start</span></div>
       ${hist.length > 1 ? sparkSvg(hist, 'spark', 'Account value over time') : '<div class="demo-note">Place a trade, then move the market on a day to start the chart.</div>'}
@@ -1495,7 +1529,7 @@ function tradePortfolio(){
     ${a.orders.length ? `<div class="sec-h">Waiting orders</div><ul class="mk-list">${a.orders.map(o => `<li><div class="mk-row"><span class="mk-n"><b>${{buy:'Buy', sell:'Sell', short:'Short', cover:'Cover'}[o.side]} ${fmtQty(MKT_BY[o.key], o.qty)} ${o.key}</b><span>at ${money(o.limit)} or ${o.side === 'buy' || o.side === 'cover' ? 'lower' : 'higher'} · now ${money(pxAt(o.key, a.day))}</span></span><button class="link-btn" data-cancel="${o.id}">Cancel</button></div></li>`).join('')}</ul>` : ''}
     <div class="sec-h">Market</div>
     <input class="field" id="mkQ" placeholder="Search a name or symbol" value="${esc(a.q)}" aria-label="Search the market" autocomplete="off">
-    <div class="pills tr-f" role="group" aria-label="Filter">${[['all','All']].concat(Object.entries(TYPE_LABEL), [['options', optionsUnlocked() ? 'Options' : 'Options 🔒']]).map(([k, t]) => `<button type="button" data-f="${k}" aria-pressed="${a.f === k}">${t}</button>`).join('')}</div>
+    <div class="pills tr-f" role="group" aria-label="Filter">${[['all','All']].concat(Object.entries(TYPE_LABEL).filter(([t]) => MARKET.some(m => m.type === t)), REPLAY_ON ? [] : [['options', optionsUnlocked() ? 'Options' : 'Options 🔒']]).map(([k, t]) => `<button type="button" data-f="${k}" aria-pressed="${a.f === k}">${t}</button>`).join('')}</div>
     ${optView ? `<div class="demo-note" style="text-align:left">${optionsUnlocked() ? 'Pick a stock or ETF to see its option chain.' : `Options unlock when you finish ${UNITS[optionsUnit()] ? UNITS[optionsUnit()].title : 'Options basics'}.`}</div>` : ''}
     <ul class="mk-list">${list.map(m => marketRow(m, a)).join('') || '<li class="empty">Nothing matches.</li>'}</ul>
     ${a.log.length ? `<div class="sec-h">Recent trades</div><ul class="mk-list log">${a.log.slice(0, 5).map(l => `<li><div class="mk-row"><span class="mk-n"><b>${{buy:'Bought', sell:'Sold', short:'Sold short', cover:'Covered'}[l.side]} ${isOpt(l.key) ? l.qty + ' × ' + optName(l.key) : fmtQty(MKT_BY[l.key], l.qty) + ' ' + l.key}</b><span>day ${l.day} · ${l.kind}</span></span><span class="mk-p"><b>${money(l.price)}</b></span></div></li>`).join('')}</ul>` : ''}
@@ -1523,11 +1557,122 @@ function bindPortfolio(){
   $('#s-trade').querySelectorAll('[data-opt]').forEach(b => b.onclick = () => openOptTicket(b.dataset.opt));
   $('#s-trade').querySelectorAll('[data-cancel]').forEach(b => b.onclick = () => { a.orders = a.orders.filter(o => String(o.id) !== b.dataset.cancel); saveState(); renderTrade(); });
 }
+/* ---------- Replay 2020 ----------
+   The same account and orders as the practice account, on real 2020 closing prices. One step is one
+   stock-market day. Skipping ahead stops on any day with news, so nobody jumps past the crash by accident.
+   On 31 December the result compares the player's season score with simply holding the S&P 500 all year. */
+function modePicker(){
+  return `<div class="seg" role="group" aria-label="Market" style="grid-template-columns:1fr 1fr;margin-top:16px">
+    <button data-mode="sample" aria-pressed="${!REPLAY_ON}">Practice market</button><button data-mode="2020" aria-pressed="${REPLAY_ON}">Replay 2020</button></div>`;
+}
+function bindModes(){
+  $('#s-trade').querySelectorAll('[data-mode]').forEach(b => b.onclick = () => {
+    if(S.trMode === b.dataset.mode) return;
+    setAuto(false); S.trMode = b.dataset.mode; saveState(); renderTrade(); $('#s-trade').scrollTop = 0;
+  });
+}
+const r20Date = (i, long) => new Date(R20.dates[Math.max(0, Math.min(R20_LAST, i))] + 'T12:00:00Z')
+  .toLocaleDateString('en-GB', long ? {weekday:'short', day:'numeric', month:'short', year:'numeric', timeZone:'UTC'} : {day:'numeric', month:'short', timeZone:'UTC'});
+const r20Bench = () => { const px = R20_MARKET[0].px; return px.map(p => START_CASH * p / px[0]); }; // $10,000 in the S&P 500 tracker on 2 Jan, held all year
+function r20Chart(eq, day){
+  const bench = r20Bench().slice(0, day + 1), w = 320, h = 90, all = eq.concat(bench), min = Math.min(...all), max = Math.max(...all), span = (max - min) || 1;
+  const pts = vals => vals.map((v, i) => `${((i / Math.max(1, day)) * (w - 8) + 4).toFixed(1)},${(h - 6 - ((v - min) / span) * (h - 12)).toFixed(1)}`).join(' ');
+  const up = eq[eq.length - 1] >= START_CASH, col = up ? 'var(--bull)' : 'var(--bear)', base = (h - 6 - ((START_CASH - min) / span) * (h - 12)).toFixed(1);
+  return `<svg class="spark r20-chart" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" role="img" aria-label="Your account and the S&amp;P 500 from 2 January to ${r20Date(day)}">
+    <line x1="0" x2="${w}" y1="${base}" y2="${base}" stroke="var(--line)" stroke-dasharray="3 4" vector-effect="non-scaling-stroke"/>
+    <polyline points="${pts(bench)}" fill="none" stroke="var(--ink-2)" stroke-width="1.5" stroke-dasharray="5 4" vector-effect="non-scaling-stroke"/>
+    <polyline points="${pts(eq)}" fill="none" stroke="${col}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>
+    <div class="r20-legend"><span><i style="background:${col}"></i>You</span><span><i class="dash"></i>S&amp;P 500, held all year</span></div>`;
+}
+function r20News(day){
+  const past = R20_NEWS.filter(n => n.day <= day).slice(-2).reverse();
+  if(!past.length) return '';
+  return `<div class="r20-news" aria-live="polite">${past.map(n => `<div class="${n.day === day ? 'today' : ''}"><span class="eyebrow">${n.day === day ? 'Today' : r20Date(n.day)}</span><b>${esc(n.t)}</b><span>${esc(n.b)}</span></div>`).join('')}</div>`;
+}
+function stepReplay(n){
+  let moved = 0;
+  while(moved < n){ if(!nextDay()) break; moved++; if(R20_NEWS.some(x => x.day === trAcct().day)) break; }
+  const a = trAcct();
+  if(moved && moved < n && a.day < R20_LAST) trNote = `Stopped on ${r20Date(a.day)}: there's news.`;
+  if(a.alert) trNote = '';
+}
+function finishReplay(a){
+  if(a.finished) return;
+  const st = trStats(); a.finished = true;
+  if(st.score !== null) S.r20best = S.r20best === null ? st.score : Math.max(S.r20best, st.score);
+  if(!S.r20done){ S.r20done = true; a.firstFinish = true; addPoints(100); }
+}
+function r20Result(a){
+  const me = trStats(), bh = statsOf(r20Bench()), sc = x => x === null ? '–' : x.toFixed(2);
+  const beat = me.score !== null && me.score > bh.score;
+  const yearly = R20_MARKET.map(m => ({m, r:(m.px[R20_LAST] / m.px[0] - 1) * 100})).sort((x, y) => y.r - x.r);
+  const verdict = me.score === null ? 'Your account barely moved, so there is no season score. Trade next time to get one.'
+    : beat ? `Your season score beat simply holding the S&P 500 all year${me.ret < bh.ret ? ', even with a lower return: your account swung less' : ''}.`
+    : `Holding the S&P 500 all year would have scored higher${me.ret > bh.ret ? ': you made more, but your account swung a lot more' : ''}.`;
+  return `<div class="r20-end">
+    <span class="eyebrow">31 December 2020</span><h2>2020 is over</h2>
+    <div class="r20-vs"><div><span class="eyebrow">You</span><div class="score"><div><b class="${me.ret >= 0 ? 'good-t' : 'bad-t'}">${signed(me.ret)}</b><span>Return</span></div><div><b>${me.dd.toFixed(1)}%</b><span>Worst drop</span></div><div class="hl"><b>${sc(me.score)}</b><span>Season score</span></div></div></div>
+      <div><span class="eyebrow">S&amp;P 500, held all year</span><div class="score"><div><b class="${bh.ret >= 0 ? 'good-t' : 'bad-t'}">${signed(bh.ret)}</b><span>Return</span></div><div><b>${bh.dd.toFixed(1)}%</b><span>Worst drop</span></div><div><b>${sc(bh.score)}</b><span>Season score</span></div></div></div></div>
+    <p class="r20-verdict">${esc(verdict)}</p>
+    ${a.firstFinish ? `<div class="moved">${I.flag}<span>+100 points and the Season finisher badge for your first full replay.</span></div>` : ''}
+    <div class="sec-h">How each one did in 2020</div>
+    <ul class="mk-list">${yearly.map(({m, r}) => `<li><div class="mk-row"><span class="mk-n"><b>${esc(m.name)}</b><span>${money(m.px[0])} → ${money(m.px[R20_LAST])}</span></span><span class="mk-p"><b class="${r >= 0 ? 'good-t' : 'bad-t'}">${signed(r)}</b></span></div></li>`).join('')}</ul>
+    <p class="demo-note" style="text-align:left">The S&amp;P 500 fell 34% between 19 February and 23 March, then set a new record on 18 August. Nobody knew on 23 March that it was the bottom.</p>
+    <div class="btn-row" style="margin-top:14px"><button class="btn" id="r20Share">Copy my result</button><button class="btn ghost" id="r20Again">Play 2020 again</button></div>
+    <div class="copy-msg" id="r20Msg" aria-live="polite"></div></div>`;
+}
+function tradeReplay(){
+  const note = trNote; trNote = '';
+  const a = trAcct(); if(a.f === 'options') a.f = 'all';
+  const eq = equityNow(), st = trStats(), over = a.day >= R20_LAST, hist = a.hist.map(h => h.eq), bench = r20Bench()[a.day];
+  const dayPrev = a.hist.length > 1 ? a.hist[a.hist.length - 2].eq : START_CASH, dayCh = (eq / dayPrev - 1) * 100;
+  const pos = Object.entries(a.pos), q = a.q.trim().toLowerCase();
+  const list = MARKET.filter(m => (a.f === 'all' || m.type === a.f) && (!q || m.sym.toLowerCase().includes(q) || m.name.toLowerCase().includes(q)));
+  const flash = a.alert || (a.call ? 'Margin call open.' : '');
+  return `${note ? `<div class="moved" style="margin-top:16px">${I.check}<span>${esc(note)}</span></div>` : ''}
+    ${flash ? `<div class="mc-alert" role="alert">${I.flag}<span>${esc(flash)}</span></div>` : ''}
+    ${a.day === 0 && !a.log.length ? `<div class="r20-intro"><b>Trade through 2020 with real prices.</b><span>You have $10,000 of fake money on 2 January 2020. News arrives on the day it happened. At the end of the year, your season score is compared with simply holding the S&amp;P 500.</span></div>` : ''}
+    <div class="pf-card"><div class="pf-top"><div><span class="eyebrow">${r20Date(a.day, true)}</span><div class="pf-val">${money(eq)}</div></div><span class="${st.ret >= 0 ? 'up-t' : 'dn-t'}">${signed(st.ret)} since 2 Jan</span></div>
+      ${hist.length > 1 ? r20Chart(hist, a.day) : '<div class="demo-note">Buy something below, then move to the next day to start the chart.</div>'}
+      <div class="score"><div><b>${money(a.cash).replace('.00', '')}</b><span>Cash</span></div><div><b>${signed((bench / START_CASH - 1) * 100)}</b><span>S&amp;P 500 since 2 Jan</span></div><div class="hl"><b>${st.score === null ? '–' : st.score.toFixed(2)}</b><span>Season score</span></div></div>
+      <div class="demo-note">Day ${a.day + 1} of ${R20_LAST + 1}${a.day > 0 ? ` · today ${signed(dayCh)} · worst drop ${st.dd.toFixed(1)}%` : ''}</div>
+      ${over ? '' : `<div class="tr-ctl three"><button class="btn sm" id="r20Day">Next day</button><button class="btn sm ghost" id="r20Week">Next week</button><button class="btn sm ghost" id="r20Month">Next month</button></div>`}</div>
+    ${r20News(a.day)}
+    ${over ? r20Result(a) : ''}
+    ${over ? '' : marginCard(a)}
+    <div class="sec-h">Your positions</div>
+    ${pos.length ? `<ul class="mk-list">${pos.map(([k, p]) => positionRow(k, p, a)).join('')}</ul>` : `<div class="empty">${over ? 'No positions at the end of the year.' : 'No positions yet. Pick something from the market below.'}</div>`}
+    ${a.orders.length ? `<div class="sec-h">Waiting orders</div><ul class="mk-list">${a.orders.map(o => `<li><div class="mk-row"><span class="mk-n"><b>${SIDE_LABEL[o.side]} ${fmtQty(MKT_BY[o.key], o.qty)} ${o.key}</b><span>at ${money(o.limit)} or ${o.side === 'buy' || o.side === 'cover' ? 'lower' : 'higher'} · now ${money(pxAt(o.key, a.day))}</span></span><button class="link-btn" data-cancel="${o.id}">Cancel</button></div></li>`).join('')}</ul>` : ''}
+    ${over ? '' : `<div class="sec-h">Market on ${r20Date(a.day)}</div>
+    <div class="pills tr-f" role="group" aria-label="Filter">${[['all','All']].concat(Object.entries(TYPE_LABEL).filter(([t]) => MARKET.some(m => m.type === t))).map(([k, t]) => `<button type="button" data-f="${k}" aria-pressed="${a.f === k}">${t}</button>`).join('')}</div>
+    <ul class="mk-list">${list.map(m => marketRow(m, a)).join('')}</ul>`}
+    ${a.log.length ? `<div class="sec-h">Recent trades</div><ul class="mk-list log">${a.log.slice(0, 5).map(l => `<li><div class="mk-row"><span class="mk-n"><b>${{buy:'Bought', sell:'Sold', short:'Sold short', cover:'Covered'}[l.side]} ${fmtQty(MKT_BY[l.key], l.qty)} ${l.key}</b><span>${r20Date(l.day)} · ${l.kind}</span></span><span class="mk-p"><b>${money(l.price)}</b></span></div></li>`).join('')}</ul>` : ''}
+    <ul class="rules"><li>${I.check}<span>Prices are the real closing price of each day. Orders fill at the price on screen, so you trade at the close.</span></li>
+      <li>${I.check}<span>Skipping a week or a month stops early on any day with news.</span></li>
+      <li>${I.check}<span>Season score is return divided by swings, the same as the practice account.</span></li></ul>
+    <div class="btn-row" style="margin-top:14px"><button class="btn ghost" id="r20Reset">${over ? 'Play 2020 again' : 'Restart from 2 January'}</button></div>
+    <div class="footnote">${esc(R20.sources)} History for practice, not advice about any real investment today.</div>`;
+}
+function bindReplay(){
+  const a = trAcct(), go = n => { stepReplay(n); renderTrade(); };
+  const d = $('#r20Day'); if(d){ d.onclick = () => go(1); $('#r20Week').onclick = () => go(5); $('#r20Month').onclick = () => go(21); }
+  const restart = () => { S.tr2020 = null; saveState(); renderTrade(); $('#s-trade').scrollTop = 0; };
+  $('#r20Reset').onclick = restart;
+  const again = $('#r20Again'); if(again) again.onclick = restart;
+  const sh = $('#r20Share'); if(sh) sh.onclick = () => { const st = trStats(), bh = statsOf(r20Bench());
+    copyText(`I traded through 2020 on Bullpen with $10,000 of fake money: ${signed(st.ret)} with a season score of ${st.score === null ? 'none' : st.score.toFixed(2)}. Holding the S&P 500 all year scored ${bh.score.toFixed(2)}. Think you can beat me?`, $('#r20Msg'), 'Copied. Paste it into WhatsApp or Instagram.'); };
+  const mg = $('#mgTog'); if(mg) mg.onchange = () => {
+    if(!mg.checked){ const ms = marginState(a); if(ms.S > 0 || a.cash < 0){ mg.checked = true; trNote = 'Close your shorts and pay back the loan before turning margin off.'; renderTrade(); return; } }
+    a.margin = mg.checked; saveState(); renderTrade(); };
+  $('#s-trade').querySelectorAll('.tr-f button').forEach(b => b.onclick = () => { a.f = b.dataset.f; renderTrade(); });
+  $('#s-trade').querySelectorAll('[data-sym]').forEach(b => b.onclick = () => openTicket(b.dataset.sym));
+  $('#s-trade').querySelectorAll('[data-cancel]').forEach(b => b.onclick = () => { a.orders = a.orders.filter(o => String(o.id) !== b.dataset.cancel); saveState(); renderTrade(); });
+}
 const SIDE_LABEL = {buy:'Buy', sell:'Sell', short:'Short', cover:'Cover'};
 function openTicket(sym, d){
   const a = trAcct(), m = MKT_BY[sym], px = pxAt(sym, a.day), held = a.pos[sym], unlocked = marginUnlocked() && a.margin;
   const tk = d || {side: held && held.qty < 0 ? 'cover' : 'buy', kind:'market', qty:'', limit:''};
-  const series = []; for(let i = Math.max(-WARM, a.day - 40); i <= a.day; i++) series.push(pxAt(sym, i));
+  const series = []; for(let i = Math.max(REPLAY_ON ? 0 : -WARM, a.day - 40); i <= a.day; i++) series.push(pxAt(sym, i));
   const qty = parseFloat(tk.qty) || 0, limit = parseFloat(tk.limit) || 0, usePx = tk.kind === 'limit' && limit > 0 ? limit : px, total = qty * usePx, ms = marginState(a);
   const maxQty = tk.side === 'buy' ? qtyOf(m, (a.margin ? Math.max(0, ms.E / INIT_MARGIN - ms.G) : Math.max(0, a.cash)) / px) : tk.side === 'short' ? qtyOf(m, Math.max(0, ms.E / INIT_MARGIN - ms.G) / px) : tk.side === 'sell' ? Math.max(0, held ? held.qty : 0) : Math.max(0, held ? -held.qty : 0);
   const ch = (px / pxAt(sym, a.day - 1) - 1) * 100;
@@ -1688,8 +1833,8 @@ function renderProfile(){
     ...VAULT.map(U => unitBadge(U, (S.vault[U.id] || 0) >= U.lessons.length, `Vault: ${U.title}`)),
     {t:'Podium', s:'Top 3 in a competition', on:S.trophies.length > 0, ic:I.up},
     {t:'Tournament winner', s:'Win a competition', on:S.trophies.some(t => t.place === 1), ic:I.trophy},
-    {t:'Steady hand', s:'Season score above 1', on:false, ic:I.scale},
-    {t:'Season finisher', s:'Trade a full season', on:false, ic:I.flag}
+    {t:'Steady hand', s:'Season score above 1', on:S.r20best !== null && S.r20best > 1, ic:I.scale},
+    {t:'Season finisher', s:'Trade a full season', on:!!S.r20done, ic:I.flag}
   ];
   const lv = levelOf(S.xpTotal);
   const sub = ['AUB', S.level && LEVEL_NAMES[S.level], S.clan].filter(Boolean).map(esc).join(' · ');
